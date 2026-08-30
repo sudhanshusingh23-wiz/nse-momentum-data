@@ -1,0 +1,62 @@
+name: Daily NSE data
+
+on:
+  schedule:
+    # 13:30 UTC = 19:00 IST, Mon-Fri. NSE publishes EOD files around 18:00-18:30 IST.
+    - cron: '30 13 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Specific date to fetch (DD-MM-YYYY). Blank = today.'
+        required: false
+        default: ''
+      backfill:
+        description: 'Also fetch the last N calendar days'
+        required: false
+        default: '0'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-nse
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install --quiet pandas numpy requests
+
+      - name: Fetch NSE end-of-day files
+        run: |
+          python scripts/fetch_nse.py \
+            ${{ github.event.inputs.date && format('--date {0}', github.event.inputs.date) || '' }} \
+            --backfill ${{ github.event.inputs.backfill || '0' }} \
+            --allow-empty
+
+      - name: Rebuild artifacts
+        run: python scripts/build_artifacts.py
+
+      - name: Commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data indices reference artifacts
+          if git diff --staged --quiet; then
+            echo "Nothing changed (market holiday, or files already present)."
+          else
+            git commit -m "Data update $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: Show manifest
+        if: always()
+        run: cat artifacts/manifest.json || echo "no manifest produced"

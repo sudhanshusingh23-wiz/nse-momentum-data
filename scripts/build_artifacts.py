@@ -66,7 +66,10 @@ def load_bhavcopy():
         if "SERIES" in df.columns:
             df = df[df["SERIES"].astype(str).str.strip() == "EQ"]
         cols = ["SYMBOL", "CLOSE_PRICE", "PREV_CLOSE"]
-        for opt in ("TURNOVER_LACS", "DELIV_PER"):
+        # HIGH/LOW are needed for a true ATR. Without them ATR degrades to mean
+        # absolute close-to-close change, which understates it by roughly 35% and
+        # makes every stock look more extended than it is.
+        for opt in ("HIGH_PRICE", "LOW_PRICE", "TURNOVER_LACS", "DELIV_PER"):
             if opt in df.columns:
                 cols.append(opt)
         sub = df[cols].copy()
@@ -77,9 +80,10 @@ def load_bhavcopy():
     d = pd.concat(rows, ignore_index=True)
     d = d.rename(columns={"SYMBOL": "symbol", "CLOSE_PRICE": "close",
                           "PREV_CLOSE": "prev_close", "TURNOVER_LACS": "turnover",
+                          "HIGH_PRICE": "high", "LOW_PRICE": "low",
                           "DELIV_PER": "delivery_pct"})
     d["symbol"] = d["symbol"].astype(str).str.strip()
-    for c in ("close", "prev_close", "turnover", "delivery_pct"):
+    for c in ("close", "prev_close", "turnover", "delivery_pct", "high", "low"):
         if c in d.columns:
             d[c] = pd.to_numeric(d[c], errors="coerce")
     return d.dropna(subset=["close"]), len(files), skipped
@@ -153,7 +157,8 @@ def main():
     panel["date"] = pd.to_datetime(panel["date"], format="%Y%m%d")
     extra = raw.copy()
     extra["date"] = pd.to_datetime(extra["date"], format="%Y%m%d")
-    keep = ["date", "symbol"] + [c for c in ("delivery_pct", "turnover") if c in extra.columns]
+    keep = ["date", "symbol"] + [c for c in ("delivery_pct", "turnover", "high", "low")
+                                 if c in extra.columns]
     panel = panel.merge(extra[keep].drop_duplicates(["date", "symbol"]),
                         on=["date", "symbol"], how="left")
     ppath = os.path.join(ART, "panel.csv.gz")
@@ -181,6 +186,44 @@ def main():
         sect.to_csv(os.path.join(ART, "sector_indices.csv"), index=False)
         print("   %-22s %4d rows -> artifacts/sector_indices.csv"
               % ("all other indices", len(sect)))
+
+    # ---- cap classification from index membership ----
+    # SEBI's definition maps exactly onto NSE index membership, so no market-cap
+    # or share-count data is needed: Nifty 100 = LARGE, Midcap 150 = MID,
+    # Smallcap 250 = SMALL, and the three sum to the Nifty 500.
+    CAP_FILES = [("ind_nifty100list.csv", "LARGE"),
+                 ("ind_niftymidcap150list.csv", "MID"),
+                 ("ind_niftysmallcap250list.csv", "SMALL")]
+    cap_rows, cap_missing = [], []
+    for fname, tier in CAP_FILES:
+        fp = os.path.join(ROOT, "reference", fname)
+        if not os.path.exists(fp):
+            cap_missing.append(fname)
+            continue
+        cdf = pd.read_csv(fp)
+        cdf.columns = [c.strip() for c in cdf.columns]
+        scol = next((c for c in cdf.columns if c.lower() in ("symbol", "ticker")), None)
+        if not scol:
+            cap_missing.append(fname)
+            continue
+        for sym in cdf[scol].astype(str).str.strip().str.upper():
+            cap_rows.append({"symbol": sym, "cap_tier": tier})
+    if cap_rows:
+        caps = pd.DataFrame(cap_rows).drop_duplicates("symbol", keep="first")
+        caps.to_csv(os.path.join(ART, "caps.csv"), index=False)
+        vc = caps["cap_tier"].value_counts().to_dict()
+        print("caps: %d classified -> artifacts/caps.csv  (%s)"
+              % (len(caps), ", ".join("%s %d" % (k, v) for k, v in sorted(vc.items()))))
+        if len(caps) < 450:
+            warnings.append("Only %d symbols cap-classified; expected ~500. The small/mid "
+                            "tilt will be partial." % len(caps))
+    else:
+        warnings.append("No cap-tier lists in reference/. The small/mid-cap tilt cannot be "
+                        "applied, and that is one of the strategy's stated objectives. "
+                        "Run fetch_nse.py to pull the Nifty 100 / Midcap 150 / Smallcap 250 lists.")
+        print("caps: NONE — small/mid tilt inoperative")
+    if cap_missing:
+        warnings.append("missing cap list(s): %s" % ", ".join(cap_missing))
 
     # ---- breadth, via the skill's own script if vendored, else inline ----
     cons = os.path.join(ROOT, "reference", "ind_nifty500list.csv")
@@ -213,6 +256,7 @@ def main():
         "panel_symbols": int(panel["symbol"].nunique()),
         "latest_session": str(panel["date"].max().date()),
         "corporate_action_events": n_ev,
+        "symbols_cap_classified": len(cap_rows),
         "warnings": warnings,
     }
     json.dump(man, open(os.path.join(ART, "manifest.json"), "w"), indent=2)

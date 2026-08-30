@@ -35,7 +35,7 @@
     "ZFCVINDIA",
     "ZYDUSWELL"
   ],
-  "sessions_in_panel": 282,
+  "sessions_in_panel": 490,
   "method": "computed_from_panel",
   "warnings": [
     "21 symbols (4.2%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."

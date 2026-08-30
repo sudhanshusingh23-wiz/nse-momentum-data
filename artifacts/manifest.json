@@ -1,10 +1,11 @@
 {
-  "built_at_utc": "2026-08-30T10:40:21.359220+00:00",
-  "bhavcopy_files": 282,
-  "index_files": 269,
-  "panel_sessions": 282,
-  "panel_symbols": 2946,
+  "built_at_utc": "2026-08-30T16:11:18.300483+00:00",
+  "bhavcopy_files": 490,
+  "index_files": 473,
+  "panel_sessions": 490,
+  "panel_symbols": 2990,
   "latest_session": "2026-08-28",
-  "corporate_action_events": 61,
+  "corporate_action_events": 74,
+  "symbols_cap_classified": 500,
   "warnings": []
 }

@@ -48,9 +48,19 @@ INDEX_URLS = [
     "https://nsearchives.nseindia.com/content/indices/ind_close_all_{d}.csv",
     "https://archives.nseindia.com/content/indices/ind_close_all_{d}.csv",
 ]
+# Constituent lists. The three cap lists give SEBI cap classification exactly:
+# Nifty 100 = LARGE (ranks 1-100), Midcap 150 = MID (101-250),
+# Smallcap 250 = SMALL (251-500). They sum to the Nifty 500 with no gaps, so no
+# market-cap data or share counts are needed anywhere in the system.
+CONSTITUENT_LISTS = {
+    "ind_nifty500list.csv":        ["Symbol", "Industry"],
+    "ind_nifty100list.csv":        ["Symbol"],
+    "ind_niftymidcap150list.csv":  ["Symbol"],
+    "ind_niftysmallcap250list.csv": ["Symbol"],
+}
 LIST_URLS = [
-    "https://archives.nseindia.com/content/indices/ind_nifty500list.csv",
-    "https://nsearchives.nseindia.com/content/indices/ind_nifty500list.csv",
+    "https://archives.nseindia.com/content/indices/{name}",
+    "https://nsearchives.nseindia.com/content/indices/{name}",
 ]
 
 
@@ -156,19 +166,26 @@ def do_date(d, session, force=False):
 
 
 def refresh_constituents(session):
-    path = os.path.join(ROOT, "reference", "ind_nifty500list.csv")
-    age_days = 999
-    if os.path.exists(path):
-        age_days = (time.time() - os.path.getmtime(path)) / 86400
-    if age_days < 7:
-        print("constituent list is %.1f days old, skipping refresh" % age_days)
-        return
-    print("refreshing Nifty 500 constituent list")
-    txt = fetch(LIST_URLS, "", ["Symbol", "Industry"], 400, "n500list", session)
-    if txt:
-        save(txt, path)
-    else:
-        print("  WARNING: constituent list refresh failed; keeping the existing copy.")
+    """Refresh the Nifty 500 list plus the three cap-tier lists, weekly."""
+    print("constituent lists")
+    for name, cols in CONSTITUENT_LISTS.items():
+        path = os.path.join(ROOT, "reference", name)
+        if os.path.exists(path):
+            age = (time.time() - os.path.getmtime(path)) / 86400
+            if age < 7:
+                print("  %-32s %.1f days old, skipping" % (name, age))
+                continue
+        min_rows = 400 if "500" in name else 80
+        urls = [u.replace("{name}", name) for u in LIST_URLS]
+        txt = fetch(urls, "", cols, min_rows, name.replace("ind_", "")[:10], session)
+        if txt:
+            save(txt, path)
+        elif os.path.exists(path):
+            print("  WARNING: %s refresh failed; keeping the existing copy." % name)
+        else:
+            print("  WARNING: %s could not be fetched and no copy exists. Cap "
+                  "classification will be unavailable and the small/mid tilt "
+                  "will not be applied." % name)
 
 
 def main():

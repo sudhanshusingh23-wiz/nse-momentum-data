@@ -1,0 +1,7 @@
+import pandas as pd
+c = pd.read_csv('reference/ind_nifty500list.csv')
+c.columns = [x.strip() for x in c.columns]
+c = c[c.Industry != 'Diversified']
+c[['Symbol','Industry']].rename(
+    columns={'Symbol':'symbol','Industry':'sector'}
+).to_csv('reference/map.csv', index=False)

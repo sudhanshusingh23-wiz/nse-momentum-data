@@ -10,7 +10,7 @@
 # Load with scripts/config.py, which resolves percentages against pool.current
 # and applies the capital-scaling table.
 
-version: 2
+version: 3
 as_of: "2026-08-30"
 
 # ---------------------------------------------------------------- capital
@@ -156,7 +156,11 @@ targets:
   horizon_sessions: 45                    # v2: matches the 2-3 month hold
   horizon_sessions_tier_c: 30
   efficiency_ratio_clamp: {min: 0.25, max: 0.65}
-  msm_volatility: {A: 0.75, B: 0.60, C: 0.45}
+  # Recalibrated 2026-08-30. The original 0.75/0.60/0.45 put the volatility
+  # estimator ~3.5x below the R-multiple ladder (2.26 ATR vs 8.00 ATR for tier A
+  # T2), so the two methods could never agree and the median was always dragged
+  # down by one broken estimator. Solved for agreement at ER=0.45.
+  msm_volatility: {A: 2.65, B: 2.00, C: 1.65}
   msm_measured_move: {A: 1.6, B: 1.3, C: 1.0}
   dispersion_max_ratio: 1.40              # above this -> DISPERSED, treat as tier C
   ladder_r:
@@ -236,7 +240,7 @@ scaling:
 
 # ---------------------------------------------------------------- data
 data:
-  repo: "https://github.com/sudhanshusingh23-wiz/nse-momentum-data"                        # e.g. https://github.com/<user>/nse-momentum-data
+  repo: ""                        # e.g. https://github.com/<user>/nse-momentum-data
   branch: main
   max_staleness_sessions: 2
   artifacts:
@@ -254,4 +258,5 @@ data:
 # ---------------------------------------------------------------- changelog
 changelog:
   - {version: 1, date: "2026-08-28", note: "Initial design. 60L pool, 8.33% monthly target."}
+  - {version: 3, date: "2026-08-30", note: "Recalibrated targets.msm_volatility from 0.75/0.60/0.45 to 2.65/2.00/1.65. The volatility estimator and the R-multiple ladder disagreed by 3.5x; found while implementing target_ladder.py."}
   - {version: 2, date: "2026-08-30", note: "80L pool, 5% monthly assessed quarterly, 50% recycling to 1Cr. Time stop 15->25 sessions with MS-decay requirement. Core promotion relaxed. Churn cap 3->2. ADV floors rescaled. Cap tilt sourced from NSE index membership rather than market caps."}

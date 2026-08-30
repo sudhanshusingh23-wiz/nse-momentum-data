@@ -42,9 +42,11 @@ BHAV_URLS = [
     "https://archives.nseindia.com/products/content/sec_bhavdata_full_{d}.csv",
     "https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_{d}.csv",
 ]
+LIST_HOSTS_NOTE = "Both hosts serve the same files; keep both as fallbacks."
+# nsearchives is the host currently serving these; archives kept as a fallback.
 INDEX_URLS = [
-    "https://archives.nseindia.com/content/indices/ind_close_all_{d}.csv",
     "https://nsearchives.nseindia.com/content/indices/ind_close_all_{d}.csv",
+    "https://archives.nseindia.com/content/indices/ind_close_all_{d}.csv",
 ]
 LIST_URLS = [
     "https://archives.nseindia.com/content/indices/ind_nifty500list.csv",
@@ -62,8 +64,13 @@ def looks_like_csv(text, must_have, min_rows):
     lines = [l for l in text.splitlines() if l.strip()]
     if len(lines) < min_rows:
         return False, "only %d rows, expected at least %d" % (len(lines), min_rows)
-    header = lines[0].upper().replace(" ", "")
-    missing = [c for c in must_have if c.replace(" ", "") not in header]
+    # Normalise BOTH sides. Uppercasing only the header silently rejects any
+    # expected column written in mixed case, which is how the index file was
+    # being discarded even though the download succeeded.
+    def norm(x):
+        return x.upper().replace(" ", "").replace("_", "").replace("-", "")
+    header = norm(lines[0])
+    missing = [c for c in must_have if norm(c) not in header]
     if missing:
         return False, "header missing expected column(s): %s" % ", ".join(missing)
     return True, "ok"

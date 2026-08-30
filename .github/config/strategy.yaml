@@ -236,7 +236,7 @@ scaling:
 
 # ---------------------------------------------------------------- data
 data:
-  repo: ""                        # e.g. https://github.com/<user>/nse-momentum-data
+  repo: "https://github.com/sudhanshusingh23-wiz/nse-momentum-data"                        # e.g. https://github.com/<user>/nse-momentum-data
   branch: main
   max_staleness_sessions: 2
   artifacts:

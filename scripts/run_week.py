@@ -28,6 +28,15 @@ LAYERS = [
 ]
 
 
+def _held_sectors(path):
+    try:
+        import csv
+        with open(path) as f:
+            return sorted({r["sector"] for r in csv.DictReader(f) if r.get("sector")})
+    except Exception:
+        return []
+
+
 def script(skills, name, fn):
     p = os.path.join(skills, name, "scripts", fn)
     return p if os.path.exists(p) else None
@@ -52,6 +61,13 @@ def main():
     ap.add_argument("--scores", help="scores.csv for the rebalance grid")
     ap.add_argument("--map", help="symbol,sector map")
     ap.add_argument("--dry-run", action="store_true", help="check wiring only")
+    ap.add_argument("--force-sectors", action="store_true",
+                    help="TEST MODE. Bypass the two-week hysteresis confirmation and take "
+                         "the top 3 by SMS directly, so L3-L8 can be exercised. Output is "
+                         "NOT a tradeable plan and is labelled as such throughout.")
+    ap.add_argument("--force-entries", action="store_true",
+                    help="TEST MODE. Continue past a reward:risk REJECT so L4/L5 run. "
+                         "Never use outside a wiring test.")
     ap.add_argument("--verbose", action="store_true")
     a = ap.parse_args()
 
@@ -61,6 +77,8 @@ def main():
     T = lambda n: os.path.join(tmp, n)
 
     print("=" * 78)
+    if a.force_sectors or a.force_entries:
+        print("***  TEST MODE — GATES BYPASSED. OUTPUT IS NOT A TRADEABLE PLAN.  ***")
     print("WEEKLY RUN — data %s | skills %s | pool Rs %s"
           % (D, a.skills, format(int(a.pool), ",")))
     print("=" * 78)
@@ -132,6 +150,11 @@ def main():
             print("  FAILED: %s" % err); sys.exit(2)
         sj = json.load(open(T("sector.json")))
         sel = sj.get("selected", [])
+        if a.force_sectors and not sel:
+            sel = [r["sector"] for r in sj.get("ranking", [])[:3]]
+            print("  !! TEST MODE: hysteresis bypassed. Taking top 3 by SMS: %s"
+                  % ", ".join(sel))
+            print("  !! These sectors have NOT confirmed. Nothing here is tradeable.")
         top = sj.get("ranking", [])[:5]
         for r in top:
             print("  %-24s SMS %5.1f  rank %d" % (r["sector"][:24], r["SMS"], r["rank"]))
@@ -180,9 +203,11 @@ def main():
         print("    L6: R %.2f (%.1f%%) | anchor %.2f | reward:risk %.2f -> %s"
               % (tl["R"], tl["R"] / tl["entry"] * 100, tl["anchor"],
                  tl.get("reward_to_risk", 0), tl.get("rr_verdict")))
-        if tl.get("rr_verdict") == "REJECT":
+        if tl.get("rr_verdict") == "REJECT" and not a.force_entries:
             print("    STOP: reward:risk REJECT. Not sized, not entered. Wait for a better entry.")
             continue
+        if tl.get("rr_verdict") == "REJECT":
+            print("    !! TEST MODE: continuing past a REJECT purely to exercise L4/L5.")
         out, err = run([sys.executable, script(a.skills, "position-sizer", "position_size.py"),
                         "--from-ladder", T("tl_%s.json" % sym), "--pool", str(a.pool),
                         "--regime", state, "--json", T("ps_%s.json" % sym)], "L4")
@@ -207,16 +232,61 @@ def main():
         plans.append({"symbol": sym, "shares": ps["shares"], "value": ps["value"],
                       "t1_limit": ep["t1_limit"], "setup": ep["setup"]})
 
-    # ---- L7 / L8 ----
-    print("\n" + "-" * 78 + "\nL7 REBALANCE / L8 RISK")
+    # ---- L7 rebalance ----
+    print("\n" + "-" * 78 + "\nL7 REBALANCE")
+    reb_orders, sector_arg = [], None
+    if a.positions and os.path.exists(a.positions) and a.scores and os.path.exists(a.scores):
+        sector_arg = ",".join("%s:%s" % (x, "TOP3" if x in sel else "EJECTED")
+                              for x in sorted(set(list(sel) + _held_sectors(a.positions))))
+        cmd = [sys.executable, script(a.skills, "weekly-rebalance-engine", "rebalance.py"),
+               "--positions", a.positions, "--scores", a.scores,
+               "--sectors", sector_arg, "--regime", state, "--pool", str(a.pool),
+               "--json", T("rebal.json")]
+        out, err = run(cmd, "L7")
+        if os.path.exists(T("rebal.json")):
+            rj = json.load(open(T("rebal.json")))
+            reb_orders = rj.get("orders", [])
+            for h in rj.get("holdings", []):
+                if not str(h.get("action", "")).startswith("HOLD"):
+                    print("  %-13s %-14s %s" % (h["symbol"], h["action"], str(h["why"])[:44]))
+            for d in rj.get("deferred", []):
+                print("  %-13s DEFERRED       %s" % (d["symbol"], str(d["defer"])[:44]))
+            if not reb_orders:
+                print("  no actions this week — every holding is HOLD or deferred")
+        else:
+            print("  L7 produced no plan: %s" % (err or "unknown"))
+    elif a.positions:
+        print("  --scores not supplied; cannot run the holding grid")
+    else:
+        print("  no positions file — fresh book, nothing to rebalance")
+
+    # ---- L8 veto gate ----
+    # EVERY risk-increasing action goes through the gate: new entries from the
+    # L3-L5 chain AND adds generated by the L7 grid. Risk-reducing actions
+    # (exits, trims, target bookings) are never vetoed - they lower exposure.
+    print("\n" + "-" * 78 + "\nL8 RISK GATE")
+    buy_side, sell_side = [], []
+    for p in plans:
+        buy_side.append({"symbol": p["symbol"], "action": "ENTRY", "value": p["value"],
+                         "detail": "%d sh, T1 limit %.2f" % (p["shares"], p["t1_limit"])})
+    for o in reb_orders:
+        if o.get("side") == "BUY":
+            val = o.get("value")
+            if not val:
+                val = int(a.pool * 0.0375)   # an add is 25% of a max-size position
+                o["value"] = val
+            buy_side.append({"symbol": o["symbol"], "action": o.get("action", "ADD"),
+                             "value": val, "detail": "size via L4 at execution"})
+        else:
+            sell_side.append(o)
+
+    vetoed, cleared, standing = {}, [], []
     if a.positions and os.path.exists(a.positions):
-        if a.scores:
-            print("  (run rebalance.py with --positions and --scores for the holding grid)")
         pend = T("pending.csv")
         with open(pend, "w") as f:
             f.write("symbol,action,value\n")
-            for p in plans:
-                f.write("%s,ENTRY,%d\n" % (p["symbol"], p["value"]))
+            for b in buy_side:
+                f.write("%s,%s,%d\n" % (b["symbol"], b["action"], b["value"]))
         cmd = [sys.executable, script(a.skills, "portfolio-risk-monitor", "risk_monitor.py"),
                "--positions", a.positions, "--panel", F("panel.csv.gz"),
                "--pool", str(a.pool), "--regime", state, "--pending", pend,
@@ -224,27 +294,78 @@ def main():
         out, err = run(cmd, "L8")
         if out:
             for line in out.splitlines():
-                if line.startswith(("** VETO", "heat ", "   VETOED", "   CLEARED")):
+                if line.startswith(("** VETO", "heat ")) or "BREACH" in line:
                     print("  " + line.strip())
+        if os.path.exists(T("risk.json")):
+            rk = json.load(open(T("risk.json")))
+            for v in rk.get("vetoes", []):
+                act = v["action"]
+                if "ALL" in act.upper():
+                    # A blanket restriction. If there are pending buys it vetoes them;
+                    # if there are none it is a STANDING restriction that will block
+                    # next week's buys too, and must still be reported.
+                    if buy_side:
+                        for b in buy_side:
+                            vetoed.setdefault(b["symbol"], []).append(v["reason"])
+                    else:
+                        standing.append((act, v["reason"]))
+                else:
+                    for b in buy_side:
+                        if b["symbol"] in act:
+                            vetoed.setdefault(b["symbol"], []).append(v["reason"])
+        cleared = [b for b in buy_side if b["symbol"] not in vetoed]
     else:
-        print("  no positions file — fresh book, nothing to rebalance or veto")
+        if buy_side:
+            print("  no positions file — cannot evaluate portfolio limits.")
+            print("  Buy-side actions are UNGATED and must not be executed.")
+        cleared = []
+
+    # ---- reconciled plan ----
+    print("\n" + "-" * 78 + "\nFINAL ORDER PLAN (post-veto)")
+    if sell_side:
+        print("  risk-reducing (never vetoed):")
+        for o in sell_side:
+            print("     SELL  %-13s %-12s qty %s" % (o["symbol"], o.get("action", ""), o.get("qty")))
+    if cleared:
+        print("  risk-increasing (CLEARED by L8):")
+        for b in cleared:
+            print("     BUY   %-13s %-12s Rs %-10s %s"
+                  % (b["symbol"], b["action"], format(b["value"], ","), b["detail"]))
+    if vetoed:
+        print("  risk-increasing (VETOED — do not execute):")
+        for sym, reasons in vetoed.items():
+            print("     XXXX  %-13s %s" % (sym, reasons[0][:56]))
+    if standing:
+        print("  standing restrictions (no pending buys to refuse, but these block any):")
+        for act, why in standing:
+            print("     ----  %-13s %s" % (act[:13], why[:60]))
+    if not sell_side and not cleared and not vetoed:
+        print("  no orders.")
 
     # ---- summary ----
     print("\n" + "=" * 78)
     print("RESULT")
-    if plans:
-        print("  %d actionable entry plan(s):" % len(plans))
-        for p in plans:
-            print("    %-13s %d shares, T1 limit %.2f (%s)"
-                  % (p["symbol"], p["shares"], p["t1_limit"], p["setup"]))
-    else:
-        print("  No actionable entries this week.")
+    n_sell, n_buy, n_veto = len(sell_side), len(cleared), len(vetoed)
+    print("  %d sell order(s), %d cleared buy(s), %d vetoed, %d standing restriction(s)."
+          % (n_sell, n_buy, n_veto, len(standing)))
+    if n_veto:
+        print("  L8 refused %d risk-increasing action(s). The veto stands." % n_veto)
+    if standing and not n_veto:
+        print("  No buys were proposed, but L8 has standing restrictions that would have")
+        print("  blocked them. Resolve those before next week.")
+    if not (n_sell or n_buy):
+        print("  No actionable orders this week.")
     if stops:
         print("\n  Where the chain stopped, and why:")
         for s in stops:
             print("    - %s" % s)
-    print("\n  A week with no orders is a normal outcome. Every layer above is designed")
-    print("  to refuse, and a refusal is a decision.")
+    if a.force_sectors or a.force_entries:
+        print("\n  *** TEST MODE was active. Gates were bypassed to exercise the wiring.")
+        print("  *** Do not act on anything above. Re-run without the force flags for a")
+        print("  *** real decision.")
+    else:
+        print("\n  A week with no orders is a normal outcome. Every layer above is designed")
+        print("  to refuse, and a refusal is a decision.")
     print("=" * 78)
     print("artifacts written to %s" % tmp)
 

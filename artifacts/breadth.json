@@ -1,16 +1,16 @@
 {
-  "asof": "2026-08-31",
+  "asof": "2026-09-01",
   "universe": "NIFTY500",
-  "pct_above_200dma": 56.9,
-  "pct_above_50dma": 45.82,
-  "pct_above_50dma_10s_ago": 54.6,
-  "delta_10s_pp": -8.79,
-  "pct_within_10pct_of_52w_high": 33.9,
-  "denominator_200dma": 471,
+  "pct_above_200dma": 55.72,
+  "pct_above_50dma": 41.84,
+  "pct_above_50dma_10s_ago": 53.77,
+  "delta_10s_pp": -11.92,
+  "pct_within_10pct_of_52w_high": 32.98,
+  "denominator_200dma": 472,
   "denominator_50dma": 478,
   "constituents_in_list": 500,
   "not_found_in_panel": 0,
-  "excluded_insufficient_history": 8,
+  "excluded_insufficient_history": 7,
   "excluded_corporate_action_flag": 21,
   "ca_flagged_symbols": [
     "ADANIPOWER",
@@ -35,7 +35,7 @@
     "ZFCVINDIA",
     "ZYDUSWELL"
   ],
-  "sessions_in_panel": 491,
+  "sessions_in_panel": 492,
   "method": "computed_from_panel",
   "warnings": [
     "21 symbols (4.2%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."

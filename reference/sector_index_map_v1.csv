@@ -1,0 +1,29 @@
+sector,tier,constituents,nse_index,index_sessions_at_v1,price_series_used,note
+Automobile and Auto Components,A,38,NIFTY AUTO,474,official index,
+Capital Goods,A,63,NIFTY CAPITAL GOODS,55,equal-weight basket,"index has only 55 sessions (<130), falls back"
+Chemicals,A,26,NIFTY CHEMICALS,363,official index,
+Construction,A,13,NIFTY CONSTRUCTION,55,equal-weight basket,"index has only 55 sessions (<130), falls back"
+Construction Materials,A,11,NIFTY CEMENT,132,official index,
+Consumer Durables,A,16,NIFTY CONSUMER DURABLES,474,official index,
+Consumer Services,A,29,NIFTY CONSUMER SERVICES,55,equal-weight basket,"index has only 55 sessions (<130), falls back"
+Defence,B,16,NIFTY INDIA DEFENCE,474,official index,
+Electronics Manufacturing,B,10,,0,equal-weight basket,no NSE index for this sector
+Fast Moving Consumer Goods,A,28,NIFTY FMCG,474,official index,
+Financial Services ex-Bank,A,76,NIFTY FINANCIAL SERVICES EX-BANK,474,official index,
+Healthcare,A,48,NIFTY HEALTHCARE INDEX,474,official index,
+Hospitality & Travel,B,10,NIFTY INDIA TOURISM,474,official index,
+Information Technology,A,27,NIFTY IT,474,official index,
+Logistics,B,9,NIFTY TRANSPORTATION & LOGISTICS,474,official index,
+Media Entertainment & Publication,A,5,NIFTY MEDIA,474,official index,
+Metals & Mining,A,18,NIFTY METAL,474,official index,
+Oil Gas & Consumable Fuels,A,17,NIFTY OIL & GAS,474,official index,
+PSU Bank,A,11,NIFTY PSU BANK,474,official index,
+Power,A,17,NIFTY POWER,55,equal-weight basket,"index has only 55 sessions (<130), falls back"
+Private Bank,A,14,NIFTY PRIVATE BANK,474,official index,
+Railways & Wagons,B,10,NIFTY INDIA RAILWAYS PSU,435,official index,
+Realty,A,11,NIFTY REALTY,474,official index,
+Renewables,B,8,,0,equal-weight basket,no NSE index for this sector
+Services,A,14,,0,equal-weight basket,no NSE index for this sector
+Sugar & Agri-inputs,B,14,NIFTY SUGAR & ETHANOL,51,equal-weight basket,"index has only 51 sessions (<130), falls back"
+Telecommunication,A,10,NIFTY TELECOMMUNICATIONS,55,equal-weight basket,"index has only 55 sessions (<130), falls back"
+Textiles,A,5,,0,equal-weight basket,no NSE index for this sector

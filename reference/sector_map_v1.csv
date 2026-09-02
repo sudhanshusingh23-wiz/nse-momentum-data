@@ -1,0 +1,575 @@
+symbol,sector,tier
+360ONE,Financial Services ex-Bank,A
+ABB,Capital Goods,A
+ACC,Construction Materials,A
+ACMESOLAR,Power,A
+AIAENG,Capital Goods,A
+APLAPOLLO,Capital Goods,A
+AUBANK,Private Bank,A
+AWL,Fast Moving Consumer Goods,A
+AADHARHFC,Financial Services ex-Bank,A
+AARTIIND,Chemicals,A
+AAVAS,Financial Services ex-Bank,A
+ABBOTINDIA,Healthcare,A
+ACE,Capital Goods,A
+ACUTAAS,Healthcare,A
+ADANIENSOL,Power,A
+ADANIENT,Metals & Mining,A
+ADANIGREEN,Power,A
+ADANIPORTS,Services,A
+ADANIPOWER,Power,A
+ATGL,Oil Gas & Consumable Fuels,A
+ABCAPITAL,Financial Services ex-Bank,A
+ABFRL,Consumer Services,A
+ABLBL,Consumer Services,A
+ABREL,Realty,A
+ABSLAMC,Financial Services ex-Bank,A
+CPPLUS,Capital Goods,A
+AEGISLOG,Oil Gas & Consumable Fuels,A
+AEGISVOPAK,Oil Gas & Consumable Fuels,A
+AFCONS,Construction,A
+AFFLE,Information Technology,A
+AJANTPHARM,Healthcare,A
+ALKEM,Healthcare,A
+ABDL,Fast Moving Consumer Goods,A
+ARE&M,Automobile and Auto Components,A
+AMBER,Consumer Durables,A
+AMBUJACEM,Construction Materials,A
+ANANDRATHI,Financial Services ex-Bank,A
+ANANTRAJ,Realty,A
+ANGELONE,Financial Services ex-Bank,A
+ANTHEM,Healthcare,A
+ANURAS,Chemicals,A
+APARINDS,Capital Goods,A
+APOLLOHOSP,Healthcare,A
+APOLLOTYRE,Automobile and Auto Components,A
+APTUS,Financial Services ex-Bank,A
+ASAHIINDIA,Automobile and Auto Components,A
+ASHOKLEY,Capital Goods,A
+ASIANPAINT,Consumer Durables,A
+ASTERDM,Healthcare,A
+ASTRAL,Capital Goods,A
+ATHERENERG,Automobile and Auto Components,A
+ATUL,Chemicals,A
+AUROPHARMA,Healthcare,A
+AIIL,Financial Services ex-Bank,A
+DMART,Consumer Services,A
+AXISBANK,Private Bank,A
+BEML,Capital Goods,A
+BLS,Consumer Services,A
+BSE,Financial Services ex-Bank,A
+BAJAJ-AUTO,Automobile and Auto Components,A
+BAJFINANCE,Financial Services ex-Bank,A
+BAJAJFINSV,Financial Services ex-Bank,A
+BAJAJHLDNG,Financial Services ex-Bank,A
+BAJAJHFL,Financial Services ex-Bank,A
+BALKRISIND,Automobile and Auto Components,A
+BALRAMCHIN,Fast Moving Consumer Goods,A
+BANDHANBNK,Private Bank,A
+BANKBARODA,PSU Bank,A
+BANKINDIA,PSU Bank,A
+MAHABANK,PSU Bank,A
+BATAINDIA,Consumer Durables,A
+BAYERCROP,Chemicals,A
+BELRISE,Automobile and Auto Components,A
+BERGEPAINT,Consumer Durables,A
+BDL,Capital Goods,A
+BEL,Capital Goods,A
+BHARATFORG,Automobile and Auto Components,A
+BHEL,Capital Goods,A
+BPCL,Oil Gas & Consumable Fuels,A
+BHARTIARTL,Telecommunication,A
+BHARTIHEXA,Telecommunication,A
+BIKAJI,Fast Moving Consumer Goods,A
+GROWW,Financial Services ex-Bank,A
+BIOCON,Healthcare,A
+BSOFT,Information Technology,A
+BLUEDART,Services,A
+BLUEJET,Healthcare,A
+BLUESTARCO,Consumer Durables,A
+BBTC,Fast Moving Consumer Goods,A
+BOSCHLTD,Automobile and Auto Components,A
+FIRSTCRY,Consumer Services,A
+BRIGADE,Realty,A
+BRITANNIA,Fast Moving Consumer Goods,A
+MAPMYINDIA,Information Technology,A
+CCL,Fast Moving Consumer Goods,A
+CESC,Power,A
+CGPOWER,Capital Goods,A
+CIEINDIA,Automobile and Auto Components,A
+CRISIL,Financial Services ex-Bank,A
+CANFINHOME,Financial Services ex-Bank,A
+CANBK,PSU Bank,A
+CANHLIFE,Financial Services ex-Bank,A
+CAPLIPOINT,Healthcare,A
+CGCL,Financial Services ex-Bank,A
+CARBORUNIV,Capital Goods,A
+CARTRADE,Consumer Services,A
+CASTROLIND,Oil Gas & Consumable Fuels,A
+CEATLTD,Automobile and Auto Components,A
+CEMPRO,Construction,A
+CENTRALBK,PSU Bank,A
+CDSL,Financial Services ex-Bank,A
+CHALET,Consumer Services,A
+CHAMBLFERT,Chemicals,A
+CHENNPETRO,Oil Gas & Consumable Fuels,A
+CHOICEIN,Financial Services ex-Bank,A
+CHOLAHLDNG,Financial Services ex-Bank,A
+CHOLAFIN,Financial Services ex-Bank,A
+CIPLA,Healthcare,A
+CUB,Private Bank,A
+CLEAN,Chemicals,A
+COALINDIA,Oil Gas & Consumable Fuels,A
+COCHINSHIP,Capital Goods,A
+COFORGE,Information Technology,A
+COHANCE,Healthcare,A
+COLPAL,Fast Moving Consumer Goods,A
+CAMS,Financial Services ex-Bank,A
+CONCORDBIO,Healthcare,A
+CONCOR,Services,A
+COROMANDEL,Chemicals,A
+CRAFTSMAN,Automobile and Auto Components,A
+CREDITACC,Financial Services ex-Bank,A
+CROMPTON,Consumer Durables,A
+CUMMINSIND,Capital Goods,A
+CYIENT,Information Technology,A
+DLF,Realty,A
+DOMS,Fast Moving Consumer Goods,A
+DABUR,Fast Moving Consumer Goods,A
+DALBHARAT,Construction Materials,A
+DATAPATTNS,Capital Goods,A
+DEEPAKFERT,Chemicals,A
+DEEPAKNTR,Chemicals,A
+DELHIVERY,Services,A
+DEVYANI,Consumer Services,A
+DIVISLAB,Healthcare,A
+DIXON,Consumer Durables,A
+LALPATHLAB,Healthcare,A
+DRREDDY,Healthcare,A
+EIDPARRY,Fast Moving Consumer Goods,A
+EIHOTEL,Consumer Services,A
+EICHERMOT,Automobile and Auto Components,A
+ELECON,Capital Goods,A
+ELGIEQUIP,Capital Goods,A
+EMAMILTD,Fast Moving Consumer Goods,A
+EMCURE,Healthcare,A
+EMMVEE,Capital Goods,A
+ENDURANCE,Automobile and Auto Components,A
+ENGINERSIN,Construction,A
+ERIS,Healthcare,A
+ESCORTS,Capital Goods,A
+ETERNAL,Consumer Services,A
+EXIDEIND,Automobile and Auto Components,A
+NYKAA,Consumer Services,A
+FEDERALBNK,Private Bank,A
+FACT,Chemicals,A
+FINCABLES,Capital Goods,A
+FSL,Services,A
+FIVESTAR,Financial Services ex-Bank,A
+FORCEMOT,Automobile and Auto Components,A
+FORTIS,Healthcare,A
+GAIL,Oil Gas & Consumable Fuels,A
+GVT&D,Capital Goods,A
+GMRAIRPORT,Services,A
+GABRIEL,Automobile and Auto Components,A
+GALLANTT,Capital Goods,A
+GRSE,Capital Goods,A
+GICRE,Financial Services ex-Bank,A
+GILLETTE,Fast Moving Consumer Goods,A
+GLAND,Healthcare,A
+GLAXO,Healthcare,A
+GLENMARK,Healthcare,A
+MEDANTA,Healthcare,A
+GODIGIT,Financial Services ex-Bank,A
+GPIL,Capital Goods,A
+GODFRYPHLP,Fast Moving Consumer Goods,A
+GODREJCP,Fast Moving Consumer Goods,A
+GODREJPROP,Realty,A
+GRANULES,Healthcare,A
+GRAPHITE,Capital Goods,A
+GRASIM,Construction Materials,A
+GRAVITA,Metals & Mining,A
+GESHIP,Services,A
+FLUOROCHEM,Chemicals,A
+GMDCLTD,Metals & Mining,A
+HEG,Capital Goods,A
+HBLENGINE,Capital Goods,A
+HCLTECH,Information Technology,A
+HDBFS,Financial Services ex-Bank,A
+HDFCAMC,Financial Services ex-Bank,A
+HDFCBANK,Private Bank,A
+HDFCLIFE,Financial Services ex-Bank,A
+HFCL,Telecommunication,A
+HAVELLS,Consumer Durables,A
+HEROMOTOCO,Automobile and Auto Components,A
+HEXT,Information Technology,A
+HSCL,Chemicals,A
+HINDALCO,Metals & Mining,A
+HAL,Capital Goods,A
+HINDCOPPER,Metals & Mining,A
+HINDPETRO,Oil Gas & Consumable Fuels,A
+HINDUNILVR,Fast Moving Consumer Goods,A
+HINDZINC,Metals & Mining,A
+POWERINDIA,Capital Goods,A
+HOMEFIRST,Financial Services ex-Bank,A
+HONASA,Fast Moving Consumer Goods,A
+HONAUT,Capital Goods,A
+HUDCO,Financial Services ex-Bank,A
+HYUNDAI,Automobile and Auto Components,A
+ICICIBANK,Private Bank,A
+ICICIGI,Financial Services ex-Bank,A
+ICICIAMC,Financial Services ex-Bank,A
+ICICIPRULI,Financial Services ex-Bank,A
+IDBI,Private Bank,A
+IDFCFIRSTB,Private Bank,A
+IFCI,Financial Services ex-Bank,A
+IIFL,Financial Services ex-Bank,A
+IRB,Construction,A
+IRCON,Construction,A
+ITCHOTELS,Consumer Services,A
+ITC,Fast Moving Consumer Goods,A
+ITI,Telecommunication,A
+INDGN,Healthcare,A
+INDIACEM,Construction Materials,A
+INDIAMART,Consumer Services,A
+INDIANB,PSU Bank,A
+IEX,Financial Services ex-Bank,A
+INDHOTEL,Consumer Services,A
+IOC,Oil Gas & Consumable Fuels,A
+IOB,PSU Bank,A
+IRCTC,Consumer Services,A
+IRFC,Financial Services ex-Bank,A
+IREDA,Financial Services ex-Bank,A
+IGL,Oil Gas & Consumable Fuels,A
+INDUSTOWER,Telecommunication,A
+INDUSINDBK,Private Bank,A
+NAUKRI,Consumer Services,A
+INFY,Information Technology,A
+INOXWIND,Capital Goods,A
+INTELLECT,Information Technology,A
+INDIGO,Services,A
+IGIL,Services,A
+IKS,Information Technology,A
+IPCALAB,Healthcare,A
+JKCEMENT,Construction Materials,A
+JBMA,Automobile and Auto Components,A
+JKTYRE,Automobile and Auto Components,A
+JMFINANCIL,Financial Services ex-Bank,A
+JSWCEMENT,Construction Materials,A
+JSWDULUX,Consumer Durables,A
+JSWENERGY,Power,A
+JSWINFRA,Services,A
+JSWSTEEL,Metals & Mining,A
+JAINREC,Metals & Mining,A
+JPPOWER,Power,A
+J&KBANK,Financial Services ex-Bank,A
+JINDALSAW,Capital Goods,A
+JSL,Metals & Mining,A
+JINDALSTEL,Metals & Mining,A
+JIOFIN,Financial Services ex-Bank,A
+JUBLFOOD,Consumer Services,A
+JUBLINGREA,Chemicals,A
+JUBLPHARMA,Healthcare,A
+JWL,Capital Goods,A
+JYOTICNC,Capital Goods,A
+KPRMILL,Textiles,A
+KEI,Capital Goods,A
+KPITTECH,Information Technology,A
+KAJARIACER,Consumer Durables,A
+KPIL,Construction,A
+KALYANKJIL,Consumer Durables,A
+KARURVYSYA,Private Bank,A
+KAYNES,Capital Goods,A
+KEC,Construction,A
+KFINTECH,Financial Services ex-Bank,A
+KIRLOSENG,Capital Goods,A
+KOTAKBANK,Private Bank,A
+KIMS,Healthcare,A
+LTF,Financial Services ex-Bank,A
+LTTS,Information Technology,A
+LGEINDIA,Consumer Durables,A
+LICHSGFIN,Financial Services ex-Bank,A
+LTFOODS,Fast Moving Consumer Goods,A
+LTM,Information Technology,A
+LT,Construction,A
+LATENTVIEW,Information Technology,A
+LAURUSLABS,Healthcare,A
+THELEELA,Consumer Services,A
+LEMONTREE,Consumer Services,A
+LENSKART,Consumer Services,A
+LICI,Financial Services ex-Bank,A
+LINDEINDIA,Chemicals,A
+LLOYDSME,Metals & Mining,A
+LODHA,Realty,A
+LUPIN,Healthcare,A
+MMTC,Services,A
+MRF,Automobile and Auto Components,A
+MGL,Oil Gas & Consumable Fuels,A
+M&MFIN,Financial Services ex-Bank,A
+M&M,Automobile and Auto Components,A
+MANAPPURAM,Financial Services ex-Bank,A
+MRPL,Oil Gas & Consumable Fuels,A
+MANKIND,Healthcare,A
+MARICO,Fast Moving Consumer Goods,A
+MARUTI,Automobile and Auto Components,A
+MFSL,Financial Services ex-Bank,A
+MAXHEALTH,Healthcare,A
+MAZDOCK,Capital Goods,A
+MEESHO,Consumer Services,A
+MINDACORP,Automobile and Auto Components,A
+MSUMI,Automobile and Auto Components,A
+MOTILALOFS,Financial Services ex-Bank,A
+MPHASIS,Information Technology,A
+MCX,Financial Services ex-Bank,A
+MUTHOOTFIN,Financial Services ex-Bank,A
+NATCOPHARM,Healthcare,A
+NBCC,Construction,A
+NCC,Construction,A
+NHPC,Power,A
+NLCINDIA,Power,A
+NMDC,Metals & Mining,A
+NSLNISP,Metals & Mining,A
+NTPCGREEN,Power,A
+NTPC,Power,A
+NH,Healthcare,A
+NATIONALUM,Metals & Mining,A
+NAVA,Power,A
+NAVINFLUOR,Chemicals,A
+NESTLEIND,Fast Moving Consumer Goods,A
+NETWEB,Information Technology,A
+NEULANDLAB,Healthcare,A
+NEWGEN,Information Technology,A
+NAM-INDIA,Financial Services ex-Bank,A
+NIVABUPA,Financial Services ex-Bank,A
+NUVAMA,Financial Services ex-Bank,A
+NUVOCO,Construction Materials,A
+OBEROIRLTY,Realty,A
+ONGC,Oil Gas & Consumable Fuels,A
+OIL,Oil Gas & Consumable Fuels,A
+OLAELEC,Automobile and Auto Components,A
+OLECTRA,Automobile and Auto Components,A
+PAYTM,Financial Services ex-Bank,A
+ONESOURCE,Healthcare,A
+OFSS,Information Technology,A
+POLICYBZR,Financial Services ex-Bank,A
+PCBL,Chemicals,A
+PGEL,Consumer Durables,A
+PIIND,Chemicals,A
+PNBHOUSING,Financial Services ex-Bank,A
+PTCIL,Capital Goods,A
+PVRINOX,Media Entertainment & Publication,A
+PAGEIND,Textiles,A
+PARADEEP,Chemicals,A
+PATANJALI,Fast Moving Consumer Goods,A
+PERSISTENT,Information Technology,A
+PETRONET,Oil Gas & Consumable Fuels,A
+PFIZER,Healthcare,A
+PHOENIXLTD,Realty,A
+PWL,Consumer Services,A
+PIDILITIND,Chemicals,A
+PINELABS,Financial Services ex-Bank,A
+PIRAMALFIN,Financial Services ex-Bank,A
+PPLPHARMA,Healthcare,A
+POLYMED,Healthcare,A
+POLYCAB,Capital Goods,A
+POONAWALLA,Financial Services ex-Bank,A
+PFC,Financial Services ex-Bank,A
+POWERGRID,Power,A
+PREMIERENE,Capital Goods,A
+PRESTIGE,Realty,A
+PFOCUS,Media Entertainment & Publication,A
+PNB,PSU Bank,A
+RRKABEL,Capital Goods,A
+RBLBANK,Private Bank,A
+RECLTD,Financial Services ex-Bank,A
+RHIM,Capital Goods,A
+RITES,Construction,A
+RADICO,Fast Moving Consumer Goods,A
+RVNL,Construction,A
+RAILTEL,Telecommunication,A
+RAINBOW,Healthcare,A
+RKFORGE,Automobile and Auto Components,A
+REDINGTON,Services,A
+RELIANCE,Oil Gas & Consumable Fuels,A
+RPOWER,Power,A
+SBFC,Financial Services ex-Bank,A
+SBICARD,Financial Services ex-Bank,A
+SBILIFE,Financial Services ex-Bank,A
+SJVN,Power,A
+SRF,Chemicals,A
+SAGILITY,Information Technology,A
+SAILIFE,Healthcare,A
+SAMMAANCAP,Financial Services ex-Bank,A
+MOTHERSON,Automobile and Auto Components,A
+SAPPHIRE,Consumer Services,A
+SARDAEN,Metals & Mining,A
+SAREGAMA,Media Entertainment & Publication,A
+SCHAEFFLER,Automobile and Auto Components,A
+SCHNEIDER,Capital Goods,A
+SCI,Services,A
+SHREECEM,Construction Materials,A
+SHRIRAMFIN,Financial Services ex-Bank,A
+SHYAMMETL,Capital Goods,A
+ENRIN,Capital Goods,A
+SIEMENS,Capital Goods,A
+SIGNATURE,Realty,A
+SOBHA,Realty,A
+SOLARINDS,Chemicals,A
+SONACOMS,Automobile and Auto Components,A
+SONATSOFTW,Information Technology,A
+STARHEALTH,Financial Services ex-Bank,A
+SBIN,PSU Bank,A
+SAIL,Metals & Mining,A
+SUMICHEM,Chemicals,A
+SUNPHARMA,Healthcare,A
+SUNTV,Media Entertainment & Publication,A
+SUNDARMFIN,Financial Services ex-Bank,A
+SUPREMEIND,Capital Goods,A
+SPLPETRO,Chemicals,A
+SUZLON,Capital Goods,A
+SWANCORP,Chemicals,A
+SWIGGY,Consumer Services,A
+SYNGENE,Healthcare,A
+SYRMA,Capital Goods,A
+TBOTEK,Consumer Services,A
+TVSMOTOR,Automobile and Auto Components,A
+TATACAP,Financial Services ex-Bank,A
+TATACHEM,Chemicals,A
+TATACOMM,Telecommunication,A
+TCS,Information Technology,A
+TATACONSUM,Fast Moving Consumer Goods,A
+TATAELXSI,Information Technology,A
+TATAINVEST,Financial Services ex-Bank,A
+TMCV,Capital Goods,A
+TMPV,Automobile and Auto Components,A
+TATAPOWER,Power,A
+TATASTEEL,Metals & Mining,A
+TATATECH,Information Technology,A
+TTML,Telecommunication,A
+TECHM,Information Technology,A
+TECHNOE,Construction,A
+TEGA,Capital Goods,A
+TEJASNET,Telecommunication,A
+TENNIND,Automobile and Auto Components,A
+NIACL,Financial Services ex-Bank,A
+RAMCOCEM,Construction Materials,A
+THERMAX,Capital Goods,A
+TIMKEN,Capital Goods,A
+TITAGARH,Capital Goods,A
+TITAN,Consumer Durables,A
+TORNTPHARM,Healthcare,A
+TORNTPOWER,Power,A
+TARIL,Capital Goods,A
+TRAVELFOOD,Consumer Services,A
+TRENT,Consumer Services,A
+TRIDENT,Textiles,A
+TRITURBINE,Capital Goods,A
+TIINDIA,Automobile and Auto Components,A
+UCOBANK,PSU Bank,A
+UNOMINDA,Automobile and Auto Components,A
+UPL,Chemicals,A
+UTIAMC,Financial Services ex-Bank,A
+ULTRACEMCO,Construction Materials,A
+UNIONBANK,PSU Bank,A
+UBL,Fast Moving Consumer Goods,A
+UNITDSPR,Fast Moving Consumer Goods,A
+URBANCO,Consumer Services,A
+USHAMART,Capital Goods,A
+VTL,Textiles,A
+VBL,Fast Moving Consumer Goods,A
+VEDL,Metals & Mining,A
+VIJAYA,Healthcare,A
+VMM,Consumer Services,A
+IDEA,Telecommunication,A
+VOLTAS,Consumer Durables,A
+WAAREEENER,Capital Goods,A
+WELCORP,Capital Goods,A
+WELSPUNLIV,Textiles,A
+WHIRLPOOL,Consumer Durables,A
+WIPRO,Information Technology,A
+WOCKPHARMA,Healthcare,A
+YESBANK,Private Bank,A
+ZFCVINDIA,Automobile and Auto Components,A
+ZEEL,Media Entertainment & Publication,A
+ZENTEC,Capital Goods,A
+ZENSARTECH,Information Technology,A
+ZYDUSLIFE,Healthcare,A
+ZYDUSWELL,Fast Moving Consumer Goods,A
+ECLERX,Services,A
+BEL,Defence,B
+HAL,Defence,B
+BDL,Defence,B
+SOLARINDS,Defence,B
+MAZDOCK,Defence,B
+COCHINSHIP,Defence,B
+GRSE,Defence,B
+DATAPATTNS,Defence,B
+ASTRAMICRO,Defence,B
+MTARTECH,Defence,B
+PARAS,Defence,B
+ZENTEC,Defence,B
+BHARATFORG,Defence,B
+DCXINDIA,Defence,B
+APOLLO,Defence,B
+IDEAFORGE,Defence,B
+TITAGARH,Railways & Wagons,B
+JWL,Railways & Wagons,B
+RVNL,Railways & Wagons,B
+IRCON,Railways & Wagons,B
+TEXRAIL,Railways & Wagons,B
+RAILTEL,Railways & Wagons,B
+IRFC,Railways & Wagons,B
+BEML,Railways & Wagons,B
+CONCOR,Railways & Wagons,B
+IRCTC,Railways & Wagons,B
+DIXON,Electronics Manufacturing,B
+AMBER,Electronics Manufacturing,B
+KAYNES,Electronics Manufacturing,B
+SYRMA,Electronics Manufacturing,B
+CYIENTDLM,Electronics Manufacturing,B
+AVALON,Electronics Manufacturing,B
+PGEL,Electronics Manufacturing,B
+CENTUM,Electronics Manufacturing,B
+ELIN,Electronics Manufacturing,B
+EPACK,Electronics Manufacturing,B
+SUZLON,Renewables,B
+INOXWIND,Renewables,B
+WAAREEENER,Renewables,B
+PREMIERENE,Renewables,B
+BORORENEW,Renewables,B
+KPIGREEN,Renewables,B
+SWSOLAR,Renewables,B
+WEBELSOLAR,Renewables,B
+BALRAMCHIN,Sugar & Agri-inputs,B
+TRIVENI,Sugar & Agri-inputs,B
+DHAMPURSUG,Sugar & Agri-inputs,B
+RENUKA,Sugar & Agri-inputs,B
+DALMIASUG,Sugar & Agri-inputs,B
+BAJAJHIND,Sugar & Agri-inputs,B
+COROMANDEL,Sugar & Agri-inputs,B
+CHAMBLFERT,Sugar & Agri-inputs,B
+UPL,Sugar & Agri-inputs,B
+DHANUKA,Sugar & Agri-inputs,B
+RALLIS,Sugar & Agri-inputs,B
+KSCL,Sugar & Agri-inputs,B
+GODREJAGRO,Sugar & Agri-inputs,B
+AVANTIFEED,Sugar & Agri-inputs,B
+INDHOTEL,Hospitality & Travel,B
+EIHOTEL,Hospitality & Travel,B
+CHALET,Hospitality & Travel,B
+LEMONTREE,Hospitality & Travel,B
+JUNIPER,Hospitality & Travel,B
+SAMHI,Hospitality & Travel,B
+INDIGO,Hospitality & Travel,B
+THOMASCOOK,Hospitality & Travel,B
+MHRIL,Hospitality & Travel,B
+WONDERLA,Hospitality & Travel,B
+CONCOR,Logistics,B
+DELHIVERY,Logistics,B
+BLUEDART,Logistics,B
+TCI,Logistics,B
+MAHLOG,Logistics,B
+VRLLOG,Logistics,B
+ALLCARGO,Logistics,B
+GATEWAY,Logistics,B
+ADANIPORTS,Logistics,B

@@ -23,7 +23,7 @@ adjusted on the ex-date. This is the correct fix; dropping affected names would
 bias breadth downward.
 """
 
-import glob, gzip, json, os, subprocess, sys
+import glob, gzip, json, os, shutil, subprocess, sys
 from datetime import datetime, timezone
 
 import numpy as np
@@ -40,6 +40,11 @@ INDEX_MAP = {
     "INDIA VIX": "vix.csv",
 }
 CA_LOW, CA_HIGH = 0.85, 1.18   # PREV_CLOSE/prior-close ratios outside this = corporate action
+
+
+def man_date_tag(ts):
+    """YYYY-MM-DD tag for snapshot filenames."""
+    return str(pd.Timestamp(ts).date())
 
 
 def datestr_from(path, prefix):
@@ -248,6 +253,58 @@ def main():
         if os.path.exists(tmp):
             os.remove(tmp)
 
+    # ---- HARNESS FIX 1: staleness detection -------------------------------
+    # A symbol can stop updating without anything failing: renamed, delisted,
+    # restructured, or silently dropped by the ingest. Downstream this shows up
+    # only as a NaN ADV, which every gate reads as UNVERIFIED and skips. STLTECH
+    # stopped on 2026-05-13 and went unnoticed for four months.
+    latest = panel["date"].max()
+    lastseen = panel.groupby("symbol")["date"].max()
+    stale = lastseen[lastseen < latest - pd.Timedelta(days=10)].sort_values()
+    stale_out = os.path.join(ART, "stale_symbols.csv")
+    if len(stale):
+        sd = stale.reset_index()
+        sd.columns = ["symbol", "last_session"]
+        sd["days_stale"] = (latest - stale.values).days if hasattr(
+            (latest - stale.values), "days") else [
+            (latest - d).days for d in stale.values]
+        sd.to_csv(stale_out, index=False)
+        recent = sd[sd.days_stale <= 120]
+        warnings.append(
+            "%d symbol(s) stale (no data for >10 sessions); %d went stale in the "
+            "last 120 days. See artifacts/stale_symbols.csv. A stale symbol yields "
+            "NaN ADV and is silently skipped by every liquidity gate."
+            % (len(sd), len(recent)))
+        print("stale: %d symbols -> artifacts/stale_symbols.csv" % len(sd))
+        for _, r in recent.head(10).iterrows():
+            print("   %-14s last %s (%d days)" % (r.symbol, r.last_session.date()
+                  if hasattr(r.last_session, "date") else r.last_session, r.days_stale))
+    else:
+        pd.DataFrame(columns=["symbol", "last_session", "days_stale"]).to_csv(
+            stale_out, index=False)
+        print("stale: none")
+
+    # ---- HARNESS FIX 2: archive constituent lists point-in-time ------------
+    # sector_map_v1.csv is built from the CURRENT Nifty 500 list. Any replay that
+    # uses it gives the map foreknowledge of index additions, flattering recall.
+    # Nothing can reconstruct past membership, so start archiving now: within a
+    # few months a point-in-time replay becomes possible.
+    snapdir = os.path.join(ROOT, "reference", "snapshots")
+    os.makedirs(snapdir, exist_ok=True)
+    n_snap = 0
+    for fname in ("ind_nifty500list.csv", "ind_nifty100list.csv",
+                  "ind_niftymidcap150list.csv", "ind_niftysmallcap250list.csv"):
+        src = os.path.join(ROOT, "reference", fname)
+        if not os.path.exists(src):
+            continue
+        dst = os.path.join(snapdir, "%s_%s" % (man_date_tag(latest), fname))
+        if not os.path.exists(dst):
+            shutil.copyfile(src, dst)
+            n_snap += 1
+    if n_snap:
+        print("snapshots: %d constituent list(s) archived for %s"
+              % (n_snap, man_date_tag(latest)))
+
     man = {
         "built_at_utc": datetime.now(timezone.utc).isoformat(),
         "bhavcopy_files": n_files,
@@ -257,6 +314,7 @@ def main():
         "latest_session": str(panel["date"].max().date()),
         "corporate_action_events": n_ev,
         "symbols_cap_classified": len(cap_rows),
+        "stale_symbols": int(len(stale)),
         "warnings": warnings,
     }
     json.dump(man, open(os.path.join(ART, "manifest.json"), "w"), indent=2)

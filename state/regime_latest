@@ -1,15 +1,15 @@
 {
-  "asof": "2026-08-31",
-  "composite_score": 59.04,
+  "asof": "2026-08-28",
+  "composite_score": 61.95,
   "state_raw": "NEUTRAL",
   "state_after_transition": "NEUTRAL",
   "partial": true,
   "degraded_benchmark": false,
   "benchmark_name": "NIFTY500",
   "cap_tier_divergence": {
-    "broad_pct_vs_200dma": 1.63,
-    "largecap_pct_vs_200dma": -2.3,
-    "gap_pp": 3.94,
+    "broad_pct_vs_200dma": 1.97,
+    "largecap_pct_vs_200dma": -1.95,
+    "gap_pp": 3.91,
     "flag": "CAP-TIER DIVERGENCE +3.9 pp. Broad market and large caps are on materially different footings. Favourable for a small/mid book when positive, a warning when negative. This is why the Nifty 50 may never substitute for the Nifty 500 here."
   },
   "components_missing": [
@@ -18,61 +18,57 @@
   "weights_renormalized_total": 0.9,
   "components": {
     "index_trend": {
-      "score": 53.75,
+      "score": 60.07,
       "weight": 0.25,
       "detail": {
-        "pct_vs_200dma": 1.63,
-        "dma200_slope_20s_pct": -0.008,
-        "sub_position": 63.1,
-        "sub_slope": 39.7
+        "pct_vs_200dma": 1.97,
+        "dma200_slope_20s_pct": 0.009,
+        "sub_position": 64.8,
+        "sub_slope": 52.9
       }
     },
     "participation": {
-      "score": 63.17,
+      "score": 63.87,
       "weight": 0.25,
       "detail": {
-        "pct_above_200dma": 56.9
+        "pct_above_200dma": 57.32
       }
     },
     "thrust": {
-      "score": 33.52,
+      "score": 36.02,
       "weight": 0.15,
       "detail": {
-        "pct_above_50dma": 45.82,
-        "delta_10s_pp": -8.78,
-        "sub_level": 49.4,
-        "sub_delta": 14.1
+        "pct_above_50dma": 47.7,
+        "delta_10s_pp": -8.21,
+        "sub_level": 51.9,
+        "sub_delta": 16.6
       }
     },
     "smallcap_health": {
-      "score": 70.92,
+      "score": 73.64,
       "weight": 0.15,
       "detail": {
-        "ratio_vs_50dma_pct": 2.16
+        "ratio_vs_50dma_pct": 2.52
       }
     },
     "volatility": {
-      "score": 82.36,
+      "score": 83.25,
       "weight": 0.1,
       "detail": {
-        "vix": 11.19,
-        "vix_chg_20s_pct": -6.2,
+        "vix": 10.68,
+        "vix_chg_20s_pct": -9.18,
         "sub_level": 85.0,
-        "sub_trend": 76.2
+        "sub_trend": 79.2
       }
     }
   },
   "breadth": {
-    "pct_above_200dma": 56.9,
-    "pct_above_50dma": 45.82,
-    "pct_above_50dma_10s_ago": 54.6,
-    "n_with_200dma": 471,
+    "pct_above_200dma": 57.32,
+    "pct_above_50dma": 47.7,
+    "pct_above_50dma_10s_ago": 55.91,
+    "n_with_200dma": 492,
     "n_symbols_total": 500,
-    "n_dropped_insufficient_history": 8,
-    "source": "computed_from_panel",
-    "breadth_warnings": [
-      "21 symbols (4.2%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
-    ]
+    "n_dropped_insufficient_history": 8
   },
   "overrides_fired": [],
   "transition": {
@@ -86,8 +82,8 @@
     "cap_tilt": "mid favoured; max 2 smallcap positions",
     "new_entries": "tranches 1 and 2 only",
     "heat_cap_pct": 3.5,
-    "max_deployment_rupees": 4800000,
-    "heat_cap_rupees": 280000
+    "max_deployment_rupees": 6000000,
+    "heat_cap_rupees": 350000
   },
-  "nifty500_5session_return_pct": -0.26
+  "nifty500_5session_return_pct": -0.01
 }

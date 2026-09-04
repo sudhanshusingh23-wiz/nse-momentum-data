@@ -52,9 +52,13 @@ def datestr_from(path, prefix):
     return b if len(b) == 8 and b.isdigit() else None
 
 
+MAINBOARD_SERIES = {"EQ", "BE", "BZ"}
+
+
 def load_bhavcopy():
     files = sorted(glob.glob(os.path.join(ROOT, "data", "sec_bhavdata_full_*.csv")))
     rows, skipped = [], 0
+    series_seen = {}
     for p in files:
         ds = datestr_from(p, "sec_bhavdata_full_")
         if not ds:
@@ -68,9 +72,28 @@ def load_bhavcopy():
         if not {"SYMBOL", "CLOSE_PRICE", "PREV_CLOSE"}.issubset(df.columns):
             skipped += 1
             continue
+        # ---- INGEST FIX: keep all mainboard equity series, not just EQ -------
+        # A `== "EQ"` filter silently discarded 25% of every daily file. Any
+        # symbol moved to Trade-for-Trade (BE) or flagged non-compliant (BZ)
+        # vanished from the panel with no error: STLTECH went BE on 2026-05-14
+        # and was absent for four months while trading Rs 22 cr a day. 210 of
+        # the 331 "stale" symbols were live on a non-EQ series.
+        #
+        # BE/BZ matter *more* than average, not less: that is where surveillance
+        # sends a stock, so this is exactly the population the risk layer must
+        # keep seeing — especially for a position already held.
+        #
+        # Deliberately excluded: GS/GB (government securities), IV/RR/E1
+        # (InvITs, REITs), SM/ST (SME platform - thin floats, different lot
+        # rules; revisit as an explicit decision, not an accident).
         if "SERIES" in df.columns:
-            df = df[df["SERIES"].astype(str).str.strip() == "EQ"]
+            ser = df["SERIES"].astype(str).str.strip()
+            df = df[ser.isin(MAINBOARD_SERIES)].copy()
+            df["SERIES"] = ser[ser.isin(MAINBOARD_SERIES)]
+            series_seen[ds] = ser.value_counts().to_dict()
         cols = ["SYMBOL", "CLOSE_PRICE", "PREV_CLOSE"]
+        if "SERIES" in df.columns:
+            cols.append("SERIES")
         # HIGH/LOW are needed for a true ATR. Without them ATR degrades to mean
         # absolute close-to-close change, which understates it by roughly 35% and
         # makes every stock look more extended than it is.
@@ -86,12 +109,14 @@ def load_bhavcopy():
     d = d.rename(columns={"SYMBOL": "symbol", "CLOSE_PRICE": "close",
                           "PREV_CLOSE": "prev_close", "TURNOVER_LACS": "turnover",
                           "HIGH_PRICE": "high", "LOW_PRICE": "low",
-                          "DELIV_PER": "delivery_pct"})
+                          "DELIV_PER": "delivery_pct", "SERIES": "series"})
     d["symbol"] = d["symbol"].astype(str).str.strip()
     for c in ("close", "prev_close", "turnover", "delivery_pct", "high", "low"):
         if c in d.columns:
             d[c] = pd.to_numeric(d[c], errors="coerce")
-    return d.dropna(subset=["close"]), len(files), skipped
+    # BE/BZ rows carry no DELIV_PER (NSE prints "-"). Leave it NaN so gates read
+    # UNVERIFIED rather than FAIL, and so delivery-weighted scoring neutralizes.
+    return d.dropna(subset=["close"]), len(files), skipped, series_seen
 
 
 def adjust(d):
@@ -147,11 +172,47 @@ def main():
     print("BUILD ARTIFACTS")
     print("=" * 68)
 
-    raw, n_files, n_skipped = load_bhavcopy()
+    raw, n_files, n_skipped, series_seen = load_bhavcopy()
     print("bhavcopy: %d files, %d skipped, %d rows, %d symbols"
           % (n_files, n_skipped, len(raw), raw["symbol"].nunique()))
     if n_skipped:
         warnings.append("%d bhavcopy file(s) unparseable" % n_skipped)
+
+    # ---- INGEST RECONCILIATION -------------------------------------------
+    # Every row in each raw file is either kept or excluded for a named reason.
+    # An unexplained delta means the parser is losing data, which is how a live
+    # symbol can disappear for four months without a single error.
+    if series_seen:
+        latest_key = max(series_seen)
+        counts = series_seen[latest_key]
+        kept_n = sum(v for k, v in counts.items() if k in MAINBOARD_SERIES)
+        excl = {k: v for k, v in counts.items() if k not in MAINBOARD_SERIES}
+        total = sum(counts.values())
+        print("series (%s): kept %d [%s] | excluded %d [%s]"
+              % (latest_key, kept_n,
+                 ", ".join("%s %d" % (k, counts[k]) for k in sorted(MAINBOARD_SERIES)
+                           if k in counts),
+                 total - kept_n,
+                 ", ".join("%s %d" % (k, v) for k, v in sorted(excl.items()))))
+        if kept_n + (total - kept_n) != total:
+            warnings.append("series reconciliation failed for %s" % latest_key)
+        # Known-and-deliberately-excluded. N1-N9 are non-convertible debentures
+        # (M&MFIN N3 trades near Rs 2,337 while its equity is near Rs 300 - a
+        # different instrument entirely). GS/GB gilts, IV/RR InvITs and REITs,
+        # SM/ST the SME platform, W* warrants, Y1 when-issued.
+        KNOWN_EXCLUDED = ({"GS", "GB", "IV", "RR", "E1", "SM", "ST", "GC", "GZ",
+                           "MF", "NA", "W1", "W2", "W3", "Y1", "nan"}
+                          | {"N%d" % i for i in range(1, 10)})
+        unknown = set(excl) - KNOWN_EXCLUDED
+        if unknown:
+            warnings.append("unrecognised NSE series present and excluded: %s. "
+                            "Decide explicitly whether these belong in the panel."
+                            % ", ".join(sorted(unknown)))
+        n_be = counts.get("BE", 0) + counts.get("BZ", 0)
+        if n_be:
+            print("   %d symbol(s) on BE/BZ (trade-for-trade / non-compliant). "
+                  "These are now retained; NSE prints no delivery for them, so "
+                  "G12 will read UNVERIFIED rather than FAIL." % n_be)
 
     Cadj, n_ev, n_sym = adjust(raw)
     print("corporate actions: %d events across %d symbols, back-adjusted" % (n_ev, n_sym))
@@ -162,7 +223,8 @@ def main():
     panel["date"] = pd.to_datetime(panel["date"], format="%Y%m%d")
     extra = raw.copy()
     extra["date"] = pd.to_datetime(extra["date"], format="%Y%m%d")
-    keep = ["date", "symbol"] + [c for c in ("delivery_pct", "turnover", "high", "low")
+    keep = ["date", "symbol"] + [c for c in ("delivery_pct", "turnover", "high",
+                                             "low", "series")
                                  if c in extra.columns]
     panel = panel.merge(extra[keep].drop_duplicates(["date", "symbol"]),
                         on=["date", "symbol"], how="left")

@@ -327,9 +327,8 @@ def main():
     if len(stale):
         sd = stale.reset_index()
         sd.columns = ["symbol", "last_session"]
-        sd["days_stale"] = (latest - stale.values).days if hasattr(
-            (latest - stale.values), "days") else [
-            (latest - d).days for d in stale.values]
+        sd["last_session"] = pd.to_datetime(sd["last_session"])
+        sd["days_stale"] = (pd.Timestamp(latest) - sd["last_session"]).dt.days
         sd.to_csv(stale_out, index=False)
         recent = sd[sd.days_stale <= 120]
         warnings.append(
@@ -339,8 +338,8 @@ def main():
             % (len(sd), len(recent)))
         print("stale: %d symbols -> artifacts/stale_symbols.csv" % len(sd))
         for _, r in recent.head(10).iterrows():
-            print("   %-14s last %s (%d days)" % (r.symbol, r.last_session.date()
-                  if hasattr(r.last_session, "date") else r.last_session, r.days_stale))
+            print("   %-14s last %s (%d days)"
+                  % (r.symbol, pd.Timestamp(r.last_session).date(), r.days_stale))
     else:
         pd.DataFrame(columns=["symbol", "last_session", "days_stale"]).to_csv(
             stale_out, index=False)

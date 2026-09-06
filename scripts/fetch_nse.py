@@ -63,6 +63,47 @@ LIST_URLS = [
     "https://nsearchives.nseindia.com/content/indices/{name}",
 ]
 
+# ---------------------------------------------------------------------------
+# Sector index constituents.
+#
+# Why: the sector score currently takes its momentum from NSE's cap-weighted
+# index but its breadth from the Industry column of ind_nifty500list. Those are
+# different populations. Measured over 126 sessions the two disagree by 10.4pp
+# on average and by more than 10pp in 8 of 18 sectors -- Defence reads +20.0%
+# on the index (BEL and HAL) against +45.8% on the 16-name basket. A sector can
+# therefore rank near the top while almost none of its constituents are
+# buyable, which is exactly what Defence did (rank 2, best constituent #286).
+#
+# Fetching the official constituent lists lets price and breadth describe the
+# same stocks, and replaces the hand-written Tier B baskets with NSE's own.
+#
+# NSE's filename convention is ind_nifty<name>list.csv but is not uniform for
+# recently launched indices. Unknown names are attempted, logged and skipped --
+# prune the failures from this list once the log shows which resolve.
+SECTOR_LISTS = [
+    # long-established, naming is reliable
+    "ind_niftyautolist.csv", "ind_niftybanklist.csv", "ind_niftyitlist.csv",
+    "ind_niftyfmcglist.csv", "ind_niftymetallist.csv", "ind_niftypharmalist.csv",
+    "ind_niftyrealtylist.csv", "ind_niftymedialist.csv", "ind_niftyenergylist.csv",
+    "ind_niftyinfralist.csv", "ind_niftypselist.csv", "ind_niftycpselist.csv",
+    "ind_niftycommoditieslist.csv", "ind_niftyconsumptionlist.csv",
+    "ind_niftyservicessectorlist.csv", "ind_niftyprivatebanklist.csv",
+    "ind_niftypsubanklist.csv", "ind_niftyfinancialserviceslist.csv",
+    "ind_niftyhealthcarelist.csv", "ind_niftyconsumerdurableslist.csv",
+    "ind_niftyoilgaslist.csv",
+    # newer indices - naming less certain
+    "ind_niftychemicalslist.csv", "ind_niftycapitalmarketslist.csv",
+    "ind_niftyfinancialservicesexbanklist.csv", "ind_niftyindiadefencelist.csv",
+    "ind_niftyindiarailwayspsulist.csv", "ind_niftyindiatourismlist.csv",
+    "ind_niftycapitalgoodslist.csv", "ind_niftyconstructionlist.csv",
+    "ind_niftyconsumerserviceslist.csv", "ind_niftytelecommunicationslist.csv",
+    "ind_niftysugarethanollist.csv", "ind_niftycementlist.csv",
+    "ind_niftypowerlist.csv", "ind_niftytransportationlogisticslist.csv",
+    "ind_niftyindiamanufacturinglist.csv", "ind_niftymidsmallhealthcarelist.csv",
+    "ind_niftyhousinglist.csv", "ind_niftyindiadigitallist.csv",
+]
+SECTOR_LIST_DIR = "sector_constituents"
+
 
 def looks_like_csv(text, must_have, min_rows):
     """Reject HTML error pages, empty files, and truncated downloads."""
@@ -186,6 +227,43 @@ def refresh_constituents(session):
             print("  WARNING: %s could not be fetched and no copy exists. Cap "
                   "classification will be unavailable and the small/mid tilt "
                   "will not be applied." % name)
+    refresh_sector_constituents(session)
+
+
+def refresh_sector_constituents(session):
+    """Fetch NSE sector index constituent lists, weekly, best-effort.
+
+    These are additive: nothing downstream requires them yet. Failures are
+    logged and skipped so an unknown filename never breaks the build.
+    """
+    d = os.path.join(ROOT, "reference", SECTOR_LIST_DIR)
+    os.makedirs(d, exist_ok=True)
+    print("sector index constituents -> reference/%s/" % SECTOR_LIST_DIR)
+    got, missing, skipped = [], [], 0
+    for name in SECTOR_LISTS:
+        path = os.path.join(d, name)
+        if os.path.exists(path):
+            age = (time.time() - os.path.getmtime(path)) / 86400
+            if age < 7:
+                skipped += 1
+                continue
+        urls = [u.replace("{name}", name) for u in LIST_URLS]
+        # sector indices carry as few as 5 constituents
+        txt = fetch(urls, "", ["Symbol"], 3, name.replace("ind_nifty", "")[:14], session)
+        if txt:
+            save(txt, path)
+            got.append(name)
+        else:
+            missing.append(name)
+    print("  resolved %d, unresolved %d, fresh-skipped %d"
+          % (len(got), len(missing), skipped))
+    if got:
+        print("  OK: " + ", ".join(n.replace("ind_nifty", "").replace("list.csv", "")
+                                   for n in got))
+    if missing:
+        print("  NOT FOUND (prune these from SECTOR_LISTS): "
+              + ", ".join(n.replace("ind_nifty", "").replace("list.csv", "")
+                          for n in missing))
 
 
 def main():

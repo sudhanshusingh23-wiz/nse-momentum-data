@@ -1,0 +1,19 @@
+sector,n_const,nse_index,index_sessions,price_series_used
+Automobile and Auto Components,15,NIFTY AUTO,478,official index
+Information Technology,10,NIFTY IT,478,official index
+Fast Moving Consumer Goods,15,NIFTY FMCG,478,official index
+Metals & Mining,15,NIFTY METAL,478,official index
+Realty,10,NIFTY REALTY,478,official index
+Media Entertainment & Publication,10,NIFTY MEDIA,478,official index
+Healthcare,20,NIFTY HEALTHCARE INDEX,478,official index
+Consumer Durables,13,NIFTY CONSUMER DURABLES,478,official index
+Oil Gas & Consumable Fuels,15,NIFTY OIL & GAS,478,official index
+PSU Bank,12,NIFTY PSU BANK,478,official index
+Pharma,20,NIFTY PHARMA,478,official index
+Bank,14,NIFTY BANK,478,official index
+Energy,40,NIFTY ENERGY,478,official index
+Infrastructure,30,NIFTY INFRASTRUCTURE,478,official index
+PSE,20,NIFTY PSE,478,official index
+CPSE,11,NIFTY CPSE,478,official index
+Commodities,30,NIFTY COMMODITIES,478,official index
+Consumption,30,NIFTY INDIA CONSUMPTION,478,official index

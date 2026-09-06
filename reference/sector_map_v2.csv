@@ -1,0 +1,331 @@
+symbol,sector,tier
+ASHOKLEY,Automobile and Auto Components,A
+BAJAJ-AUTO,Automobile and Auto Components,A
+BHARATFORG,Automobile and Auto Components,A
+BOSCHLTD,Automobile and Auto Components,A
+EICHERMOT,Automobile and Auto Components,A
+EXIDEIND,Automobile and Auto Components,A
+HEROMOTOCO,Automobile and Auto Components,A
+M&M,Automobile and Auto Components,A
+MARUTI,Automobile and Auto Components,A
+MOTHERSON,Automobile and Auto Components,A
+SONACOMS,Automobile and Auto Components,A
+TVSMOTOR,Automobile and Auto Components,A
+TMPV,Automobile and Auto Components,A
+TIINDIA,Automobile and Auto Components,A
+UNOMINDA,Automobile and Auto Components,A
+COFORGE,Information Technology,A
+HCLTECH,Information Technology,A
+INFY,Information Technology,A
+LTM,Information Technology,A
+MPHASIS,Information Technology,A
+OFSS,Information Technology,A
+PERSISTENT,Information Technology,A
+TCS,Information Technology,A
+TECHM,Information Technology,A
+WIPRO,Information Technology,A
+BRITANNIA,Fast Moving Consumer Goods,A
+COLPAL,Fast Moving Consumer Goods,A
+DABUR,Fast Moving Consumer Goods,A
+EMAMILTD,Fast Moving Consumer Goods,A
+GODREJCP,Fast Moving Consumer Goods,A
+HINDUNILVR,Fast Moving Consumer Goods,A
+ITC,Fast Moving Consumer Goods,A
+MARICO,Fast Moving Consumer Goods,A
+NESTLEIND,Fast Moving Consumer Goods,A
+PATANJALI,Fast Moving Consumer Goods,A
+RADICO,Fast Moving Consumer Goods,A
+TATACONSUM,Fast Moving Consumer Goods,A
+UBL,Fast Moving Consumer Goods,A
+UNITDSPR,Fast Moving Consumer Goods,A
+VBL,Fast Moving Consumer Goods,A
+APLAPOLLO,Metals & Mining,A
+ADANIENT,Metals & Mining,A
+HINDALCO,Metals & Mining,A
+HINDCOPPER,Metals & Mining,A
+HINDZINC,Metals & Mining,A
+JSWSTEEL,Metals & Mining,A
+JSL,Metals & Mining,A
+JINDALSTEL,Metals & Mining,A
+LLOYDSME,Metals & Mining,A
+NMDC,Metals & Mining,A
+NATIONALUM,Metals & Mining,A
+SAIL,Metals & Mining,A
+TATASTEEL,Metals & Mining,A
+VEDL,Metals & Mining,A
+WELCORP,Metals & Mining,A
+ABREL,Realty,A
+ANANTRAJ,Realty,A
+BRIGADE,Realty,A
+DLF,Realty,A
+GODREJPROP,Realty,A
+LODHA,Realty,A
+OBEROIRLTY,Realty,A
+PHOENIXLTD,Realty,A
+PRESTIGE,Realty,A
+SOBHA,Realty,A
+DBCORP,Media Entertainment & Publication,A
+HATHWAY,Media Entertainment & Publication,A
+NAZARA,Media Entertainment & Publication,A
+NETWORK18,Media Entertainment & Publication,A
+PVRINOX,Media Entertainment & Publication,A
+PFOCUS,Media Entertainment & Publication,A
+SAREGAMA,Media Entertainment & Publication,A
+SUNTV,Media Entertainment & Publication,A
+TIPSMUSIC,Media Entertainment & Publication,A
+ZEEL,Media Entertainment & Publication,A
+ABBOTINDIA,Healthcare,A
+ALKEM,Healthcare,A
+APOLLOHOSP,Healthcare,A
+AUROPHARMA,Healthcare,A
+BIOCON,Healthcare,A
+CIPLA,Healthcare,A
+DIVISLAB,Healthcare,A
+DRREDDY,Healthcare,A
+FORTIS,Healthcare,A
+GLENMARK,Healthcare,A
+IPCALAB,Healthcare,A
+LAURUSLABS,Healthcare,A
+LUPIN,Healthcare,A
+MANKIND,Healthcare,A
+MAXHEALTH,Healthcare,A
+PPLPHARMA,Healthcare,A
+SUNPHARMA,Healthcare,A
+SYNGENE,Healthcare,A
+TORNTPHARM,Healthcare,A
+ZYDUSLIFE,Healthcare,A
+AMBER,Consumer Durables,A
+BATAINDIA,Consumer Durables,A
+BLUESTARCO,Consumer Durables,A
+CROMPTON,Consumer Durables,A
+DIXON,Consumer Durables,A
+HAVELLS,Consumer Durables,A
+KAJARIACER,Consumer Durables,A
+KALYANKJIL,Consumer Durables,A
+LGEINDIA,Consumer Durables,A
+PGEL,Consumer Durables,A
+TITAN,Consumer Durables,A
+VOLTAS,Consumer Durables,A
+WHIRLPOOL,Consumer Durables,A
+ATGL,Oil Gas & Consumable Fuels,A
+AEGISLOG,Oil Gas & Consumable Fuels,A
+AEGISVOPAK,Oil Gas & Consumable Fuels,A
+BPCL,Oil Gas & Consumable Fuels,A
+CASTROLIND,Oil Gas & Consumable Fuels,A
+CHENNPETRO,Oil Gas & Consumable Fuels,A
+GAIL,Oil Gas & Consumable Fuels,A
+HINDPETRO,Oil Gas & Consumable Fuels,A
+IOC,Oil Gas & Consumable Fuels,A
+IGL,Oil Gas & Consumable Fuels,A
+MGL,Oil Gas & Consumable Fuels,A
+ONGC,Oil Gas & Consumable Fuels,A
+OIL,Oil Gas & Consumable Fuels,A
+PETRONET,Oil Gas & Consumable Fuels,A
+RELIANCE,Oil Gas & Consumable Fuels,A
+BANKBARODA,PSU Bank,A
+BANKINDIA,PSU Bank,A
+MAHABANK,PSU Bank,A
+CANBK,PSU Bank,A
+CENTRALBK,PSU Bank,A
+INDIANB,PSU Bank,A
+IOB,PSU Bank,A
+PSB,PSU Bank,A
+PNB,PSU Bank,A
+SBIN,PSU Bank,A
+UCOBANK,PSU Bank,A
+UNIONBANK,PSU Bank,A
+ABBOTINDIA,Pharma,A
+AJANTPHARM,Pharma,A
+ALKEM,Pharma,A
+AUROPHARMA,Pharma,A
+BIOCON,Pharma,A
+CIPLA,Pharma,A
+DIVISLAB,Pharma,A
+DRREDDY,Pharma,A
+GLAND,Pharma,A
+GLENMARK,Pharma,A
+IPCALAB,Pharma,A
+LAURUSLABS,Pharma,A
+LUPIN,Pharma,A
+MANKIND,Pharma,A
+PPLPHARMA,Pharma,A
+SAILIFE,Pharma,A
+SUNPHARMA,Pharma,A
+TORNTPHARM,Pharma,A
+WOCKPHARMA,Pharma,A
+ZYDUSLIFE,Pharma,A
+AUBANK,Bank,A
+AXISBANK,Bank,A
+BANKBARODA,Bank,A
+CANBK,Bank,A
+FEDERALBNK,Bank,A
+HDFCBANK,Bank,A
+ICICIBANK,Bank,A
+IDFCFIRSTB,Bank,A
+INDUSINDBK,Bank,A
+KOTAKBANK,Bank,A
+PNB,Bank,A
+SBIN,Bank,A
+UNIONBANK,Bank,A
+YESBANK,Bank,A
+ABB,Energy,A
+ADANIENSOL,Energy,A
+ADANIGREEN,Energy,A
+ADANIPOWER,Energy,A
+ATGL,Energy,A
+AEGISLOG,Energy,A
+BHEL,Energy,A
+BPCL,Energy,A
+CESC,Energy,A
+CGPOWER,Energy,A
+CASTROLIND,Energy,A
+COALINDIA,Energy,A
+GAIL,Energy,A
+GVT&D,Energy,A
+HINDPETRO,Energy,A
+POWERINDIA,Energy,A
+IOC,Energy,A
+IGL,Energy,A
+INOXWIND,Energy,A
+JSWENERGY,Energy,A
+JPPOWER,Energy,A
+MGL,Energy,A
+NHPC,Energy,A
+NLCINDIA,Energy,A
+NTPCGREEN,Energy,A
+NTPC,Energy,A
+NAVA,Energy,A
+ONGC,Energy,A
+OIL,Energy,A
+PETRONET,Energy,A
+POWERGRID,Energy,A
+RELIANCE,Energy,A
+RPOWER,Energy,A
+SJVN,Energy,A
+ENRIN,Energy,A
+SIEMENS,Energy,A
+SUZLON,Energy,A
+TATAPOWER,Energy,A
+THERMAX,Energy,A
+TORNTPOWER,Energy,A
+ADANIGREEN,Infrastructure,A
+ADANIPORTS,Infrastructure,A
+AMBUJACEM,Infrastructure,A
+APOLLOHOSP,Infrastructure,A
+ASHOKLEY,Infrastructure,A
+BHARATFORG,Infrastructure,A
+BPCL,Infrastructure,A
+BHARTIARTL,Infrastructure,A
+CGPOWER,Infrastructure,A
+CUMMINSIND,Infrastructure,A
+DLF,Infrastructure,A
+FORTIS,Infrastructure,A
+GAIL,Infrastructure,A
+GRASIM,Infrastructure,A
+HINDPETRO,Infrastructure,A
+INDHOTEL,Infrastructure,A
+IOC,Infrastructure,A
+INDUSTOWER,Infrastructure,A
+INDIGO,Infrastructure,A
+LT,Infrastructure,A
+MAXHEALTH,Infrastructure,A
+NTPC,Infrastructure,A
+ONGC,Infrastructure,A
+POWERGRID,Infrastructure,A
+RELIANCE,Infrastructure,A
+MOTHERSON,Infrastructure,A
+SHREECEM,Infrastructure,A
+SUZLON,Infrastructure,A
+TATAPOWER,Infrastructure,A
+ULTRACEMCO,Infrastructure,A
+BEL,PSE,A
+BHEL,PSE,A
+BPCL,PSE,A
+COALINDIA,PSE,A
+CONCOR,PSE,A
+GAIL,PSE,A
+HAL,PSE,A
+HINDPETRO,PSE,A
+IOC,PSE,A
+IRCTC,PSE,A
+IRFC,PSE,A
+NHPC,PSE,A
+NMDC,PSE,A
+NTPC,PSE,A
+ONGC,PSE,A
+OIL,PSE,A
+PFC,PSE,A
+POWERGRID,PSE,A
+RECLTD,PSE,A
+RVNL,PSE,A
+BEL,CPSE,A
+COALINDIA,CPSE,A
+COCHINSHIP,CPSE,A
+NBCC,CPSE,A
+NHPC,CPSE,A
+NLCINDIA,CPSE,A
+NTPC,CPSE,A
+ONGC,CPSE,A
+OIL,CPSE,A
+POWERGRID,CPSE,A
+SJVN,CPSE,A
+APLAPOLLO,Commodities,A
+ADANIENSOL,Commodities,A
+ADANIGREEN,Commodities,A
+ADANIPOWER,Commodities,A
+AMBUJACEM,Commodities,A
+BPCL,Commodities,A
+COALINDIA,Commodities,A
+GRASIM,Commodities,A
+HINDALCO,Commodities,A
+HINDPETRO,Commodities,A
+IOC,Commodities,A
+JSWENERGY,Commodities,A
+JSWSTEEL,Commodities,A
+JINDALSTEL,Commodities,A
+NHPC,Commodities,A
+NMDC,Commodities,A
+NTPC,Commodities,A
+ONGC,Commodities,A
+OIL,Commodities,A
+PIIND,Commodities,A
+PIDILITIND,Commodities,A
+RELIANCE,Commodities,A
+SRF,Commodities,A
+SHREECEM,Commodities,A
+TATAPOWER,Commodities,A
+TATASTEEL,Commodities,A
+TORNTPOWER,Commodities,A
+UPL,Commodities,A
+ULTRACEMCO,Commodities,A
+VEDL,Commodities,A
+ADANIPOWER,Consumption,A
+APOLLOHOSP,Consumption,A
+ASIANPAINT,Consumption,A
+DMART,Consumption,A
+BAJAJ-AUTO,Consumption,A
+BHARTIARTL,Consumption,A
+BRITANNIA,Consumption,A
+DLF,Consumption,A
+DIXON,Consumption,A
+EICHERMOT,Consumption,A
+ETERNAL,Consumption,A
+GODREJCP,Consumption,A
+HAVELLS,Consumption,A
+HEROMOTOCO,Consumption,A
+HINDUNILVR,Consumption,A
+ITC,Consumption,A
+INDHOTEL,Consumption,A
+NAUKRI,Consumption,A
+INDIGO,Consumption,A
+M&M,Consumption,A
+MARUTI,Consumption,A
+MAXHEALTH,Consumption,A
+NESTLEIND,Consumption,A
+TVSMOTOR,Consumption,A
+TATACONSUM,Consumption,A
+TATAPOWER,Consumption,A
+TITAN,Consumption,A
+TRENT,Consumption,A
+UNITDSPR,Consumption,A
+VBL,Consumption,A

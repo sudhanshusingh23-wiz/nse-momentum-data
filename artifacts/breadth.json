@@ -1,17 +1,17 @@
 {
-  "asof": "2026-09-04",
+  "asof": "2026-09-07",
   "universe": "NIFTY500",
-  "pct_above_200dma": 54.53,
-  "pct_above_50dma": 41.54,
-  "pct_above_50dma_10s_ago": 49.9,
-  "delta_10s_pp": -8.35,
-  "pct_within_10pct_of_52w_high": 33.68,
-  "denominator_200dma": 475,
-  "denominator_50dma": 479,
+  "pct_above_200dma": 53.8,
+  "pct_above_50dma": 38.08,
+  "pct_above_50dma_10s_ago": 48.33,
+  "delta_10s_pp": -10.25,
+  "pct_within_10pct_of_52w_high": 31.01,
+  "denominator_200dma": 474,
+  "denominator_50dma": 478,
   "constituents_in_list": 500,
   "not_found_in_panel": 0,
   "excluded_insufficient_history": 4,
-  "excluded_corporate_action_flag": 21,
+  "excluded_corporate_action_flag": 22,
   "ca_flagged_symbols": [
     "ADANIPOWER",
     "AIIL",
@@ -22,6 +22,7 @@
     "ECLERX",
     "GODFRYPHLP",
     "HDFCAMC",
+    "HEG",
     "IRB",
     "KOTAKBANK",
     "LALPATHLAB",
@@ -35,9 +36,9 @@
     "ZFCVINDIA",
     "ZYDUSWELL"
   ],
-  "sessions_in_panel": 495,
+  "sessions_in_panel": 496,
   "method": "computed_from_panel",
   "warnings": [
-    "21 symbols (4.2%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
+    "22 symbols (4.4%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
   ]
 }

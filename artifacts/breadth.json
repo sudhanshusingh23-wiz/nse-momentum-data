@@ -1,17 +1,17 @@
 {
-  "asof": "2026-09-10",
+  "asof": "2026-09-11",
   "universe": "NIFTY500",
-  "pct_above_200dma": 52.53,
-  "pct_above_50dma": 37.24,
-  "pct_above_50dma_10s_ago": 48.54,
-  "delta_10s_pp": -11.3,
-  "pct_within_10pct_of_52w_high": 29.75,
-  "denominator_200dma": 474,
-  "denominator_50dma": 478,
+  "pct_above_200dma": 51.37,
+  "pct_above_50dma": 32.99,
+  "pct_above_50dma_10s_ago": 47.6,
+  "delta_10s_pp": -14.61,
+  "pct_within_10pct_of_52w_high": 29.05,
+  "denominator_200dma": 475,
+  "denominator_50dma": 479,
   "constituents_in_list": 500,
   "not_found_in_panel": 0,
   "excluded_insufficient_history": 4,
-  "excluded_corporate_action_flag": 22,
+  "excluded_corporate_action_flag": 21,
   "ca_flagged_symbols": [
     "ADANIPOWER",
     "AIIL",
@@ -29,16 +29,15 @@
     "LICI",
     "MCX",
     "NUVAMA",
-    "PATANJALI",
     "PIDILITIND",
     "TATAINVEST",
     "VEDL",
     "ZFCVINDIA",
     "ZYDUSWELL"
   ],
-  "sessions_in_panel": 499,
+  "sessions_in_panel": 500,
   "method": "computed_from_panel",
   "warnings": [
-    "22 symbols (4.4%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
+    "21 symbols (4.2%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
   ]
 }

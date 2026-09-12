@@ -120,7 +120,14 @@ def load_bhavcopy():
 
 
 def adjust(d):
-    """Back-adjust for splits/bonuses using NSE's adjusted PREV_CLOSE."""
+    """Back-adjust for splits/bonuses using NSE's adjusted PREV_CLOSE.
+
+    Returns the adjusted close AND the factor matrix. HIGH and LOW must be
+    adjusted by the SAME factor: previously only close was adjusted, which left
+    52 symbols with an adjusted close sitting beside a raw high/low - KOTAKBANK
+    showed a close of 10,806 against a high of 2,139. Every ATR, stop, MAE and
+    MFE computed on those rows was wrong.
+    """
     C = d.pivot_table(index="date", columns="symbol", values="close", aggfunc="last").sort_index()
     P = d.pivot_table(index="date", columns="symbol", values="prev_close",
                       aggfunc="last").sort_index().reindex_like(C)
@@ -133,7 +140,14 @@ def adjust(d):
     n_syms = int((events.notna().sum() > 0).sum())
     Rc = events.fillna(1.0)
     factor = Rc[::-1].cumprod()[::-1].shift(-1).fillna(1.0)   # product of SUBSEQUENT ratios
-    return C * factor, n_events, n_syms
+    return C * factor, factor, n_events, n_syms
+
+
+def apply_factor(d, factor, col):
+    """Apply the corporate-action factor matrix to a raw OHLC column."""
+    M = d.pivot_table(index="date", columns="symbol", values=col,
+                      aggfunc="last").sort_index().reindex_like(factor)
+    return (M * factor).stack().rename(col)
 
 
 def load_indices():
@@ -214,7 +228,7 @@ def main():
                   "These are now retained; NSE prints no delivery for them, so "
                   "G12 will read UNVERIFIED rather than FAIL." % n_be)
 
-    Cadj, n_ev, n_sym = adjust(raw)
+    Cadj, ca_factor, n_ev, n_sym = adjust(raw)
     print("corporate actions: %d events across %d symbols, back-adjusted" % (n_ev, n_sym))
 
     panel = Cadj.stack().reset_index()
@@ -223,11 +237,36 @@ def main():
     panel["date"] = pd.to_datetime(panel["date"], format="%Y%m%d")
     extra = raw.copy()
     extra["date"] = pd.to_datetime(extra["date"], format="%Y%m%d")
-    keep = ["date", "symbol"] + [c for c in ("delivery_pct", "turnover", "high",
-                                             "low", "series")
+    # high/low carry the SAME corporate-action factor as close. Merging them raw
+    # leaves adjusted closes beside unadjusted highs, which silently corrupts ATR.
+    hl = []
+    for col in ("high", "low"):
+        if col in raw.columns:
+            adj = apply_factor(raw, ca_factor, col).reset_index()
+            adj.columns = ["date", "symbol", col]
+            adj["date"] = pd.to_datetime(adj["date"], format="%Y%m%d")
+            hl.append(adj)
+    keep = ["date", "symbol"] + [c for c in ("delivery_pct", "turnover", "series")
                                  if c in extra.columns]
     panel = panel.merge(extra[keep].drop_duplicates(["date", "symbol"]),
                         on=["date", "symbol"], how="left")
+    for adj in hl:
+        panel = panel.merge(adj.drop_duplicates(["date", "symbol"]),
+                            on=["date", "symbol"], how="left")
+    # assert consistency: close must sit inside the high/low band on every row
+    if {"high", "low"}.issubset(panel.columns):
+        band = panel.dropna(subset=["close", "high", "low"])
+        off = band[(band["close"] > band["high"] * 1.02)
+                   | (band["close"] < band["low"] * 0.98)]
+        if len(off):
+            warnings.append("%d row(s) across %d symbol(s) have close outside the "
+                            "high/low band after adjustment - corporate-action "
+                            "factors may be misaligned. See the ca_mismatch artifact."
+                            % (len(off), off["symbol"].nunique()))
+            off.to_csv(os.path.join(ART, "ca_mismatch.csv"), index=False)
+        else:
+            print("   OHLC consistency: close within high/low band on all %d rows"
+                  % len(band))
     ppath = os.path.join(ART, "panel.csv.gz")
     panel.to_csv(ppath, index=False, compression="gzip")
     print("panel: %d rows, %d sessions -> artifacts/panel.csv.gz"

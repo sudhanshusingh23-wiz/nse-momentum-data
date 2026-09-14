@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watchlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E8EDEF; --panel:#FFFFFF; --ink:#16262E; --soft:#5C7078;
+  --rule:#C6D2D7; --rule-soft:#DEE6E9; --petrol:#0F5C6B; --petrol-tint:#E1EDF0;
+  --up:#1E7A4D; --down:#A93A32; --warn:#9E6712; --warn-tint:#FBF0DC;
+  --dead:#8A9AA1;
+  --r:3px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:14px; line-height:1.5;
+}
+.num{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px; margin:0 auto; padding:20px 18px 80px}
+
+/* ---------- header ---------- */
+header{display:flex; flex-wrap:wrap; align-items:baseline; gap:14px; margin-bottom:4px}
+h1{font-size:21px; font-weight:600; letter-spacing:-.01em; margin:0}
+.ro{
+  font-size:11px; color:var(--soft); border:1px solid var(--rule);
+  padding:2px 7px; border-radius:var(--r); background:var(--panel);
+}
+.stamps{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 18px}
+.stamp{
+  font-size:11.5px; padding:3px 8px; border-radius:var(--r);
+  background:var(--panel); border:1px solid var(--rule-soft); color:var(--soft);
+}
+.stamp b{font-weight:500; color:var(--ink)}
+.stamp.stale{background:var(--warn-tint); border-color:#E8D3AB; color:var(--warn)}
+.stamp.none{color:var(--dead)}
+
+/* ---------- controls ---------- */
+.bar{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px}
+.seg{display:flex; border:1px solid var(--rule); border-radius:var(--r); overflow:hidden; background:var(--panel)}
+.seg button{
+  font:inherit; font-size:13px; border:0; background:transparent; color:var(--soft);
+  padding:5px 13px; cursor:pointer; border-right:1px solid var(--rule-soft);
+}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--petrol); color:#fff}
+.seg button:focus-visible{outline:2px solid var(--petrol); outline-offset:-2px}
+.ghost{
+  font:inherit; font-size:13px; background:var(--panel); border:1px solid var(--rule);
+  color:var(--soft); padding:5px 11px; border-radius:var(--r); cursor:pointer;
+}
+.ghost:hover{color:var(--ink); border-color:var(--soft)}
+.spacer{flex:1}
+
+/* ---------- ladder (hero) ---------- */
+.ladder{background:var(--panel); border:1px solid var(--rule); border-radius:var(--r); margin-bottom:20px}
+.ladder-hd{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:11px 14px 9px; border-bottom:1px solid var(--rule-soft);
+}
+.ladder-hd h2{font-size:14px; font-weight:600; margin:0}
+.ladder-hd span{font-size:11.5px; color:var(--soft)}
+.rung{display:grid; grid-template-columns:132px 1fr; border-bottom:1px solid var(--rule-soft)}
+.rung:last-child{border-bottom:0}
+.rung-label{
+  padding:11px 14px; border-right:1px solid var(--rule-soft); background:#F5F8F9;
+}
+.rung-label .nm{font-size:12.5px; font-weight:600; display:block}
+.rung-label .rg{font-size:11px; color:var(--soft)}
+.rung-body{padding:9px 12px; display:flex; flex-wrap:wrap; gap:6px; align-items:flex-start}
+.rung.archive .rung-label{background:#F0F2F3}
+.rung.archive .rung-label .nm{color:var(--down)}
+.empty-rung{font-size:12px; color:var(--dead); padding:2px 0}
+
+.chip{
+  display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+  border:1px solid var(--rule); border-radius:var(--r); background:var(--panel);
+  padding:4px 8px; font-size:12.5px; font-weight:500;
+}
+.chip:hover{border-color:var(--petrol)}
+.chip:focus-visible{outline:2px solid var(--petrol); outline-offset:1px}
+.chip .ms{font-size:11.5px; color:var(--soft)}
+.chip .d{font-size:11px}
+.chip .d.up{color:var(--up)} .chip .d.dn{color:var(--down)}
+.chip.blocked{border-left:3px solid var(--warn)}
+.chip.nodata{color:var(--dead); border-style:dashed}
+
+/* ---------- table ---------- */
+table{width:100%; border-collapse:collapse; background:var(--panel);
+  border:1px solid var(--rule); border-radius:var(--r)}
+th{
+  text-align:left; font-size:11.5px; font-weight:500; color:var(--soft);
+  padding:8px 10px; border-bottom:1px solid var(--rule); cursor:pointer; white-space:nowrap;
+}
+th:hover{color:var(--ink)}
+th.r,td.r{text-align:right}
+td{padding:9px 10px; border-bottom:1px solid var(--rule-soft); font-size:13px}
+tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:#F5F8F9}
+.sym{font-weight:600}
+.sub{font-size:11px; color:var(--soft); font-weight:400}
+.tag{
+  font-size:10.5px; padding:1px 5px; border-radius:2px; border:1px solid var(--rule);
+  color:var(--soft); margin-left:5px; font-weight:500;
+}
+.tag.user{background:var(--petrol-tint); border-color:#BCD6DC; color:var(--petrol)}
+.gate{font-size:12px}
+.gate .p{color:var(--soft)} .gate .f{color:var(--down); font-weight:600}
+.gate .u{color:var(--warn); font-weight:600}
+.fund-no{color:var(--warn); font-weight:600; font-size:12px}
+.fund-yes{color:var(--up); font-size:12px}
+.up{color:var(--up)} .dn{color:var(--down)}
+.nil{color:var(--dead)}
+
+/* ---------- detail ---------- */
+.sheet{
+  position:fixed; inset:0; background:rgba(22,38,46,.34);
+  display:flex; justify-content:flex-end; z-index:50;
+}
+.sheet[hidden]{display:none}
+.sheet-in{
+  background:var(--panel); width:min(470px,100%); height:100%; overflow-y:auto;
+  border-left:1px solid var(--rule); padding:18px 20px 40px;
+}
+.sheet-hd{display:flex; justify-content:space-between; align-items:flex-start; gap:12px}
+.sheet-hd h3{margin:0; font-size:18px; font-weight:600}
+.x{border:0; background:transparent; font-size:22px; line-height:1; color:var(--soft); cursor:pointer; padding:0 2px}
+.blk{margin-top:18px}
+.blk h4{
+  margin:0 0 8px; font-size:11.5px; font-weight:600; color:var(--soft);
+  border-bottom:1px solid var(--rule-soft); padding-bottom:5px;
+}
+.kv{display:grid; grid-template-columns:auto 1fr; gap:3px 14px; font-size:13px}
+.kv dt{color:var(--soft)}
+.kv dd{margin:0}
+.gl{display:flex; justify-content:space-between; font-size:12.5px; padding:3px 0;
+  border-bottom:1px solid #F0F3F4}
+.gl.bad{color:var(--down); font-weight:500}
+.gl.unv{color:var(--warn); font-weight:500}
+.note{font-size:12.5px; padding:5px 0; border-bottom:1px solid #F0F3F4}
+.note b{font-weight:500; color:var(--soft); font-size:11.5px; display:block}
+.block-list{margin:0; padding-left:16px; font-size:12.5px; color:var(--warn)}
+.cmd{
+  background:#16262E; color:#C8D8DD; font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px; padding:9px 11px; border-radius:var(--r);
+  white-space:pre-wrap; word-break:break-all; margin-bottom:6px;
+}
+.cmd .flag{color:#7FB8C4}
+
+dialog{border:1px solid var(--rule); border-radius:var(--r); padding:0; max-width:560px; width:92%}
+dialog::backdrop{background:rgba(22,38,46,.34)}
+.dlg{padding:18px}
+.dlg h3{margin:0 0 6px; font-size:16px}
+.dlg p{margin:0 0 10px; font-size:13px; color:var(--soft)}
+textarea{
+  width:100%; height:190px; font-family:"IBM Plex Mono",monospace; font-size:11.5px;
+  border:1px solid var(--rule); border-radius:var(--r); padding:9px; resize:vertical;
+}
+.err{color:var(--down); font-size:12.5px; margin-top:8px; min-height:17px}
+.dlg-ft{display:flex; gap:8px; justify-content:flex-end; margin-top:10px}
+.primary{
+  font:inherit; font-size:13px; background:var(--petrol); color:#fff; border:0;
+  padding:6px 14px; border-radius:var(--r); cursor:pointer;
+}
+.foot{margin-top:22px; font-size:11.5px; color:var(--soft); line-height:1.7}
+.mcard{display:none}
+
+@media(max-width:760px){
+  .wrap{padding:16px 12px 60px}
+  table{display:none}
+  .mcard{display:block; background:var(--panel); border:1px solid var(--rule);
+    border-radius:var(--r); padding:11px 12px; margin-bottom:8px; cursor:pointer}
+  .mcard-t{display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+  .mcard-m{display:flex; flex-wrap:wrap; gap:10px; font-size:12px; color:var(--soft); margin-top:5px}
+  .rung{grid-template-columns:1fr}
+  .rung-label{border-right:0; border-bottom:1px solid var(--rule-soft);
+    display:flex; justify-content:space-between; align-items:baseline; padding:8px 12px}
+  .sheet-in{width:100%; border-left:0}
+}
+@media(prefers-reduced-motion:no-preference){
+  .chip{transition:border-color .12s ease}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Watchlist</h1>
+  <span class="ro">read-only &middot; writes go through watchlist.py</span>
+</header>
+<div class="stamps" id="stamps"></div>
+
+<div class="bar">
+  <div class="seg" id="books" role="group" aria-label="Book"></div>
+  <div class="seg" id="scope" role="group" aria-label="Scope">
+    <button data-scope="active" aria-pressed="true">Active</button>
+    <button data-scope="archive" aria-pressed="false">Archive</button>
+  </div>
+  <span class="spacer"></span>
+  <button class="ghost" id="refresh">Refresh from repo</button>
+  <button class="ghost" id="load">Paste JSON</button>
+</div>
+
+<section class="ladder" id="ladder"></section>
+
+<table id="tbl">
+  <thead><tr>
+    <th data-k="symbol">Symbol</th>
+    <th data-k="ms" class="r">MS</th>
+    <th data-k="delta" class="r">&Delta;1w</th>
+    <th data-k="seen" class="r">Seen</th>
+    <th data-k="sector">Sector</th>
+    <th data-k="gates">Gates</th>
+    <th data-k="days" class="r">Days</th>
+    <th data-k="ret" class="r">Return</th>
+    <th data-k="status">Status</th>
+    <th data-k="flags">Notes</th>
+  </tr></thead>
+  <tbody id="tb"></tbody>
+</table>
+<div id="cards"></div>
+
+<p class="foot" id="foot"></p>
+<p class="foot" id="src"></p>
+</div>
+
+<div class="sheet" id="sheet" hidden><div class="sheet-in" id="sheetIn"></div></div>
+
+<dialog id="dlg"><div class="dlg">
+  <h3>Load watchlist.json</h3>
+  <p>Paste the contents of the file from your repo. Nothing is uploaded or saved &mdash; it is read into this page only.</p>
+  <textarea id="ta" spellcheck="false" placeholder='{ "schema_version": 1, "active": [ ... ] }'></textarea>
+  <div class="err" id="err"></div>
+  <div class="dlg-ft">
+    <button class="ghost" id="cancel">Cancel</button>
+    <button class="primary" id="apply">Load</button>
+  </div>
+</div></dialog>
+
+<script>
+// Mirrors the derived zone in watchlist.py. Computes nothing the pipeline owns.
+const BANDS=[[89,'Active'],[78,'Active'],[55,'Cooling']], ARCH='Archive candidate';
+const MS_FLOOR=55;
+const RUNGS=[
+  {k:'top',   nm:'Active',  rg:'MS 89+ · rank ~top 50',  test:m=>m>=89},
+  {k:'act',   nm:'Active',  rg:'MS 78–89 · rank ~51–100',test:m=>m>=78&&m<89},
+  {k:'cool',  nm:'Cooling', rg:'MS 55–78 · no new triggers',test:m=>m>=55&&m<78},
+  {k:'arch',  nm:'Archive candidate', rg:'MS <55 · 2 weeks → archive', test:m=>m<55, dead:true}
+];
+
+let DATA=null, book='all', scope='active', sortK='ms', sortDir=-1;
+
+const band=ms=>ms==null?null:(BANDS.find(b=>ms>=b[0])||[0,ARCH])[1];
+const days=(a,b)=>{if(!a)return null;const x=new Date(a),y=b?new Date(b):new Date();
+  return Math.round((y-x)/864e5);};
+
+function gsum(g){const v=Object.values(g||{}).map(x=>String(x).toUpperCase());
+  return{pass:v.filter(x=>x==='PASS').length,fail:v.filter(x=>x==='FAIL').length,
+  unv:v.filter(x=>x==='UNVERIFIED').length,total:v.length};}
+
+function derive(r){
+  const m=r.machine,h=r.human,hist=r.ms_history||[],d={};
+  d.days=days(h.date_added);
+  const last=r.price?.last, add=h.price_at_add;
+  d.ret = (last!=null&&add) ? +((last/add-1)*100).toFixed(2) : null;
+  const v=hist.filter(e=>e.ms!=null).map(e=>e.ms);
+  d.delta = v.length>=2 ? +(v[v.length-1]-v[v.length-2]).toFixed(1) : null;
+  d.best = v.length?Math.max(...v):null;
+  d.sinceBest = v.length? v.length-1-v.lastIndexOf(d.best) : null;
+  d.band=band(m.ms); d.g=gsum(m.gates); d.hist=v;
+  d.seen=m.scan_appearances||0; d.recurring=d.seen>=3;
+  const b=[];
+  if(d.g.fail) b.push(d.g.fail+' gate(s) FAIL');
+  if(d.g.unv) b.push(d.g.unv+' gate(s) unchecked');
+  if(m.ms!=null&&m.ms<MS_FLOOR) b.push('MS '+m.ms+', below the shortlist floor');
+  if(!h.price_at_add) b.push('no price_at_add, so return is not tracked');
+  d.flags=b;
+  return d;
+}
+
+const rows=()=>{
+  const src=(scope==='archive'?DATA.archive:DATA.active)||[];
+  return src.filter(r=>book==='all'||r.book===book).map(r=>({r,d:derive(r)}));
+};
+
+function sorted(list){
+  const get={symbol:x=>x.r.symbol, ms:x=>x.r.machine.ms, rank:x=>x.r.machine.rank,
+    sector:x=>x.r.machine.sector, days:x=>x.d.days, ret:x=>x.d.ret, seen:x=>x.d.seen,
+    delta:x=>x.d.delta, status:x=>x.r.human.status,
+    gates:x=>x.d.g.fail*2+x.d.g.unv, flags:x=>x.d.flags.length}[sortK];
+  return [...list].sort((a,b)=>{
+    const A=get(a),B=get(b);
+    if(A==null&&B==null)return 0; if(A==null)return 1; if(B==null)return -1;
+    return (A>B?1:A<B?-1:0)*sortDir;
+  });
+}
+
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const n=(v,d=1)=>v==null?'<span class="nil">–</span>':'<span class="num">'+(+v).toFixed(d)+'</span>';
+const sgn=v=>v==null?'<span class="nil">–</span>':
+  '<span class="num '+(v>0?'up':v<0?'dn':'')+'">'+(v>0?'+':'')+v.toFixed(1)+'</span>';
+
+function stamps(){
+  const all=[...(DATA.active||[]),...(DATA.archive||[])];
+  const mx=f=>{const v=all.map(f).filter(Boolean).sort(); return v.length?v[v.length-1]:null;};
+  const ms=mx(r=>r.machine.ms_asof), px=mx(r=>r.price?.asof),
+        fu=mx(r=>(r.fundamental_findings||[]).map(x=>x.date).sort().pop());
+  const cell=(lbl,v,lane)=>{
+    if(!v) return '<span class="stamp none">'+lbl+' — not yet run ('+lane+')</span>';
+    const age=days(v), st=age>9?' stale':'';
+    return '<span class="stamp'+st+'">'+lbl+' <b>'+v.slice(0,10)+'</b>'+
+      (age>1?' · '+age+'d ago':'')+'</span>';
+  };
+  document.getElementById('stamps').innerHTML=
+    cell('Technical',ms,'Lane B')+cell('Price',px,'Lane A')+
+    cell('Fundamental',fu,'Lane C')+
+    '<span class="stamp">Store <b>v'+DATA.schema_version+'</b> · '+
+    (DATA.active||[]).length+' active · '+(DATA.archive||[]).length+' archived</span>';
+}
+
+function ladder(){
+  const list=rows(), el=document.getElementById('ladder');
+  const nodata=list.filter(x=>x.r.machine.ms==null);
+  let h='<div class="ladder-hd"><h2>Eviction ladder</h2>'+
+    '<span>'+list.length+' name'+(list.length===1?'':'s')+
+    (scope==='archive'?' · archived':'')+'</span></div>';
+  for(const rg of RUNGS){
+    const inRung=list.filter(x=>x.r.machine.ms!=null&&rg.test(x.r.machine.ms));
+    h+='<div class="rung'+(rg.dead?' archive':'')+'"><div class="rung-label">'+
+      '<span class="nm">'+rg.nm+'</span><span class="rg">'+rg.rg+'</span></div>'+
+      '<div class="rung-body">'+(inRung.length?inRung.map(chip).join(''):
+      '<span class="empty-rung">none</span>')+'</div></div>';
+  }
+  if(nodata.length){
+    h+='<div class="rung"><div class="rung-label"><span class="nm">No scan data</span>'+
+      '<span class="rg">awaiting an ingest</span></div><div class="rung-body">'+
+      nodata.map(chip).join('')+'</div></div>';
+  }
+  el.innerHTML=h;
+  el.querySelectorAll('.chip').forEach(c=>c.onclick=()=>open(c.dataset.s));
+}
+
+function chip(x){
+  const m=x.r.machine,d=x.d;
+  return '<button class="chip'+(d.flags.length?' blocked':'')+(m.ms==null?' nodata':'')+
+    '" data-s="'+x.r.symbol+'">'+esc(x.r.symbol)+
+    (m.ms!=null?'<span class="ms num">'+m.ms.toFixed(1)+'</span>':'')+
+    (d.seen>=3?'<span class="ms num up">×'+d.seen+'</span>':'')+
+    (d.delta!=null?'<span class="d '+(d.delta>0?'up':'dn')+'">'+
+      (d.delta>0?'▲':'▼')+Math.abs(d.delta).toFixed(1)+'</span>':'')+'</button>';
+}
+
+function spark(v){
+  if(v.length<2) return '';
+  const w=46,h=14,mn=Math.min(...v),mx=Math.max(...v),rg=mx-mn||1;
+  const pts=v.map((y,i)=>[i/(v.length-1)*w,h-(y-mn)/rg*h]);
+  const up=v[v.length-1]>=v[0];
+  return '<svg width="'+w+'" height="'+h+'" aria-hidden="true" style="vertical-align:middle;margin-right:6px">'+
+    '<polyline fill="none" stroke="'+(up?'var(--up)':'var(--down)')+'" stroke-width="1.3" points="'+
+    pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')+'"/></svg>';
+}
+
+function table(){
+  const list=sorted(rows());
+  document.getElementById('tb').innerHTML=list.map(x=>{
+    const r=x.r,m=r.machine,d=x.d,g=d.g;
+    const gc=g.total?'<span class="p">'+g.pass+'P</span>'+
+      (g.fail?' <span class="f">'+g.fail+'F</span>':'')+
+      (g.unv?' <span class="u">'+g.unv+'U</span>':'') : '<span class="nil">none</span>';
+    return '<tr data-s="'+r.symbol+'"><td><span class="sym">'+esc(r.symbol)+'</span>'+
+      (r.origin==='user'?'<span class="tag user">USER</span>':'')+
+      (r.name?'<div class="sub">'+esc(r.name)+'</div>':'')+'</td>'+
+      '<td class="r">'+spark(d.hist)+n(m.ms)+'</td>'+
+      '<td class="r">'+sgn(d.delta)+'</td>'+
+      '<td class="r">'+(d.seen?'<span class="num'+(d.recurring?' up':'')+'">×'+d.seen+
+        '</span>':'<span class="nil">–</span>')+'</td>'+
+      '<td>'+(m.sector?esc(m.sector):'<span class="nil">–</span>')+'</td>'+
+      '<td class="gate">'+gc+'</td>'+
+      '<td class="r">'+n(d.days,0)+'</td>'+
+      '<td class="r">'+(d.ret==null?'<span class="nil">–</span>':
+        '<span class="num '+(d.ret>0?'up':'dn')+'">'+(d.ret>0?'+':'')+d.ret.toFixed(2)+'%</span>')+'</td>'+
+      '<td>'+esc(r.human.status)+'</td>'+
+      '<td>'+(d.flags.length?'<span class="fund-no">'+d.flags.length+'</span>':
+        '<span class="nil">–</span>')+'</td></tr>';
+  }).join('')||'<tr><td colspan="10" style="color:var(--dead);padding:18px">Nothing here.</td></tr>';
+
+  document.getElementById('cards').innerHTML=list.map(x=>{
+    const r=x.r,d=x.d;
+    return '<div class="mcard" data-s="'+r.symbol+'"><div class="mcard-t">'+
+      '<span class="sym">'+esc(r.symbol)+(r.origin==='user'?'<span class="tag user">USER</span>':'')+'</span>'+
+      '<span>'+n(r.machine.ms)+' '+sgn(d.delta)+'</span></div>'+
+      '<div class="mcard-m"><span>'+(d.band||'no scan data')+'</span>'+
+      '<span>'+esc(r.human.status)+'</span>'+
+      '<span>'+(d.days!=null?d.days+'d':'–')+'</span>'+
+      (d.flags.length?'<span class="fund-no">'+d.flags.length+' to check</span>':'')+
+      '</div></div>';
+  }).join('');
+
+  document.querySelectorAll('#tb tr[data-s],.mcard').forEach(t=>t.onclick=()=>open(t.dataset.s));
+  document.getElementById('foot').textContent=
+    list.length+' name'+(list.length===1?'':'s')+' shown. '+
+    'This page never writes. Every change goes through watchlist.py, so watchlist.json stays the single source of truth.';
+}
+
+function open(sym){
+  const src=[...(DATA.active||[]),...(DATA.archive||[])];
+  const r=src.find(x=>x.symbol===sym); if(!r) return;
+  const d=derive(r),m=r.machine,h=r.human;
+  const kv=(k,v)=>'<dt>'+k+'</dt><dd>'+(v??'<span class="nil">–</span>')+'</dd>';
+
+  let g='';
+  if(d.g.total){
+    const bad=Object.entries(m.gates).filter(([,v])=>String(v).toUpperCase()!=='PASS');
+    g='<div class="blk"><h4>Gates — '+d.g.pass+' pass, '+d.g.fail+' fail, '+d.g.unv+' unverified</h4>'+
+      (bad.length?bad.map(([k,v])=>'<div class="gl '+(String(v).toUpperCase()==='FAIL'?'bad':'unv')+'">'+
+        '<span>'+esc(k)+'</span><span>'+esc(v)+'</span></div>').join('')
+        :'<div class="gl"><span>all twelve clear</span></div>')+'</div>';
+  } else g='<div class="blk"><h4>Gates</h4><div class="gl"><span>no gate data — '+
+      'run an ingest</span></div></div>';
+
+  const cmds=[
+    ['Adopt (set your price)','python scripts/watchlist.py --path state/watchlist.json adopt '+sym+' --price 0'],
+    ['Add a note','python scripts/watchlist.py --path state/watchlist.json note '+sym+' "…"'],
+    ['Change status','python scripts/watchlist.py --path state/watchlist.json set '+sym+' --status "Trigger set"'],
+    ['Archive','python scripts/watchlist.py --path state/watchlist.json archive '+sym+' --reason momentum_decay']
+  ];
+
+  document.getElementById('sheetIn').innerHTML=
+    '<div class="sheet-hd"><div><h3>'+esc(sym)+'</h3>'+
+    '<div class="sub">'+esc(r.name||'')+' · '+r.book+' book · origin '+r.origin+
+    (r.archive_reason?' · archived: '+esc(r.archive_reason):'')+'</div></div>'+
+    '<button class="x" id="close" aria-label="Close">×</button></div>'+
+
+    '<div class="blk"><h4>Machine zone'+(m.ms_asof?' — as of '+m.ms_asof:' — no scan data')+'</h4>'+
+    '<dl class="kv">'+kv('MS',m.ms!=null?'<span class="num">'+m.ms+'</span>':null)+
+    kv('Band',d.band)+kv('Composite',m.composite)+kv('Tier',m.tier)+
+    kv('Seen in scans',m.scan_appearances?
+       m.scan_appearances+' (first '+(m.first_seen_asof||'?')+', last '+(m.last_seen_asof||'?')+')':null)+
+    kv('Sector',m.sector?esc(m.sector)+' (SMS '+(m.sms??'–')+')':null)+
+    kv('Cap tier',m.cap_tier)+kv('Signal',m.entry_signal)+
+    kv('Close at scan',m.px)+
+    kv('Regime at ingest',m.regime_at_ingest)+kv('Data tier',m.data_tier)+'</dl></div>'+
+    g+
+
+    '<div class="blk"><h4>Human zone</h4><dl class="kv">'+
+    kv('Status',esc(h.status))+kv('Conviction',h.conviction?esc(h.conviction):null)+
+    kv('Added',h.date_added+(d.days!=null?' · '+d.days+' days':''))+
+    kv('Price at add',h.price_at_add)+
+    kv('Thesis',h.thesis?esc(h.thesis):null)+'</dl>'+
+    ((h.notes||[]).length?'<div style="margin-top:10px">'+h.notes.slice(-6).map(x=>
+      '<div class="note"><b>'+x.date+'</b>'+esc(x.text)+'</div>').join('')+'</div>':'')+'</div>'+
+
+    '<div class="blk"><h4>Derived</h4><dl class="kv">'+
+    kv('Δ MS 1w',d.delta!=null?sgn(d.delta):null)+
+    kv('Best MS',d.best!=null?d.best+' ('+d.sinceBest+'w ago)':null)+
+    kv('Recurring',d.recurring?'yes — top 3 in '+d.seen+' scans':(d.seen?'seen '+d.seen+'×':null))+
+    kv('Return since add',d.ret!=null?(d.ret>0?'+':'')+d.ret+'%':null)+
+    kv('vs Nifty 500','<span class="nil">Lane A, Phase 3</span>')+
+    '</dl>'+(d.flags.length?'<h4 style="margin-top:14px">Worth knowing</h4><ul class="block-list">'+
+      d.flags.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>':'')+'</div>'+
+
+    ((r.ms_history||[]).length?'<div class="blk"><h4>MS history</h4>'+
+      r.ms_history.slice(-10).map(e=>'<div class="gl"><span>'+e.asof+'</span>'+
+      '<span class="num">'+e.ms+(e.rank?' · rank '+e.rank:'')+'</span></div>').join('')+'</div>':'')+
+
+    '<div class="blk"><h4>Change this — copy into your terminal</h4>'+
+    cmds.map(([lbl,c],i)=>'<div class="cmd" data-c="'+i+'">'+esc(c)+'</div>'+
+      '<button class="ghost" data-copy="'+i+'" style="margin:0 0 12px">Copy · '+lbl+'</button>').join('')+
+    '</div>';
+
+  const sh=document.getElementById('sheet'); sh.hidden=false;
+  document.getElementById('close').onclick=close;
+  document.getElementById('sheetIn').querySelectorAll('[data-copy]').forEach(b=>{
+    b.onclick=async()=>{
+      const t=document.querySelector('.cmd[data-c="'+b.dataset.copy+'"]').textContent;
+      try{ await navigator.clipboard.writeText(t); const o=b.textContent;
+        b.textContent='Copied'; setTimeout(()=>b.textContent=o,1200);
+      }catch{ b.textContent='Select the line above to copy'; }
+    };
+  });
+  document.getElementById('close').focus();
+}
+const close=()=>{document.getElementById('sheet').hidden=true;};
+document.getElementById('sheet').onclick=e=>{if(e.target.id==='sheet')close();};
+addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+
+function books(){
+  const set=new Set((DATA.active||[]).concat(DATA.archive||[]).map(r=>r.book));
+  const opts=['all',...[...set].sort()];
+  document.getElementById('books').innerHTML=opts.map(b=>
+    '<button data-book="'+b+'" aria-pressed="'+(b===book)+'">'+
+    (b==='all'?'All books':b[0].toUpperCase()+b.slice(1))+'</button>').join('');
+  document.querySelectorAll('#books button').forEach(b=>b.onclick=()=>{
+    book=b.dataset.book; books(); render();
+  });
+}
+
+function render(){ stamps(); ladder(); table(); }
+
+document.querySelectorAll('#scope button').forEach(b=>b.onclick=()=>{
+  scope=b.dataset.scope;
+  document.querySelectorAll('#scope button').forEach(o=>
+    o.setAttribute('aria-pressed',o.dataset.scope===scope));
+  render();
+});
+document.querySelectorAll('#tbl th').forEach(th=>th.onclick=()=>{
+  const k=th.dataset.k;
+  if(k===sortK) sortDir*=-1; else {sortK=k; sortDir=(k==='symbol'||k==='sector'||k==='status')?1:-1;}
+  table();
+});
+
+const dlg=document.getElementById('dlg');
+document.getElementById('load').onclick=()=>{document.getElementById('err').textContent='';dlg.showModal();};
+document.getElementById('cancel').onclick=()=>dlg.close();
+document.getElementById('apply').onclick=()=>{
+  const e=document.getElementById('err');
+  try{
+    const d=JSON.parse(document.getElementById('ta').value);
+    if(!Array.isArray(d.active)) throw new Error('No "active" array. This does not look like a watchlist.json.');
+    if(d.schema_version!==1) throw new Error('Schema v'+d.schema_version+'. This viewer reads v1.');
+    DATA=d; book='all'; scope='active';
+    document.querySelectorAll('#scope button').forEach(o=>
+      o.setAttribute('aria-pressed',o.dataset.scope==='active'));
+    books(); render(); dlg.close();
+    note('Pasted manually · not live');
+  }catch(x){ e.textContent=x.message; }
+};
+
+const SRC = "https://raw.githubusercontent.com/sudhanshusingh23-wiz/"
+          + "nse-momentum-data/main/state/watchlist.json";
+
+function note(msg, bad){
+  const e=document.getElementById('src');
+  e.textContent=msg; e.style.color = bad ? 'var(--down)' : 'var(--soft)';
+}
+
+async function pull(){
+  const b=document.getElementById('refresh'); const was=b.textContent;
+  b.textContent='Loading…'; b.disabled=true;
+  try{
+    const r=await fetch(SRC+'?cb='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(!Array.isArray(d.active)) throw new Error('not a watchlist.json');
+    DATA=d; books(); render();
+    note('Live from the repo · fetched '+new Date().toLocaleTimeString());
+  }catch(e){
+    note('Could not reach the repo ('+e.message+'). Use Paste JSON instead.', true);
+  }finally{ b.textContent=was; b.disabled=false; }
+}
+document.getElementById('refresh').onclick=pull;
+
+DATA={schema_version:1,active:[],archive:[]};
+books(); render(); note('Loading…');
+pull();
+</script>
+</body>
+</html>

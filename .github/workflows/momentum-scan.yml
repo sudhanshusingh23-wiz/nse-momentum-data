@@ -111,14 +111,14 @@ jobs:
       - name: L1 — regime
         if: inputs.mode == 'scan'
         run: |
-          ARGS="--benchmark artifacts/nifty500.csv --json state/regime_scan.json"
-          [ -f artifacts/breadth.json ]     && ARGS="$ARGS --breadth-json artifacts/breadth.json"
-          [ -f artifacts/nifty50.csv ]      && ARGS="$ARGS --largecap-index artifacts/nifty50.csv"
-          [ -f artifacts/smallcap250.csv ]  && ARGS="$ARGS --smallcap artifacts/smallcap250.csv"
-          [ -f artifacts/vix.csv ]          && ARGS="$ARGS --vix artifacts/vix.csv"
-          [ -f state/regime_state.json ]    && ARGS="$ARGS --state state/regime_state.json"
-          echo "regime_score.py $ARGS"
-          python scripts/regime_score.py $ARGS
+          ARGS=(--benchmark artifacts/nifty500.csv --json state/regime_scan.json)
+          [ -f artifacts/breadth.json ]    && ARGS+=(--breadth-json artifacts/breadth.json)
+          [ -f artifacts/nifty50.csv ]     && ARGS+=(--largecap-index artifacts/nifty50.csv)
+          [ -f artifacts/smallcap250.csv ] && ARGS+=(--smallcap artifacts/smallcap250.csv)
+          [ -f artifacts/vix.csv ]         && ARGS+=(--vix artifacts/vix.csv)
+          [ -f state/regime_state.json ]   && ARGS+=(--state state/regime_state.json)
+          printf 'regime_score.py'; printf ' %q' "${ARGS[@]}"; echo
+          python scripts/regime_score.py "${ARGS[@]}"
 
       - name: Read the regime
         if: inputs.mode == 'scan'
@@ -136,13 +136,13 @@ jobs:
       - name: L2 — sector rotation
         if: inputs.mode == 'scan'
         run: |
-          ARGS="--prices artifacts/panel.csv.gz --map reference/map.csv"
-          ARGS="$ARGS --regime $REGIME --json state/sector_scan.json"
-          ARGS="$ARGS --out-state state/sector_state.json"
-          [ -f artifacts/sector_indices.csv ] && ARGS="$ARGS --sector-index artifacts/sector_indices.csv"
-          [ -f state/sector_state.json ]      && ARGS="$ARGS --state state/sector_state.json"
-          echo "sector_score.py $ARGS"
-          python scripts/sector_score.py $ARGS
+          ARGS=(--prices artifacts/panel.csv.gz --map reference/map.csv
+                --regime "$REGIME" --json state/sector_scan.json
+                --out-state state/sector_state.json)
+          [ -f artifacts/sector_indices.csv ] && ARGS+=(--sector-index artifacts/sector_indices.csv)
+          [ -f state/sector_state.json ]      && ARGS+=(--state state/sector_state.json)
+          printf 'sector_score.py'; printf ' %q' "${ARGS[@]}"; echo
+          python scripts/sector_score.py "${ARGS[@]}"
 
       - name: Read the top sectors
         if: inputs.mode == 'scan'
@@ -209,13 +209,14 @@ jobs:
       - name: L3 — stock selection
         if: inputs.mode == 'scan'
         run: |
-          ARGS="--panel artifacts/panel.csv.gz --map reference/map.csv"
-          ARGS="$ARGS --benchmark artifacts/nifty500.csv --sectors $SECTORS"
-          ARGS="$ARGS --regime $REGIME --sms state/sector_scan.json"
-          ARGS="$ARGS --show-n ${{ inputs.show_n }} --json state/last_scan.json"
-          [ -f artifacts/caps.csv ] && ARGS="$ARGS --caps artifacts/caps.csv"
-          echo "stock_select.py $ARGS"
-          python scripts/stock_select.py $ARGS
+          ARGS=(--panel artifacts/panel.csv.gz --map reference/map.csv
+                --benchmark artifacts/nifty500.csv
+                --sectors "$SECTORS"
+                --regime "$REGIME" --sms state/sector_scan.json
+                --show-n "${{ inputs.show_n }}" --json state/last_scan.json)
+          [ -f artifacts/caps.csv ] && ARGS+=(--caps artifacts/caps.csv)
+          printf 'stock_select.py'; printf ' %q' "${ARGS[@]}"; echo
+          python scripts/stock_select.py "${ARGS[@]}"
 
       - name: Summarise the shortlist
         if: inputs.mode == 'scan'

@@ -1,0 +1,242 @@
+name: Momentum scan
+
+# Two modes, chosen from the Run workflow dropdown:
+#
+#   scan    Runs regime -> sector -> selector against the committed panel and
+#           writes state/last_scan.json. Nothing touches the watchlist.
+#   ingest  Reads state/last_scan.json and adds the symbols you name to
+#           state/watchlist.json. Never runs the scan chain.
+#
+# Splitting them is deliberate. You look at the scan first, decide what you
+# actually want to track, then ingest. The scan output is committed so the
+# ingest step reads exactly the numbers you looked at.
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'What to do'
+        required: true
+        default: 'scan'
+        type: choice
+        options: [scan, ingest]
+      symbols:
+        description: 'ingest only — comma separated, e.g. KAYNES,AZAD'
+        required: false
+        default: ''
+      prices:
+        description: 'ingest only — price at add, e.g. KAYNES=5810,AZAD=1842'
+        required: false
+        default: ''
+      book:
+        description: 'ingest only — which book'
+        required: false
+        default: 'momentum'
+        type: choice
+        options: [momentum, core]
+      sectors:
+        description: 'scan only — override sectors (blank = use the sector scan)'
+        required: false
+        default: ''
+      show_n:
+        description: 'scan only — candidates shown per sector'
+        required: false
+        default: '8'
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install --quiet pandas numpy
+
+      # ---------------------------------------------------------------- scan
+
+      - name: Rebuild the symbol-to-sector map
+        if: inputs.mode == 'scan'
+        run: |
+          python - <<'PY'
+          import pandas as pd, pathlib
+          src = pathlib.Path('reference/ind_nifty500list.csv')
+          if not src.exists():
+              raise SystemExit(f"MISSING: {src}. The scan chain cannot run without it.")
+          c = pd.read_csv(src)
+          c.columns = [x.strip() for x in c.columns]
+          c = c[c.Industry != 'Diversified']
+          out = c[['Symbol', 'Industry']].rename(
+              columns={'Symbol': 'symbol', 'Industry': 'sector'})
+          out.to_csv('reference/map.csv', index=False)
+          print(f"map.csv rebuilt: {len(out)} symbols, {out.sector.nunique()} sectors")
+          PY
+
+      - name: Check inputs exist
+        if: inputs.mode == 'scan'
+        run: |
+          missing=0
+          for f in artifacts/panel.csv.gz artifacts/nifty500.csv reference/map.csv; do
+            if [ ! -f "$f" ]; then echo "MISSING (required): $f"; missing=1; fi
+          done
+          for f in artifacts/caps.csv artifacts/sector_indices.csv artifacts/breadth.json \
+                   artifacts/nifty50.csv artifacts/smallcap250.csv artifacts/vix.csv; do
+            [ -f "$f" ] || echo "missing (optional, will degrade): $f"
+          done
+          [ "$missing" = "0" ] || exit 1
+          mkdir -p state
+
+      - name: L1 — regime
+        if: inputs.mode == 'scan'
+        run: |
+          ARGS="--benchmark artifacts/nifty500.csv --json state/regime_scan.json"
+          [ -f artifacts/breadth.json ]     && ARGS="$ARGS --breadth-json artifacts/breadth.json"
+          [ -f artifacts/nifty50.csv ]      && ARGS="$ARGS --largecap-index artifacts/nifty50.csv"
+          [ -f artifacts/smallcap250.csv ]  && ARGS="$ARGS --smallcap artifacts/smallcap250.csv"
+          [ -f artifacts/vix.csv ]          && ARGS="$ARGS --vix artifacts/vix.csv"
+          [ -f state/regime_state.json ]    && ARGS="$ARGS --state state/regime_state.json"
+          echo "regime_score.py $ARGS"
+          python scripts/regime_score.py $ARGS
+
+      - name: Read the regime
+        if: inputs.mode == 'scan'
+        run: |
+          python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          d = json.load(open('state/regime_scan.json'))
+          r = d.get('state_after_transition') or d.get('state_raw')
+          if not r:
+              raise SystemExit("Could not read regime. Keys present: " + ", ".join(d))
+          print(f"REGIME={r}")
+          PY
+          grep REGIME= "$GITHUB_ENV" | tail -1
+
+      - name: L2 — sector rotation
+        if: inputs.mode == 'scan'
+        run: |
+          ARGS="--prices artifacts/panel.csv.gz --map reference/map.csv"
+          ARGS="$ARGS --regime $REGIME --json state/sector_scan.json"
+          ARGS="$ARGS --out-state state/sector_state.json"
+          [ -f artifacts/sector_indices.csv ] && ARGS="$ARGS --sector-index artifacts/sector_indices.csv"
+          [ -f state/sector_state.json ]      && ARGS="$ARGS --state state/sector_state.json"
+          echo "sector_score.py $ARGS"
+          python scripts/sector_score.py $ARGS
+
+      - name: Read the selected sectors
+        if: inputs.mode == 'scan'
+        env:
+          OVERRIDE: ${{ inputs.sectors }}
+        run: |
+          python - <<'PY' >> "$GITHUB_ENV"
+          import json, os
+          ov = os.environ.get('OVERRIDE', '').strip()
+          if ov:
+              print(f"SECTORS={ov}")
+              raise SystemExit(0)
+          d = json.load(open('state/sector_scan.json'))
+          sel = d.get('selected') or []
+          # `selected` may be plain names or dicts depending on the branch taken.
+          names = [s if isinstance(s, str) else (s.get('sector') or s.get('name')) for s in sel]
+          names = [n for n in names if n]
+          if not names:
+              raise SystemExit(
+                  "Sector scan selected nothing. This is a legitimate result in a "
+                  "RISK-OFF regime. Re-run with the sectors input set if you want "
+                  "to force a scan anyway.")
+          print("SECTORS=" + ",".join(names))
+          PY
+          grep SECTORS= "$GITHUB_ENV" | tail -1
+
+      - name: L3 — stock selection
+        if: inputs.mode == 'scan'
+        run: |
+          ARGS="--panel artifacts/panel.csv.gz --map reference/map.csv"
+          ARGS="$ARGS --benchmark artifacts/nifty500.csv --sectors $SECTORS"
+          ARGS="$ARGS --regime $REGIME --sms state/sector_scan.json"
+          ARGS="$ARGS --show-n ${{ inputs.show_n }} --json state/last_scan.json"
+          [ -f artifacts/caps.csv ] && ARGS="$ARGS --caps artifacts/caps.csv"
+          echo "stock_select.py $ARGS"
+          python scripts/stock_select.py $ARGS
+
+      - name: Summarise the shortlist
+        if: inputs.mode == 'scan'
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          d = json.load(open('state/last_scan.json'))
+          sl = d.get('shortlist', [])
+          print(f"## Scan — {d.get('asof')}\n")
+          print(f"Regime **{d.get('regime')}** · {len(sl)} candidates\n")
+          if sl:
+              print("| Symbol | MS | Rank | Sector | Cap |")
+              print("|---|---:|---:|---|---|")
+              for s in sl:
+                  print(f"| {s.get('symbol')} | {s.get('ms')} | {s.get('rank')} "
+                        f"| {s.get('sector','')} | {s.get('cap','')} |")
+              print("\nTo track any of these, run this workflow again with "
+                    "**mode: ingest** and paste the symbols.")
+          PY
+
+      # -------------------------------------------------------------- ingest
+
+      - name: Ingest into the watchlist
+        if: inputs.mode == 'ingest'
+        env:
+          SYMBOLS: ${{ inputs.symbols }}
+          PRICES: ${{ inputs.prices }}
+        run: |
+          if [ ! -f state/last_scan.json ]; then
+            echo "No state/last_scan.json. Run this workflow in scan mode first."; exit 1
+          fi
+          if [ -z "$SYMBOLS" ]; then echo "No symbols given."; exit 1; fi
+          [ -f state/watchlist.json ] || \
+            python scripts/watchlist.py --path state/watchlist.json init
+          PRICE_ARGS=""
+          IFS=',' read -ra PAIRS <<< "$PRICES"
+          for p in "${PAIRS[@]}"; do
+            p="$(echo "$p" | xargs)"
+            [ -n "$p" ] && PRICE_ARGS="$PRICE_ARGS --price $p"
+          done
+          python scripts/watchlist.py --path state/watchlist.json ingest \
+            --json state/last_scan.json --symbols "$SYMBOLS" \
+            --book ${{ inputs.book }} $PRICE_ARGS | tee /tmp/out.txt
+          python scripts/watchlist.py --path state/watchlist.json validate
+          { echo '## Ingest'; echo; echo '```'; cat /tmp/out.txt; echo '```'; } \
+            >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Show the watchlist
+        if: inputs.mode == 'ingest'
+        run: |
+          { echo; echo '```'
+            python scripts/watchlist.py --path state/watchlist.json list
+            echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
+      # --------------------------------------------------------------- commit
+
+      - name: Commit state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state reference/map.csv 2>/dev/null || git add state
+          if git diff --staged --quiet; then
+            echo "Nothing changed."
+          else
+            git commit -m "${{ inputs.mode }}: watchlist state update"
+            git push
+          fi
+
+      - name: Upload scan output
+        if: always() && inputs.mode == 'scan'
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-json
+          path: state/*.json
+          if-no-files-found: ignore

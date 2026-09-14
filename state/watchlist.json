@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created_at": "2026-09-14T00:00:00+00:00",
-  "updated_at": "2026-09-14T06:50:35+00:00",
+  "updated_at": "2026-09-14T07:03:56+00:00",
   "active": [
     {
       "symbol": "HFCL",
@@ -44,11 +44,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 233.69,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T05:55:22+00:00",
-      "updated_at": "2026-09-14T05:55:22+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "DIVISLAB",
@@ -114,11 +117,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 9322.0,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "LAURUSLABS",
@@ -184,11 +190,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 1969.0,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "ANTHEM",
@@ -254,11 +263,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 940.9,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "OIL",
@@ -324,11 +336,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 489.8,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "AEGISLOG",
@@ -394,11 +409,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 1353.6,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "CASTROLIND",
@@ -464,11 +482,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 188.03,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "WELCORP",
@@ -534,11 +555,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 2676.6,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "JINDALSAW",
@@ -604,11 +628,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 311.95,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     },
     {
       "symbol": "SHYAMMETL",
@@ -674,11 +701,14 @@
       },
       "fundamental_findings": [],
       "price": {
-        "last": null,
-        "asof": null
+        "last": 1074.8,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
       },
       "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T06:50:35+00:00"
+      "updated_at": "2026-09-14T07:03:56+00:00"
     }
   ],
   "archive": []

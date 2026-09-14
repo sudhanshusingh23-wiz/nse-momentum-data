@@ -1,0 +1,126 @@
+name: Watchlist
+
+# Deliberately separate from "Momentum scan".
+#
+# Adopting a name, adding one by hand, or jotting a note needs nothing but
+# scripts/ and state/. This workflow checks out only those two folders and
+# installs nothing — watchlist.py is stdlib-only. It finishes in seconds
+# rather than pulling a 65MB panel and waiting on pip.
+#
+# Anything that reads the panel (scan, prices) lives in "Momentum scan".
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'What to do'
+        required: true
+        default: 'adopt'
+        type: choice
+        options: [adopt, add, note, status, archive]
+      symbols:
+        description: 'Comma separated, e.g. DIVISLAB,WELCORP'
+        required: true
+      prices:
+        description: 'Optional. DIVISLAB=9322 — blank lets the next price run stamp it'
+        required: false
+        default: ''
+      text:
+        description: 'Thesis (adopt/add) or note text (note) or reason (archive)'
+        required: false
+        default: ''
+      status:
+        description: 'status only — the new status'
+        required: false
+        default: 'Watching'
+        type: choice
+        options: [Surfaced, Watching, Trigger set, Accumulating, Held, Exited]
+      book:
+        description: 'add only'
+        required: false
+        default: 'momentum'
+        type: choice
+        options: [momentum, core]
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout scripts and state only
+        uses: actions/checkout@v5
+        with:
+          sparse-checkout: |
+            scripts
+            state
+          sparse-checkout-cone-mode: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Apply
+        env:
+          SYMBOLS: ${{ inputs.symbols }}
+          PRICES: ${{ inputs.prices }}
+          TEXT: ${{ inputs.text }}
+        run: |
+          WL="python scripts/watchlist.py --path state/watchlist.json"
+          [ -f state/watchlist.json ] || $WL init
+
+          declare -A PX
+          IFS=',' read -ra PAIRS <<< "$PRICES"
+          for p in "${PAIRS[@]}"; do
+            p="$(echo "$p" | xargs)"
+            [ -n "$p" ] && PX["${p%%=*}"]="${p#*=}"
+          done
+
+          IFS=',' read -ra SYMS <<< "$SYMBOLS"
+          for sym in "${SYMS[@]}"; do
+            sym="$(echo "$sym" | xargs | tr '[:lower:]' '[:upper:]')"
+            [ -z "$sym" ] && continue
+            ARGS=()
+            case "${{ inputs.action }}" in
+              adopt)
+                ARGS=(adopt "$sym")
+                [ -n "${PX[$sym]}" ] && ARGS+=(--price "${PX[$sym]}")
+                [ -n "$TEXT" ] && ARGS+=(--thesis "$TEXT") ;;
+              add)
+                ARGS=(add "$sym" --book "${{ inputs.book }}")
+                [ -n "${PX[$sym]}" ] && ARGS+=(--price "${PX[$sym]}")
+                [ -n "$TEXT" ] && ARGS+=(--thesis "$TEXT") ;;
+              note)
+                if [ -z "$TEXT" ]; then echo "::error::note needs text."; exit 1; fi
+                ARGS=(note "$sym" "$TEXT") ;;
+              status)
+                ARGS=(set "$sym" --status "${{ inputs.status }}") ;;
+              archive)
+                ARGS=(archive "$sym" --reason "${TEXT:-manual}") ;;
+            esac
+            $WL "${ARGS[@]}"
+          done
+          $WL validate
+
+      - name: Show the watchlist
+        if: always()
+        run: |
+          { echo '## Watchlist'; echo; echo '```'
+            python scripts/watchlist.py --path state/watchlist.json list \
+              || echo "(could not read)"
+            echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state
+          if git diff --staged --quiet; then
+            echo "Nothing changed."
+          else
+            git commit -m "watchlist: ${{ inputs.action }} ${{ inputs.symbols }}"
+            git push
+          fi

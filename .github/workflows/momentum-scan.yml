@@ -51,10 +51,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -146,17 +146,58 @@ jobs:
           # `selected` may be plain names or dicts depending on the branch taken.
           names = [s if isinstance(s, str) else (s.get('sector') or s.get('name')) for s in sel]
           names = [n for n in names if n]
-          if not names:
-              raise SystemExit(
-                  "Sector scan selected nothing. This is a legitimate result in a "
-                  "RISK-OFF regime. Re-run with the sectors input set if you want "
-                  "to force a scan anyway.")
           print("SECTORS=" + ",".join(names))
           PY
           grep SECTORS= "$GITHUB_ENV" | tail -1
 
-      - name: L3 — stock selection
+      - name: Report regime and sectors
+        if: always() && inputs.mode == 'scan'
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, os
+          def load(p):
+              try: return json.load(open(p))
+              except Exception as e: return {"_error": str(e)}
+          r = load('state/regime_scan.json'); s = load('state/sector_scan.json')
+          print("## L1 regime\n")
+          if "_error" in r:
+              print("Not produced: `%s`\n" % r["_error"])
+          else:
+              print(f"**{r.get('state_after_transition')}** · score {r.get('composite_score')} "
+                    f"· as of {r.get('asof')}\n")
+              if r.get('components_missing'): print(f"Components missing: {r['components_missing']}\n")
+              print("| Component | Score | Weight |")
+              print("|---|---:|---:|")
+              for k, v in (r.get('components') or {}).items():
+                  print(f"| {k} | {v.get('score')} | {v.get('weight')} |")
+              print()
+          print("## L2 sectors\n")
+          if "_error" in s:
+              print("Not produced: `%s`\n" % s["_error"])
+          else:
+              sel = s.get('selected') or []
+              print(f"Selected: **{sel if sel else 'none'}**\n")
+              print("| Rank | Sector | SMS | Breadth |")
+              print("|---:|---|---:|---:|")
+              for row in (s.get('ranking') or [])[:15]:
+                  print(f"| {row.get('rank')} | {row.get('sector')} | {row.get('SMS')} "
+                        f"| {row.get('breadth_raw')} |")
+              print()
+              for n in (s.get('notes') or []): print(f"- {n}")
+          PY
+
+      - name: Stop if no sector was selected
         if: inputs.mode == 'scan'
+        run: |
+          if ! grep -q "^SECTORS=." "$GITHUB_ENV"; then
+            echo "::warning::No sector met the selection bar. See the run summary "\
+                 "for the full ranking. This is a valid outcome, not a failure. "\
+                 "Use the sectors input to force a scan."
+            exit 0
+          fi
+
+      - name: L3 — stock selection
+        if: inputs.mode == 'scan' && env.SECTORS != ''
         run: |
           ARGS="--panel artifacts/panel.csv.gz --map reference/map.csv"
           ARGS="$ARGS --benchmark artifacts/nifty500.csv --sectors $SECTORS"
@@ -167,7 +208,7 @@ jobs:
           python scripts/stock_select.py $ARGS
 
       - name: Summarise the shortlist
-        if: inputs.mode == 'scan'
+        if: inputs.mode == 'scan' && env.SECTORS != ''
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
@@ -222,6 +263,7 @@ jobs:
       # --------------------------------------------------------------- commit
 
       - name: Commit state
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -229,13 +271,13 @@ jobs:
           if git diff --staged --quiet; then
             echo "Nothing changed."
           else
-            git commit -m "${{ inputs.mode }}: watchlist state update"
+            git commit -m "${{ inputs.mode }}: state update"
             git push
           fi
 
       - name: Upload scan output
         if: always() && inputs.mode == 'scan'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: scan-json
           path: state/*.json

@@ -29,6 +29,8 @@ Usage:
 """
 
 import argparse
+import csv
+import gzip
 import json
 import os
 import sys
@@ -191,8 +193,12 @@ def derive(rec, asof_price_date=None):
         d["return_pct"] = round((last / add - 1) * 100, 2)
     else:
         d["return_abs"] = d["return_pct"] = None
-    # Benchmark-relative return needs a Nifty 500 series — Lane A, Phase 3.
-    d["return_vs_nifty500"] = None
+    ba, bl = rec["price"].get("bench_at_add"), rec["price"].get("bench_last")
+    if d["return_pct"] is not None and ba and bl:
+        d["bench_pct"] = round((bl / ba - 1) * 100, 2)
+        d["return_vs_nifty500"] = round(d["return_pct"] - d["bench_pct"], 2)
+    else:
+        d["bench_pct"] = d["return_vs_nifty500"] = None
 
     ms_vals = [e["ms"] for e in hist if e.get("ms") is not None]
     d["delta_ms_1w"] = round(ms_vals[-1] - ms_vals[-2], 1) if len(ms_vals) >= 2 else None
@@ -453,6 +459,77 @@ def set_human(data, symbol, **fields):
     return rec
 
 
+# ------------------------------------------------------------ lane A: prices
+
+def _open_maybe_gz(path):
+    return gzip.open(path, "rt", newline="") if path.endswith(".gz") \
+        else open(path, newline="")
+
+
+def _bench_series(path):
+    """date -> close, from a two-column date,close file."""
+    out = {}
+    with _open_maybe_gz(path) as fh:
+        for row in csv.DictReader(fh):
+            try:
+                out[row["date"][:10]] = float(row["close"])
+            except (KeyError, TypeError, ValueError):
+                continue
+    return out
+
+
+def _on_or_before(series, when):
+    """Last observation on or before `when`. Markets close; dates have holes."""
+    keys = [k for k in series if k <= when]
+    return (max(keys), series[max(keys)]) if keys else (None, None)
+
+
+def refresh_prices(data, panel_path, benchmark_path=None):
+    """Lane A. Touches price fields only — never MS, gates, tags or notes (R20).
+
+    The panel is ~3M rows, so it is streamed once and only the symbols we
+    actually track are retained.
+    """
+    want = {r["symbol"] for r in data["active"]}
+    latest = {}
+    with _open_maybe_gz(panel_path) as fh:
+        for row in csv.DictReader(fh):
+            sym = row.get("symbol")
+            if sym not in want:
+                continue
+            d = (row.get("date") or "")[:10]
+            if sym not in latest or d >= latest[sym][0]:
+                try:
+                    latest[sym] = (d, float(row["close"]))
+                except (TypeError, ValueError):
+                    continue
+
+    bench = _bench_series(benchmark_path) if benchmark_path else {}
+    b_asof, b_last = (max(bench), bench[max(bench)]) if bench else (None, None)
+
+    updated, missing = [], []
+    for rec in data["active"]:
+        hit = latest.get(rec["symbol"])
+        if hit is None:
+            missing.append(rec["symbol"])
+            continue
+        d, px = hit
+        rec["price"]["last"] = px
+        rec["price"]["asof"] = d
+        if bench:
+            rec["price"]["bench_last"] = b_last
+            rec["price"]["bench_asof"] = b_asof
+            added = rec["human"]["date_added"]
+            if added and rec["price"].get("bench_at_add") is None:
+                _, bv = _on_or_before(bench, added)
+                rec["price"]["bench_at_add"] = bv
+        rec["updated_at"] = _now()
+        updated.append(rec["symbol"])
+    return {"updated": updated, "not_in_panel": missing,
+            "asof": max((latest[s][0] for s in latest), default=None),
+            "bench_asof": b_asof}
+
+
 # ---------------------------------------------------------------- validation
 
 def validate(data):
@@ -549,8 +626,11 @@ def render_detail(rec):
 
     out += ["",
             "DERIVED",
-            f"  return since add {d['return_abs']} ({d['return_pct']}%)  "
-            f"vs Nifty500 {d['return_vs_nifty500'] or 'not yet computed'}",
+            f"  return since add {d['return_abs']} ({d['return_pct']}%)"
+            + (f"   Nifty500 {d['bench_pct']}%   relative "
+               f"{d['return_vs_nifty500']:+.2f}pp" if d['return_vs_nifty500'] is not None
+               else "   vs Nifty500: not computed"),
+            f"  last price {rec['price']['last']} as of {rec['price']['asof'] or '-'}",
             f"  dMS 1w {d['delta_ms_1w']}  dMS 2w {d['delta_ms_2w']}  "
             f"best MS {d['best_ms']} ({d['weeks_since_best']}w ago)",
             ]
@@ -638,6 +718,10 @@ def main(argv=None):
 
     p = sub.add_parser("restore")
     p.add_argument("symbol")
+
+    p = sub.add_parser("prices", help="Lane A — refresh prices from the panel")
+    p.add_argument("--panel", required=True)
+    p.add_argument("--benchmark", help="date,close series for relative return")
 
     sub.add_parser("validate")
 
@@ -750,6 +834,16 @@ def main(argv=None):
         restore(data, a.symbol)
         save(data, a.path)
         print(f"Restored {a.symbol.upper()} to the active list.")
+        return 0
+
+    if a.cmd == "prices":
+        res = refresh_prices(data, a.panel, a.benchmark)
+        save(data, a.path)
+        print(f"Prices as of {res['asof']}"
+              + (f" | benchmark {res['bench_asof']}" if res['bench_asof'] else ""))
+        print(f"  updated {len(res['updated'])} name(s)")
+        if res["not_in_panel"]:
+            print(f"  ! not found in the panel: {', '.join(res['not_in_panel'])}")
         return 0
 
     if a.cmd == "validate":

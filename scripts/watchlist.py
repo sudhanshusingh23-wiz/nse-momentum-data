@@ -134,11 +134,13 @@ def save(data, path=DEFAULT_PATH):
     """Atomic write. The file is git-tracked; a truncated write is unacceptable."""
     data["updated_at"] = _now()
     d = os.path.dirname(os.path.abspath(path))
+    os.makedirs(d, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=d, suffix=".tmp")
     try:
         with os.fdopen(fd, "w") as fh:
             json.dump(data, fh, indent=2, sort_keys=False)
             fh.write("\n")
+        os.chmod(tmp, 0o644)
         os.replace(tmp, path)
     except Exception:
         if os.path.exists(tmp):

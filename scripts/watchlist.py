@@ -65,6 +65,7 @@ MACHINE_FIELDS = (
     "ms", "sms", "composite", "sector", "cap_tier", "tier", "gates",
     "unverified", "entry_signal", "px", "regime_at_ingest",
     "data_tier", "ms_asof", "neutralized", "dropped_from_scan",
+    "scan_appearances", "first_seen_asof", "last_seen_asof",
 )
 
 
@@ -206,7 +207,12 @@ def derive(rec, asof_price_date=None):
         d["best_ms"] = d["weeks_since_best"] = None
 
     d["band"] = band_for(m["ms"])
+    d["scan_appearances"] = m.get("scan_appearances") or 0
+    d["weeks_since_seen"] = (
+        len([e for e in hist if e["asof"] > m["last_seen_asof"]])
+        if m.get("last_seen_asof") else None)
     d["flags"] = flags(rec)
+    d["recurring"] = d["scan_appearances"] >= 3
     d["gate_summary"] = gate_summary(m.get("gates") or {})
     return d
 
@@ -341,6 +347,12 @@ def ingest(data, scan, symbols=None, prices=None, book="momentum", capture_all=F
         m["entry_signal"] = entry.get("entry")      # ACTIONABLE / EXTENDED / ...
         m["px"] = entry.get("px")                   # close, NOT price_at_add
         m["gates"] = gates_all.get(sym, {})
+        # Recurrence is the signal this list exists to show. A name in the top
+        # three for four straight weeks is a different animal from a one-off.
+        if asof and asof != m.get("last_seen_asof"):
+            m["scan_appearances"] = (m.get("scan_appearances") or 0) + 1
+            m["first_seen_asof"] = m.get("first_seen_asof") or asof
+            m["last_seen_asof"] = asof
         m["regime_at_ingest"] = regime
         m["data_tier"] = scan.get("data_tier", 1 if scan.get("cap_data") else 2)
         m["ms_asof"] = asof
@@ -481,7 +493,7 @@ def render_table(records):
     if not records:
         return "Nothing tracked yet. Add a name with `add` or `ingest`."
     hdr = (f"{'SYMBOL':<13}{'BK':<4}{'ORG':<5}{'MS':>6}{'BAND':>10}{'SIGNAL':>12}"
-           f"{'GATES':>12}{'DAYS':>6}{'RET%':>8}  {'STATUS':<14}NOTE")
+           f"{'GATES':>12}{'SEEN':>6}{'DAYS':>6}{'RET%':>8}  {'STATUS':<14}NOTE")
     lines = [hdr, "-" * len(hdr)]
     for r in records:
         d = derive(r)
@@ -491,6 +503,7 @@ def render_table(records):
             f"{r['symbol']:<13}{r['book'][:3]:<4}{r['origin'][:4]:<5}"
             f"{_fmt(r['machine']['ms'], 6)}"
             f"{(d['band'] or '-'):>10}{(r['machine']['entry_signal'] or '-'):>12}{gs:>12}"
+            f"{(('x' + str(d['scan_appearances'])) if d['scan_appearances'] else '-'):>6}"
             f"{_fmt(d['days_tracked'], 6)}{_fmt(d['return_pct'], 8, 2)}  "
             f"{r['human']['status']:<14}"
             f"{(str(len(d['flags'])) + ' flag' + ('' if len(d['flags']) == 1 else 's')) if d['flags'] else '-'}"
@@ -511,6 +524,8 @@ def render_detail(rec):
            f"  sector {m['sector']}  SMS {m['sms']}  cap {m['cap_tier']}",
            f"  signal {m['entry_signal']}  close at scan {m['px']}  "
            f"unverified gates {m['unverified']}",
+           f"  seen in {m['scan_appearances'] or 0} scan(s), "
+           f"first {m['first_seen_asof'] or '-'}, last {m['last_seen_asof'] or '-'}",
            f"  regime at ingest {m['regime_at_ingest']}  data tier {m['data_tier']}"]
     g = d["gate_summary"]
     if g["total"]:

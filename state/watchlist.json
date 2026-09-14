@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created_at": "2026-09-14T00:00:00+00:00",
-  "updated_at": "2026-09-14T10:18:28+00:00",
+  "updated_at": "2026-09-14T10:48:28+00:00",
   "active": [
     {
       "symbol": "HFCL",
@@ -909,6 +909,56 @@
       },
       "created_at": "2026-09-14T10:18:28+00:00",
       "updated_at": "2026-09-14T10:18:28+00:00"
+    },
+    {
+      "symbol": "IKIO",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Hand-added; LED lighting / electronics manufacturing.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": 223.87
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T10:48:28+00:00",
+      "updated_at": "2026-09-14T10:48:28+00:00"
     }
   ],
   "archive": []

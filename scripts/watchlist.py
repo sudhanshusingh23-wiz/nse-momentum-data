@@ -40,23 +40,30 @@ DEFAULT_PATH = "watchlist.json"
 
 BOOKS = ("momentum", "core")
 ORIGINS = ("scan", "user")
-STATUSES = ("Watching", "Trigger set", "Accumulating", "Held", "Exited")
+STATUSES = ("Surfaced", "Watching", "Trigger set", "Accumulating", "Held", "Exited")
 
 # Eviction ladder (spec section 9). Bands are computed here; the eviction
 # *actions* they imply are Phase 4. Thresholds are provisional by design.
+# Keyed on MS alone. The selector does not emit rank, and MS is the same
+# percentile viewed differently, so the spec's rank language is dropped.
 BANDS = [
-    (89.0, "Active"),    # rank ~top 50
-    (78.0, "Active"),    # rank ~51-100
-    (55.0, "Cooling"),   # rank ~101-200
+    (89.0, "Active"),
+    (78.0, "Active"),
+    (55.0, "Cooling"),
 ]
 ARCHIVE_BAND = "Archive candidate"
 
 MS_FLOOR = 55.0          # L3 shortlist floor
-ADV_FLOOR_CR = 5.0       # matches stock_select.py --adv-floor-cr default
+# ADV is not in the selector output. It applies --adv-floor-cr internally as a
+# gate, so anything in the shortlist has already cleared it. Re-checking a
+# number we do not have would be theatre.
 
+# Mirrors stock_select.py's shortlist record exactly. It emits MS/SMS/composite/
+# cap/tier/unverified/entry/px — no rank, no ADV, no ATR extension. Anything the
+# selector does not emit is not invented here.
 MACHINE_FIELDS = (
-    "ms", "rank", "composite", "sector", "sms", "cap_tier", "gates",
-    "entry_level", "adv_cr", "extension_atr", "regime_at_ingest",
+    "ms", "sms", "composite", "sector", "cap_tier", "tier", "gates",
+    "unverified", "entry_signal", "px", "regime_at_ingest",
     "data_tier", "ms_asof", "neutralized", "dropped_from_scan",
 )
 
@@ -198,11 +205,8 @@ def derive(rec, asof_price_date=None):
     else:
         d["best_ms"] = d["weeks_since_best"] = None
 
-    ranks = [e["rank"] for e in hist if e.get("rank") is not None]
-    d["best_rank"] = min(ranks) if ranks else None
-
     d["band"] = band_for(m["ms"])
-    d["fundable"], d["fundable_blockers"] = fundable(rec)
+    d["flags"] = flags(rec)
     d["gate_summary"] = gate_summary(m.get("gates") or {})
     return d
 
@@ -228,30 +232,25 @@ def gate_summary(gates):
     }
 
 
-def fundable(rec):
-    """Computed, never typed. Spec R13.
+def flags(rec):
+    """Context worth knowing, not permission to act.
 
-    UNVERIFIED is treated exactly as loudly as FAIL — inherited from
-    momentum-stock-selector, where silently passing an unchecked gate is
-    named as the most dangerous thing the layer could do.
+    A watchlist is a place to watch things. Whether capital may be committed
+    is L8's call, made at the moment of sizing against live portfolio heat —
+    not something to precompute here from a week-old scan.
     """
-    blockers = []
-    if rec["origin"] == "user" and not rec.get("scan_confirmed"):
-        blockers.append("USER-tagged, not yet confirmed by a scan")
+    out = []
     g = gate_summary(rec["machine"].get("gates") or {})
-    if g["total"] == 0:
-        blockers.append("no gate data")
     if g["fail"]:
-        blockers.append(f"{g['fail']} gate(s) FAIL")
+        out.append(f"{g['fail']} gate(s) FAIL")
     if g["unverified"]:
-        blockers.append(f"{g['unverified']} gate(s) UNVERIFIED")
+        out.append(f"{g['unverified']} gate(s) unchecked")
     ms = rec["machine"]["ms"]
     if ms is not None and ms < MS_FLOOR:
-        blockers.append(f"MS {ms} below L3 floor of {MS_FLOOR}")
-    adv = rec["machine"]["adv_cr"]
-    if adv is not None and adv < ADV_FLOOR_CR:
-        blockers.append(f"ADV Rs{adv}cr below floor of Rs{ADV_FLOOR_CR}cr")
-    return (len(blockers) == 0), blockers
+        out.append(f"MS {ms}, below the selector's own shortlist floor")
+    if rec["human"]["price_at_add"] is None:
+        out.append("no price_at_add, so return is not tracked")
+    return out
 
 
 # ------------------------------------------------------------------ mutation
@@ -267,7 +266,7 @@ def add_manual(data, symbol, book="momentum", price=None, thesis=None,
     rec["human"]["price_at_add"] = price
     rec["human"]["thesis"] = thesis
     rec["human"]["conviction"] = conviction
-    rec["human"]["tags"] = ["USER"] + list(tags or [])
+    rec["human"]["tags"] = list(tags or [])
     if date_added:
         rec["human"]["date_added"] = date_added
     if arch:
@@ -285,7 +284,7 @@ def add_manual(data, symbol, book="momentum", price=None, thesis=None,
     return rec
 
 
-def ingest(data, scan, symbols, prices=None, book="momentum"):
+def ingest(data, scan, symbols=None, prices=None, book="momentum", capture_all=False):
     """Merge L3 scan output into the store. Keyed on symbol.
 
     Machine zone is overwritten wholesale. Human zone is never touched.
@@ -297,6 +296,11 @@ def ingest(data, scan, symbols, prices=None, book="momentum"):
     """
     prices = prices or {}
     shortlist = {s["symbol"].upper(): s for s in scan.get("shortlist", [])}
+    # The selector's `shortlist` IS the top-n per sector; --show-n only affects
+    # what it prints. Capturing the array captures the top 3 per sector.
+    if capture_all:
+        symbols = list(shortlist)
+    symbols = symbols or []
     gates_all = scan.get("gates", {})
     asof = scan.get("asof")
     regime = scan.get("regime")
@@ -315,32 +319,33 @@ def ingest(data, scan, symbols, prices=None, book="momentum"):
         is_new = rec is None
         if is_new:
             rec = blank_record(sym, book=book, origin="scan")
+            # Surfaced, not Watching. The scan captured it; you have not yet
+            # decided to track it. `adopt` is that decision (R30).
+            rec["human"]["status"] = "Surfaced"
             if sym in prices:
                 rec["human"]["price_at_add"] = prices[sym]
+                rec["human"]["status"] = "Watching"
             data["active"].append(rec)
         else:
             # An existing USER name confirmed by a scan is now fundable-eligible.
             rec["scan_confirmed"] = True
 
         m = rec["machine"]
-        m["ms"] = entry.get("ms")
-        m["rank"] = entry.get("rank")
+        m["ms"] = entry.get("MS")
+        m["sms"] = entry.get("SMS")
         m["composite"] = entry.get("composite")
         m["sector"] = entry.get("sector")
-        m["sms"] = entry.get("sms")
         m["cap_tier"] = entry.get("cap")
-        m["entry_level"] = entry.get("entry_level") or entry.get("entry")
-        m["adv_cr"] = entry.get("adv_cr")
-        m["extension_atr"] = entry.get("extension")
-        m["gates"] = gates_all.get(sym, entry.get("gates") or {})
+        m["tier"] = entry.get("tier")
+        m["unverified"] = entry.get("unverified")
+        m["entry_signal"] = entry.get("entry")      # ACTIONABLE / EXTENDED / ...
+        m["px"] = entry.get("px")                   # close, NOT price_at_add
+        m["gates"] = gates_all.get(sym, {})
         m["regime_at_ingest"] = regime
         m["data_tier"] = scan.get("data_tier", 1 if scan.get("cap_data") else 2)
         m["ms_asof"] = asof
         m["neutralized"] = neutralized
-        if rec.get("name") is None:
-            rec["name"] = entry.get("name")
-
-        append_ms_history(rec, asof, entry.get("ms"), entry.get("rank"))
+        append_ms_history(rec, asof, entry.get("MS"))
         rec["updated_at"] = _now()
         (added if is_new else updated).append(sym)
 
@@ -348,7 +353,7 @@ def ingest(data, scan, symbols, prices=None, book="momentum"):
             "asof": asof, "regime": regime}
 
 
-def append_ms_history(rec, asof, ms, rank=None):
+def append_ms_history(rec, asof, ms):
     """Appended, never overwritten (R14). Re-running the same date replaces
     that date's entry rather than creating a duplicate."""
     if asof is None or ms is None:
@@ -356,10 +361,34 @@ def append_ms_history(rec, asof, ms, rank=None):
     hist = rec["ms_history"]
     for e in hist:
         if e["asof"] == asof:
-            e["ms"], e["rank"] = ms, rank
+            e["ms"] = ms
             return
-    hist.append({"asof": asof, "ms": ms, "rank": rank})
+    hist.append({"asof": asof, "ms": ms})
     hist.sort(key=lambda e: e["asof"])
+
+
+def adopt(data, symbol, price, thesis=None, conviction=None):
+    """Turn a Surfaced name into a tracked one.
+
+    This is the moment R30 is about: price_at_add is the price when *you*
+    decide to track, not the close the scan happened to surface it at.
+    """
+    rec = find(data, symbol)
+    if rec is None:
+        raise ValueError(f"{symbol.upper()} is not on the active list.")
+    if rec["human"]["status"] != "Surfaced":
+        raise ValueError(
+            f"{rec['symbol']} is already adopted (status {rec['human']['status']}, "
+            f"added {rec['human']['date_added']}). Use `set` to change it.")
+    rec["human"]["price_at_add"] = price
+    rec["human"]["date_added"] = _today()
+    rec["human"]["status"] = "Watching"
+    if thesis:
+        rec["human"]["thesis"] = thesis
+    if conviction:
+        rec["human"]["conviction"] = conviction
+    rec["updated_at"] = _now()
+    return rec
 
 
 def archive(data, symbol, reason):
@@ -430,10 +459,6 @@ def validate(data):
             problems.append(f"{s}: unknown origin '{r['origin']}'")
         if r["human"]["status"] not in STATUSES:
             problems.append(f"{s}: unknown status '{r['human']['status']}'")
-        if r["origin"] == "user" and "USER" not in r["human"]["tags"]:
-            problems.append(f"{s}: user-origin record missing USER tag")
-        if r["human"]["price_at_add"] is None:
-            problems.append(f"{s}: no price_at_add — return tracking inoperative")
         dates = [e["asof"] for e in r["ms_history"]]
         if dates != sorted(dates):
             problems.append(f"{s}: ms_history out of order")
@@ -455,8 +480,8 @@ def _fmt(v, width, dec=1):
 def render_table(records):
     if not records:
         return "Nothing tracked yet. Add a name with `add` or `ingest`."
-    hdr = (f"{'SYMBOL':<13}{'BK':<4}{'ORG':<5}{'MS':>6}{'RANK':>6}{'BAND':>10}"
-           f"{'GATES':>12}{'DAYS':>6}{'RET%':>8}  {'STATUS':<14}FUND")
+    hdr = (f"{'SYMBOL':<13}{'BK':<4}{'ORG':<5}{'MS':>6}{'BAND':>10}{'SIGNAL':>12}"
+           f"{'GATES':>12}{'DAYS':>6}{'RET%':>8}  {'STATUS':<14}NOTE")
     lines = [hdr, "-" * len(hdr)]
     for r in records:
         d = derive(r)
@@ -464,10 +489,11 @@ def render_table(records):
         gs = f"{g['pass']}P/{g['fail']}F/{g['unverified']}U" if g["total"] else "none"
         lines.append(
             f"{r['symbol']:<13}{r['book'][:3]:<4}{r['origin'][:4]:<5}"
-            f"{_fmt(r['machine']['ms'], 6)}{_fmt(r['machine']['rank'], 6)}"
-            f"{(d['band'] or '-'):>10}{gs:>12}"
+            f"{_fmt(r['machine']['ms'], 6)}"
+            f"{(d['band'] or '-'):>10}{(r['machine']['entry_signal'] or '-'):>12}{gs:>12}"
             f"{_fmt(d['days_tracked'], 6)}{_fmt(d['return_pct'], 8, 2)}  "
-            f"{r['human']['status']:<14}{'yes' if d['fundable'] else 'NO'}"
+            f"{r['human']['status']:<14}"
+            f"{(str(len(d['flags'])) + ' flag' + ('' if len(d['flags']) == 1 else 's')) if d['flags'] else '-'}"
         )
     return "\n".join(lines)
 
@@ -481,9 +507,10 @@ def render_detail(rec):
            f"scan-confirmed {rec['scan_confirmed']} | tags {', '.join(h['tags']) or '-'}",
            "",
            "MACHINE ZONE" + (f"   (as of {m['ms_asof']})" if m["ms_asof"] else "   (no scan data)"),
-           f"  MS {m['ms']}  rank {m['rank']}  composite {m['composite']}  band {d['band']}",
+           f"  MS {m['ms']}  composite {m['composite']}  band {d['band']}  tier {m['tier']}",
            f"  sector {m['sector']}  SMS {m['sms']}  cap {m['cap_tier']}",
-           f"  entry {m['entry_level']}  ADV Rs{m['adv_cr']}cr  extension {m['extension_atr']} ATR",
+           f"  signal {m['entry_signal']}  close at scan {m['px']}  "
+           f"unverified gates {m['unverified']}",
            f"  regime at ingest {m['regime_at_ingest']}  data tier {m['data_tier']}"]
     g = d["gate_summary"]
     if g["total"]:
@@ -510,15 +537,17 @@ def render_detail(rec):
             f"  return since add {d['return_abs']} ({d['return_pct']}%)  "
             f"vs Nifty500 {d['return_vs_nifty500'] or 'not yet computed'}",
             f"  dMS 1w {d['delta_ms_1w']}  dMS 2w {d['delta_ms_2w']}  "
-            f"best MS {d['best_ms']} ({d['weeks_since_best']}w ago)  best rank {d['best_rank']}",
-            f"  FUNDABLE: {'yes' if d['fundable'] else 'NO'}"]
-    for b in d["fundable_blockers"]:
-        out.append(f"    - {b}")
+            f"best MS {d['best_ms']} ({d['weeks_since_best']}w ago)",
+            ]
+    if d["flags"]:
+        out.append("  worth knowing:")
+        for b in d["flags"]:
+            out.append(f"    - {b}")
 
     if rec["ms_history"]:
         out += ["", "MS HISTORY"]
         for e in rec["ms_history"][-8:]:
-            out.append(f"  {e['asof']}  MS {e['ms']}  rank {e['rank']}")
+            out.append(f"  {e['asof']}  MS {e['ms']}")
     return "\n".join(out)
 
 
@@ -553,7 +582,9 @@ def main(argv=None):
 
     p = sub.add_parser("ingest", help="merge selected symbols from an L3 scan")
     p.add_argument("--json", required=True, help="stock_select.py --json output")
-    p.add_argument("--symbols", required=True, help="comma separated")
+    p.add_argument("--symbols", help="comma separated")
+    p.add_argument("--all", action="store_true",
+                   help="capture the whole shortlist (= top 3 per sector)")
     p.add_argument("--book", choices=BOOKS, default="momentum")
     p.add_argument("--price", action="append", metavar="SYM=PRICE",
                    help="price at add, repeatable")
@@ -579,6 +610,12 @@ def main(argv=None):
     p.add_argument("--thesis")
     p.add_argument("--conviction")
     p.add_argument("--price-at-add", type=float, dest="price_at_add")
+
+    p = sub.add_parser("adopt", help="decide to track a Surfaced name")
+    p.add_argument("symbol")
+    p.add_argument("--price", type=float, required=True)
+    p.add_argument("--thesis")
+    p.add_argument("--conviction")
 
     p = sub.add_parser("archive")
     p.add_argument("symbol")
@@ -607,35 +644,39 @@ def main(argv=None):
                          thesis=a.thesis, conviction=a.conviction,
                          name=a.name, tags=tags, date_added=a.date_added)
         save(data, a.path)
-        print(f"Added {rec['symbol']} to the {rec['book']} book, tagged USER.")
+        print(f"Added {rec['symbol']} to the {rec['book']} book.")
         if rec.get("readded_from_archive"):
             print(f"  Pulled back from the archive (archived {rec['readded_from_archive']}). "
                   f"{len(rec['ms_history'])} week(s) of MS history carried forward.")
         if a.price is None:
-            print("  ! No price given. Return tracking is inoperative until you "
-                  "set one: `set SYMBOL --price-at-add N`")
-        print("  ! Not fundable until it appears in a scan output.")
+            print("  No price given, so return won't be tracked. "
+                  "Add one later with `set SYMBOL --price-at-add N`.")
         return 0
 
     if a.cmd == "ingest":
         with open(a.json) as fh:
             scan = json.load(fh)
-        syms = [s.strip() for s in a.symbols.split(",") if s.strip()]
-        res = ingest(data, scan, syms, prices=_kvpairs(a.price), book=a.book)
+        if not a.all and not a.symbols:
+            print("Give --symbols or --all."); return 1
+        syms = [s.strip() for s in (a.symbols or "").split(",") if s.strip()]
+        res = ingest(data, scan, syms, prices=_kvpairs(a.price), book=a.book,
+                     capture_all=a.all)
         save(data, a.path)
         print(f"Scan as of {res['asof']} | regime {res['regime']}")
         if res["added"]:
-            print(f"  added:   {', '.join(res['added'])}")
+            print(f"  surfaced: {', '.join(res['added'])}")
+            print("  Adopt the ones you want to track: "
+                  "`adopt SYMBOL --price N`")
         if res["updated"]:
             print(f"  updated: {', '.join(res['updated'])}")
         if res["not_in_scan"]:
             print(f"  ! not in this scan's shortlist: {', '.join(res['not_in_scan'])}")
             print("    Add by hand if you want them tracked — they'll carry the USER tag.")
         for s in res["added"] + res["updated"]:
-            rec = find(data, s)
-            ok, blockers = fundable(rec)
-            if not ok:
-                print(f"  ! {s} NOT fundable: {'; '.join(blockers)}")
+            f = flags(find(data, s))
+            gate_notes = [x for x in f if "gate" in x]
+            if gate_notes:
+                print(f"  {s}: {'; '.join(gate_notes)}")
         return 0
 
     if a.cmd == "list":
@@ -676,6 +717,12 @@ def main(argv=None):
                   conviction=a.conviction, price_at_add=a.price_at_add)
         save(data, a.path)
         print(f"Updated {a.symbol.upper()}.")
+        return 0
+
+    if a.cmd == "adopt":
+        rec = adopt(data, a.symbol, a.price, a.thesis, a.conviction)
+        save(data, a.path)
+        print(f"Adopted {rec['symbol']} at {a.price}. Now tracking from today.")
         return 0
 
     if a.cmd == "archive":

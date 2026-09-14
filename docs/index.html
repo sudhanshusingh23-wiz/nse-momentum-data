@@ -170,6 +170,17 @@ textarea{
 }
 .foot{margin-top:22px; font-size:11.5px; color:var(--soft); line-height:1.7}
 .mcard{display:none}
+.act{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:8px}
+.act select,.act input{
+  font:inherit; font-size:12.5px; padding:5px 7px; border:1px solid var(--rule);
+  border-radius:var(--r); background:var(--panel); color:var(--ink); min-width:0;
+}
+.act input{flex:1; min-width:90px}
+.act .go{background:var(--petrol); color:#fff; border:0; padding:5px 13px;
+  border-radius:var(--r); font:inherit; font-size:12.5px; cursor:pointer}
+.act .go:disabled{opacity:.5; cursor:default}
+.status{font-size:12px; margin-top:7px; min-height:16px; color:var(--soft)}
+.status.err{color:var(--down)} .status.ok{color:var(--up)}
 
 @media(max-width:760px){
   .wrap{padding:16px 12px 60px}
@@ -206,6 +217,7 @@ textarea{
   <span class="spacer"></span>
   <button class="ghost" id="refresh">Refresh from repo</button>
   <button class="ghost" id="load">Paste JSON</button>
+  <button class="ghost" id="tok">Connect</button>
 </div>
 
 <section class="ladder" id="ladder"></section>
@@ -428,12 +440,7 @@ function open(sym){
   } else g='<div class="blk"><h4>Gates</h4><div class="gl"><span>no gate data — '+
       'run an ingest</span></div></div>';
 
-  const cmds=[
-    ['Adopt (set your price)','python scripts/watchlist.py --path state/watchlist.json adopt '+sym+' --price 0'],
-    ['Add a note','python scripts/watchlist.py --path state/watchlist.json note '+sym+' "…"'],
-    ['Change status','python scripts/watchlist.py --path state/watchlist.json set '+sym+' --status "Trigger set"'],
-    ['Archive','python scripts/watchlist.py --path state/watchlist.json archive '+sym+' --reason momentum_decay']
-  ];
+  const isSurfaced = h.status==='Surfaced';
 
   document.getElementById('sheetIn').innerHTML=
     '<div class="sheet-hd"><div><h3>'+esc(sym)+'</h3>'+
@@ -476,21 +483,25 @@ function open(sym){
       r.ms_history.slice(-10).map(e=>'<div class="gl"><span>'+e.asof+'</span>'+
       '<span class="num">'+e.ms+(e.rank?' · rank '+e.rank:'')+'</span></div>').join('')+'</div>':'')+
 
-    '<div class="blk"><h4>Change this — copy into your terminal</h4>'+
-    cmds.map(([lbl,c],i)=>'<div class="cmd" data-c="'+i+'">'+esc(c)+'</div>'+
-      '<button class="ghost" data-copy="'+i+'" style="margin:0 0 12px">Copy · '+lbl+'</button>').join('')+
-    '</div>';
+    '<div class="blk"><h4>Do something</h4>'+
+    '<div class="act">'+
+      '<select id="aAct">'+
+        '<option value="adopt"'+(isSurfaced?' selected':'')+'>Adopt — start tracking</option>'+
+        '<option value="note">Add a note</option>'+
+        '<option value="status">Change status</option>'+
+        '<option value="archive">Archive</option>'+
+      '</select>'+
+      '<select id="aStatus" hidden>'+
+        ['Surfaced','Watching','Trigger set','Accumulating','Held','Exited']
+          .map(x=>'<option'+(x===h.status?' selected':'')+'>'+x+'</option>').join('')+
+      '</select>'+
+      '<input id="aText" placeholder="price (optional)">'+
+      '<button class="go" id="aGo">Run</button>'+
+    '</div><div class="status" id="aMsg"></div></div>';
 
   const sh=document.getElementById('sheet'); sh.hidden=false;
   document.getElementById('close').onclick=close;
-  document.getElementById('sheetIn').querySelectorAll('[data-copy]').forEach(b=>{
-    b.onclick=async()=>{
-      const t=document.querySelector('.cmd[data-c="'+b.dataset.copy+'"]').textContent;
-      try{ await navigator.clipboard.writeText(t); const o=b.textContent;
-        b.textContent='Copied'; setTimeout(()=>b.textContent=o,1200);
-      }catch{ b.textContent='Select the line above to copy'; }
-    };
-  });
+  wireActions(sym);
   document.getElementById('close').focus();
 }
 const close=()=>{document.getElementById('sheet').hidden=true;};
@@ -539,8 +550,81 @@ document.getElementById('apply').onclick=()=>{
   }catch(x){ e.textContent=x.message; }
 };
 
-const SRC = "https://raw.githubusercontent.com/sudhanshusingh23-wiz/"
-          + "nse-momentum-data/main/state/watchlist.json";
+const OWNER="sudhanshusingh23-wiz", REPO="nse-momentum-data", BRANCH="main";
+const WORKFLOW="watchlist.yml";
+const SRC = "https://raw.githubusercontent.com/"+OWNER+"/"+REPO+"/"+BRANCH
+          + "/state/watchlist.json";
+
+// Token lives in localStorage. Wrapped because some sandboxed preview frames
+// block storage entirely — there it degrades to memory for the session.
+let memTok=null;
+const getTok=()=>{ try{ return localStorage.getItem('wl_tok')||memTok; }catch{ return memTok; } };
+const setTok=v=>{ memTok=v; try{ v?localStorage.setItem('wl_tok',v):localStorage.removeItem('wl_tok'); }catch{} };
+
+function connect(){
+  const cur=getTok();
+  const v=prompt(
+    cur ? "Token is set. Paste a new one to replace it, or leave blank and press OK to disconnect."
+        : "Paste a GitHub fine-grained token with Actions: write on "+REPO+".",
+    "");
+  if(v===null) return;
+  setTok(v.trim()||null);
+  const _t=document.getElementById('tok');
+  if(_t) _t.textContent = getTok()? 'Connected' : 'Connect';
+  note(getTok()? 'Token saved in this browser.' : 'Token cleared.');
+}
+
+async function dispatch(inputs){
+  const t=getTok();
+  if(!t) throw new Error('No token. Press Connect first.');
+  const r=await fetch("https://api.github.com/repos/"+OWNER+"/"+REPO
+        +"/actions/workflows/"+WORKFLOW+"/dispatches",{
+    method:'POST',
+    headers:{'Authorization':'Bearer '+t,'Accept':'application/vnd.github+json',
+             'Content-Type':'application/json','X-GitHub-Api-Version':'2022-11-28'},
+    body:JSON.stringify({ref:BRANCH,inputs})
+  });
+  if(r.status===204) return true;
+  let msg='HTTP '+r.status;
+  try{ const j=await r.json(); if(j.message) msg=j.message; }catch{}
+  if(r.status===404) msg+=' — check the token has Actions: write, and that '
+      +WORKFLOW+' exists on '+BRANCH+'.';
+  throw new Error(msg);
+}
+
+function wireActions(sym){
+  const sel=document.getElementById('aAct'), st=document.getElementById('aStatus'),
+        txt=document.getElementById('aText'), go=document.getElementById('aGo'),
+        msg=document.getElementById('aMsg');
+  if(!sel) return;
+  const shape=()=>{
+    const a=sel.value;
+    st.hidden = a!=='status';
+    txt.hidden = a==='status';
+    txt.placeholder = a==='adopt' ? 'price (optional)'
+      : a==='note' ? 'note text' : 'reason, e.g. momentum_decay';
+    txt.value='';
+  };
+  sel.onchange=shape; shape();
+
+  go.onclick=async()=>{
+    const a=sel.value, v=txt.value.trim();
+    if(a==='note' && !v){ msg.className='status err'; msg.textContent='A note needs text.'; return; }
+    const inputs={action:a, symbols:sym};
+    if(a==='adopt' && v) inputs.prices = sym+'='+v;
+    if(a==='note' || a==='archive') inputs.text = v;
+    if(a==='status') inputs.status = st.value;
+    go.disabled=true; msg.className='status'; msg.textContent='Sending…';
+    try{
+      await dispatch(inputs);
+      msg.className='status ok';
+      msg.textContent='Sent. The action takes about 10s — refreshing shortly.';
+      setTimeout(async()=>{ await pull(); msg.textContent='Refreshed. Reopen if it looks unchanged.'; },14000);
+    }catch(e){
+      msg.className='status err'; msg.textContent=e.message; go.disabled=false;
+    }
+  };
+}
 
 function note(msg, bad){
   const e=document.getElementById('src');
@@ -561,7 +645,9 @@ async function pull(){
     note('Could not reach the repo ('+e.message+'). Use Paste JSON instead.', true);
   }finally{ b.textContent=was; b.disabled=false; }
 }
-document.getElementById('refresh').onclick=pull;
+const _rf=document.getElementById('refresh'); if(_rf) _rf.onclick=pull;
+const _tk=document.getElementById('tok');
+if(_tk){ _tk.onclick=connect; _tk.textContent = getTok()? 'Connected' : 'Connect'; }
 
 DATA={schema_version:1,active:[],archive:[]};
 books(); render(); note('Loading…');

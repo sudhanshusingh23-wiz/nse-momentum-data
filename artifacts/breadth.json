@@ -1,10 +1,10 @@
 {
-  "asof": "2026-09-11",
+  "asof": "2026-09-14",
   "universe": "NIFTY500",
   "pct_above_200dma": 51.37,
-  "pct_above_50dma": 32.99,
-  "pct_above_50dma_10s_ago": 47.6,
-  "delta_10s_pp": -14.61,
+  "pct_above_50dma": 33.61,
+  "pct_above_50dma_10s_ago": 45.72,
+  "delta_10s_pp": -12.11,
   "pct_within_10pct_of_52w_high": 29.05,
   "denominator_200dma": 475,
   "denominator_50dma": 479,
@@ -35,7 +35,7 @@
     "ZFCVINDIA",
     "ZYDUSWELL"
   ],
-  "sessions_in_panel": 1474,
+  "sessions_in_panel": 1475,
   "method": "computed_from_panel",
   "warnings": [
     "21 symbols (4.2%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."

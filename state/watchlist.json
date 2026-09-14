@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created_at": "2026-09-14T00:00:00+00:00",
-  "updated_at": "2026-09-14T05:55:22+00:00",
+  "updated_at": "2026-09-14T06:23:12+00:00",
   "active": [
     {
       "symbol": "HFCL",
@@ -49,6 +49,636 @@
       },
       "created_at": "2026-09-14T05:55:22+00:00",
       "updated_at": "2026-09-14T05:55:22+00:00"
+    },
+    {
+      "symbol": "DIVISLAB",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 90.1,
+        "sms": 96.5,
+        "composite": 92.3,
+        "sector": "Healthcare",
+        "cap_tier": "LARGE",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 9322.0,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 90.1
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
+    },
+    {
+      "symbol": "LAURUSLABS",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 87.4,
+        "sms": 96.5,
+        "composite": 90.6,
+        "sector": "Healthcare",
+        "cap_tier": "MID",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 1969.0,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 87.4
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
+    },
+    {
+      "symbol": "ANTHEM",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 83.0,
+        "sms": 96.5,
+        "composite": 87.7,
+        "sector": "Healthcare",
+        "cap_tier": "MID",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 940.9,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 83.0
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
+    },
+    {
+      "symbol": "OIL",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 66.4,
+        "sms": 81.6,
+        "composite": 71.7,
+        "sector": "Oil Gas & Consumable Fuels",
+        "cap_tier": "MID",
+        "tier": "B",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 489.8,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 66.4
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
+    },
+    {
+      "symbol": "AEGISLOG",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 63.4,
+        "sms": 81.6,
+        "composite": 69.7,
+        "sector": "Oil Gas & Consumable Fuels",
+        "cap_tier": "SMALL",
+        "tier": "B",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 1353.6,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 63.4
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
+    },
+    {
+      "symbol": "CASTROLIND",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 63.2,
+        "sms": 81.6,
+        "composite": 69.6,
+        "sector": "Oil Gas & Consumable Fuels",
+        "cap_tier": "SMALL",
+        "tier": "B",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 188.03,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 63.2
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
+    },
+    {
+      "symbol": "WELCORP",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 82.2,
+        "sms": 78.1,
+        "composite": 80.8,
+        "sector": "Capital Goods",
+        "cap_tier": "SMALL",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 2676.6,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 82.2
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
+    },
+    {
+      "symbol": "JINDALSAW",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 79.0,
+        "sms": 78.1,
+        "composite": 78.6,
+        "sector": "Capital Goods",
+        "cap_tier": "SMALL",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 311.95,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 79.0
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
+    },
+    {
+      "symbol": "SHYAMMETL",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 76.1,
+        "sms": 78.1,
+        "composite": 76.8,
+        "sector": "Capital Goods",
+        "cap_tier": "SMALL",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 1074.8,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 76.1
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T06:23:12+00:00"
     }
   ],
   "archive": []

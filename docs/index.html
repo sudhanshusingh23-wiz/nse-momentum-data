@@ -270,6 +270,9 @@ function derive(r){
   d.days=days(h.date_added);
   const last=r.price?.last, add=h.price_at_add;
   d.ret = (last!=null&&add) ? +((last/add-1)*100).toFixed(2) : null;
+  const ba=r.price?.bench_at_add, bl=r.price?.bench_last;
+  d.benchPct = (ba&&bl) ? +((bl/ba-1)*100).toFixed(2) : null;
+  d.rel = (d.ret!=null&&d.benchPct!=null) ? +(d.ret-d.benchPct).toFixed(2) : null;
   const v=hist.filter(e=>e.ms!=null).map(e=>e.ms);
   d.delta = v.length>=2 ? +(v[v.length-1]-v[v.length-2]).toFixed(1) : null;
   d.best = v.length?Math.max(...v):null;
@@ -462,7 +465,10 @@ function open(sym){
     kv('Best MS',d.best!=null?d.best+' ('+d.sinceBest+'w ago)':null)+
     kv('Recurring',d.recurring?'yes — top 3 in '+d.seen+' scans':(d.seen?'seen '+d.seen+'×':null))+
     kv('Return since add',d.ret!=null?(d.ret>0?'+':'')+d.ret+'%':null)+
-    kv('vs Nifty 500','<span class="nil">Lane A, Phase 3</span>')+
+    kv('Last price',r.price?.last!=null?r.price.last+' ('+(r.price.asof||'?')+')':null)+
+    kv('Nifty 500 same window',d.benchPct!=null?(d.benchPct>0?'+':'')+d.benchPct+'%':null)+
+    kv('Relative',d.rel!=null?'<span class="'+(d.rel>0?'up':'dn')+'">'+
+       (d.rel>0?'+':'')+d.rel+'pp</span>':null)+
     '</dl>'+(d.flags.length?'<h4 style="margin-top:14px">Worth knowing</h4><ul class="block-list">'+
       d.flags.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>':'')+'</div>'+
 

@@ -10,6 +10,10 @@ name: Momentum scan
 #           may deploy; it does not decide what you may look at. The real regime
 #           is still passed to the selector, so the ACTIONABLE/EXTENDED signal
 #           stays truthful — it is recorded on the row, not used as a filter.
+#   prices  Lane A. Refreshes last price for every tracked name from the
+#           committed panel, plus the Nifty 500 for relative return. Touches
+#           price fields only — never MS, gates or notes.
+#
 #   adopt   Turns Surfaced names into tracked ones. This is where price_at_add
 #           is set, because that is the price at the moment you decide (R30).
 #
@@ -24,7 +28,7 @@ on:
         required: true
         default: 'scan'
         type: choice
-        options: [scan, adopt, add]
+        options: [scan, adopt, add, prices]
       capture:
         description: 'scan only — capture the top 3 per sector into the watchlist'
         required: false
@@ -247,6 +251,19 @@ jobs:
           python scripts/watchlist.py --path state/watchlist.json ingest \
             --json state/last_scan.json --all | tee /tmp/out.txt
           { echo; echo '## Captured'; echo; echo '```'; cat /tmp/out.txt; echo '```'; } \
+            >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Lane A — refresh prices
+        if: inputs.mode == 'prices'
+        run: |
+          if [ ! -f state/watchlist.json ]; then
+            echo "No watchlist yet. Add or capture a name first."; exit 1
+          fi
+          ARGS=(prices --panel artifacts/panel.csv.gz)
+          [ -f artifacts/nifty500.csv ] && ARGS+=(--benchmark artifacts/nifty500.csv)
+          python scripts/watchlist.py --path state/watchlist.json "${ARGS[@]}" \
+            | tee /tmp/out.txt
+          { echo '## Prices'; echo; echo '```'; cat /tmp/out.txt; echo '```'; } \
             >> "$GITHUB_STEP_SUMMARY"
 
       - name: Add by hand

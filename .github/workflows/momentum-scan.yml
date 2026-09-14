@@ -3,8 +3,13 @@ name: Momentum scan
 # Two modes, chosen from the Run workflow dropdown:
 #
 #   scan    Runs regime -> sector -> selector against the committed panel.
-#           Tick `capture` to also pull the top 3 per sector into the watchlist
-#           as Surfaced — captured, but not yet tracked.
+#           Tick `capture` to also pull the top 3 names from each of the top 3
+#           sectors into the watchlist as Surfaced.
+#
+#           Capture is NOT gated by the regime. The regime decides whether you
+#           may deploy; it does not decide what you may look at. The real regime
+#           is still passed to the selector, so the ACTIONABLE/EXTENDED signal
+#           stays truthful — it is recorded on the row, not used as a filter.
 #   adopt   Turns Surfaced names into tracked ones. This is where price_at_add
 #           is set, because that is the price at the moment you decide (R30).
 #
@@ -139,7 +144,7 @@ jobs:
           echo "sector_score.py $ARGS"
           python scripts/sector_score.py $ARGS
 
-      - name: Read the selected sectors
+      - name: Read the top sectors
         if: inputs.mode == 'scan'
         env:
           OVERRIDE: ${{ inputs.sectors }}
@@ -151,10 +156,15 @@ jobs:
               print(f"SECTORS={ov}")
               raise SystemExit(0)
           d = json.load(open('state/sector_scan.json'))
-          sel = d.get('selected') or []
-          # `selected` may be plain names or dicts depending on the branch taken.
-          names = [s if isinstance(s, str) else (s.get('sector') or s.get('name')) for s in sel]
-          names = [n for n in names if n]
+          # Deliberately NOT `selected`. That field answers "may capital be
+          # deployed here", which is a different question from "what is
+          # strongest right now". The watchlist wants the latter: the top 3 by
+          # SMS every week, regardless of whether the regime permits entry.
+          # A drawdown is exactly when a watchlist should be filling up.
+          rank = sorted((d.get('ranking') or []), key=lambda r: r.get('rank', 999))
+          names = [r['sector'] for r in rank[:3] if r.get('sector')]
+          if not names:
+              raise SystemExit("Sector ranking is empty — L2 produced nothing to rank.")
           print("SECTORS=" + ",".join(names))
           PY
           grep SECTORS= "$GITHUB_ENV" | tail -1
@@ -185,7 +195,8 @@ jobs:
               print("Not produced: `%s`\n" % s["_error"])
           else:
               sel = s.get('selected') or []
-              print(f"Selected: **{sel if sel else 'none'}**\n")
+              print(f"Cleared for deployment: **{sel if sel else 'none — regime blocks entry'}**\n")
+              print("The watchlist captures the top 3 by SMS regardless of this.\n")
               print("| Rank | Sector | SMS | Breadth |")
               print("|---:|---|---:|---:|")
               for row in (s.get('ranking') or [])[:15]:
@@ -195,18 +206,8 @@ jobs:
               for n in (s.get('notes') or []): print(f"- {n}")
           PY
 
-      - name: Stop if no sector was selected
-        if: inputs.mode == 'scan'
-        run: |
-          if ! grep -q "^SECTORS=." "$GITHUB_ENV"; then
-            echo "::warning::No sector met the selection bar. See the run summary "\
-                 "for the full ranking. This is a valid outcome, not a failure. "\
-                 "Use the sectors input to force a scan."
-            exit 0
-          fi
-
       - name: L3 — stock selection
-        if: inputs.mode == 'scan' && env.SECTORS != ''
+        if: inputs.mode == 'scan'
         run: |
           ARGS="--panel artifacts/panel.csv.gz --map reference/map.csv"
           ARGS="$ARGS --benchmark artifacts/nifty500.csv --sectors $SECTORS"
@@ -217,7 +218,7 @@ jobs:
           python scripts/stock_select.py $ARGS
 
       - name: Summarise the shortlist
-        if: inputs.mode == 'scan' && env.SECTORS != ''
+        if: inputs.mode == 'scan'
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
@@ -238,7 +239,7 @@ jobs:
       # -------------------------------------------------------------- ingest
 
       - name: Capture the top 3 per sector
-        if: inputs.mode == 'scan' && inputs.capture && env.SECTORS != ''
+        if: inputs.mode == 'scan' && inputs.capture
         run: |
           [ -f state/watchlist.json ] || \
             python scripts/watchlist.py --path state/watchlist.json init

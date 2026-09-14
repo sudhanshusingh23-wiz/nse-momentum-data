@@ -2,14 +2,14 @@ name: Momentum scan
 
 # Two modes, chosen from the Run workflow dropdown:
 #
-#   scan    Runs regime -> sector -> selector against the committed panel and
-#           writes state/last_scan.json. Nothing touches the watchlist.
-#   ingest  Reads state/last_scan.json and adds the symbols you name to
-#           state/watchlist.json. Never runs the scan chain.
+#   scan    Runs regime -> sector -> selector against the committed panel.
+#           Tick `capture` to also pull the top 3 per sector into the watchlist
+#           as Surfaced — captured, but not yet tracked.
+#   adopt   Turns Surfaced names into tracked ones. This is where price_at_add
+#           is set, because that is the price at the moment you decide (R30).
 #
-# Splitting them is deliberate. You look at the scan first, decide what you
-# actually want to track, then ingest. The scan output is committed so the
-# ingest step reads exactly the numbers you looked at.
+# Surfacing is cheap and reversible; the eviction ladder prunes what you never
+# adopt. Adopting is the decision, and it stays yours.
 
 on:
   workflow_dispatch:
@@ -19,21 +19,30 @@ on:
         required: true
         default: 'scan'
         type: choice
-        options: [scan, ingest]
+        options: [scan, adopt, add]
+      capture:
+        description: 'scan only — capture the top 3 per sector into the watchlist'
+        required: false
+        default: false
+        type: boolean
       symbols:
-        description: 'ingest only — comma separated, e.g. KAYNES,AZAD'
+        description: 'adopt/add — comma separated, e.g. KAYNES,AZAD'
         required: false
         default: ''
       prices:
-        description: 'ingest only — price at add, e.g. KAYNES=5810,AZAD=1842'
+        description: 'adopt/add — price, e.g. KAYNES=5810,AZAD=1842'
         required: false
         default: ''
       book:
-        description: 'ingest only — which book'
+        description: 'add only — which book'
         required: false
         default: 'momentum'
         type: choice
         options: [momentum, core]
+      thesis:
+        description: 'adopt/add — one line, applied to each name'
+        required: false
+        default: ''
       sectors:
         description: 'scan only — override sectors (blank = use the sector scan)'
         required: false
@@ -228,33 +237,71 @@ jobs:
 
       # -------------------------------------------------------------- ingest
 
-      - name: Ingest into the watchlist
-        if: inputs.mode == 'ingest'
+      - name: Capture the top 3 per sector
+        if: inputs.mode == 'scan' && inputs.capture && env.SECTORS != ''
+        run: |
+          [ -f state/watchlist.json ] || \
+            python scripts/watchlist.py --path state/watchlist.json init
+          python scripts/watchlist.py --path state/watchlist.json ingest \
+            --json state/last_scan.json --all | tee /tmp/out.txt
+          { echo; echo '## Captured'; echo; echo '```'; cat /tmp/out.txt; echo '```'; } \
+            >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Add by hand
+        if: inputs.mode == 'add'
         env:
           SYMBOLS: ${{ inputs.symbols }}
           PRICES: ${{ inputs.prices }}
+          THESIS: ${{ inputs.thesis }}
         run: |
-          if [ ! -f state/last_scan.json ]; then
-            echo "No state/last_scan.json. Run this workflow in scan mode first."; exit 1
-          fi
           if [ -z "$SYMBOLS" ]; then echo "No symbols given."; exit 1; fi
           [ -f state/watchlist.json ] || \
             python scripts/watchlist.py --path state/watchlist.json init
-          PRICE_ARGS=""
+          declare -A PX
           IFS=',' read -ra PAIRS <<< "$PRICES"
           for p in "${PAIRS[@]}"; do
             p="$(echo "$p" | xargs)"
-            [ -n "$p" ] && PRICE_ARGS="$PRICE_ARGS --price $p"
+            [ -n "$p" ] && PX["${p%%=*}"]="${p#*=}"
           done
-          python scripts/watchlist.py --path state/watchlist.json ingest \
-            --json state/last_scan.json --symbols "$SYMBOLS" \
-            --book ${{ inputs.book }} $PRICE_ARGS | tee /tmp/out.txt
+          IFS=',' read -ra SYMS <<< "$SYMBOLS"
+          for sym in "${SYMS[@]}"; do
+            sym="$(echo "$sym" | xargs)"; [ -z "$sym" ] && continue
+            ARGS="add $sym --book ${{ inputs.book }}"
+            [ -n "${PX[$sym]}" ] && ARGS="$ARGS --price ${PX[$sym]}"
+            [ -n "$THESIS" ] && ARGS="$ARGS --thesis \"$THESIS\""
+            eval python scripts/watchlist.py --path state/watchlist.json $ARGS
+          done
           python scripts/watchlist.py --path state/watchlist.json validate
-          { echo '## Ingest'; echo; echo '```'; cat /tmp/out.txt; echo '```'; } \
-            >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Adopt
+        if: inputs.mode == 'adopt'
+        env:
+          SYMBOLS: ${{ inputs.symbols }}
+          PRICES: ${{ inputs.prices }}
+          THESIS: ${{ inputs.thesis }}
+        run: |
+          if [ -z "$SYMBOLS" ]; then echo "No symbols given."; exit 1; fi
+          declare -A PX
+          IFS=',' read -ra PAIRS <<< "$PRICES"
+          for p in "${PAIRS[@]}"; do
+            p="$(echo "$p" | xargs)"
+            [ -n "$p" ] && PX["${p%%=*}"]="${p#*=}"
+          done
+          IFS=',' read -ra SYMS <<< "$SYMBOLS"
+          for sym in "${SYMS[@]}"; do
+            sym="$(echo "$sym" | xargs)"; [ -z "$sym" ] && continue
+            price="${PX[$sym]}"
+            if [ -z "$price" ]; then
+              echo "::error::No price for $sym. Give it as $sym=1234 in prices."; exit 1
+            fi
+            ARGS="adopt $sym --price $price"
+            [ -n "$THESIS" ] && ARGS="$ARGS --thesis \"$THESIS\""
+            eval python scripts/watchlist.py --path state/watchlist.json $ARGS
+          done
+          python scripts/watchlist.py --path state/watchlist.json validate
 
       - name: Show the watchlist
-        if: inputs.mode == 'ingest'
+        if: always() && (inputs.mode != 'scan' || inputs.capture)
         run: |
           { echo; echo '```'
             python scripts/watchlist.py --path state/watchlist.json list

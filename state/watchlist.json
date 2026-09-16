@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created_at": "2026-09-14T00:00:00+00:00",
-  "updated_at": "2026-09-14T10:48:28+00:00",
+  "updated_at": "2026-09-16T15:15:43+00:00",
   "active": [
     {
       "symbol": "HFCL",
@@ -959,6 +959,406 @@
       },
       "created_at": "2026-09-14T10:48:28+00:00",
       "updated_at": "2026-09-14T10:48:28+00:00"
+    },
+    {
+      "symbol": "SANSERA",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 4129.9
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:15:43+00:00",
+      "updated_at": "2026-09-16T15:15:43+00:00"
+    },
+    {
+      "symbol": "HAPPYFORGE",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 2169.0
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:15:43+00:00",
+      "updated_at": "2026-09-16T15:15:43+00:00"
+    },
+    {
+      "symbol": "GLAND",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 2922.3
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:15:43+00:00",
+      "updated_at": "2026-09-16T15:15:43+00:00"
+    },
+    {
+      "symbol": "KRN",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 1593.6
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:15:43+00:00",
+      "updated_at": "2026-09-16T15:15:43+00:00"
+    },
+    {
+      "symbol": "ENTERO",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 1815.4
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:15:43+00:00",
+      "updated_at": "2026-09-16T15:15:43+00:00"
+    },
+    {
+      "symbol": "SAILIFE",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 1585.0
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:15:43+00:00",
+      "updated_at": "2026-09-16T15:15:43+00:00"
+    },
+    {
+      "symbol": "ALIVUS",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 1386.8
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:15:43+00:00",
+      "updated_at": "2026-09-16T15:15:43+00:00"
+    },
+    {
+      "symbol": "KENNAMET",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 4682.4
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:15:43+00:00",
+      "updated_at": "2026-09-16T15:15:43+00:00"
     }
   ],
   "archive": []

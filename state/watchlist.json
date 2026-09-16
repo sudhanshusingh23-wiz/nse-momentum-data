@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created_at": "2026-09-14T00:00:00+00:00",
-  "updated_at": "2026-09-16T15:25:03+00:00",
+  "updated_at": "2026-09-16T15:25:36+00:00",
   "active": [
     {
       "symbol": "HFCL",
@@ -959,9 +959,7 @@
       },
       "created_at": "2026-09-14T10:48:28+00:00",
       "updated_at": "2026-09-14T10:48:28+00:00"
-    }
-  ],
-  "archive": [
+    },
     {
       "symbol": "SANSERA",
       "name": null,
@@ -990,19 +988,23 @@
       },
       "ms_history": [],
       "human": {
-        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "thesis": "External momentum screen, 16 Sep close.",
         "conviction": null,
         "status": "Watching",
         "notes": [
           {
             "date": "2026-09-16",
             "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
           }
         ],
         "custom_levels": {},
         "tags": [],
         "date_added": "2026-09-16",
-        "price_at_add": 4129.9
+        "price_at_add": 3971.2
       },
       "technical": {
         "tag": null,
@@ -1014,10 +1016,9 @@
         "last": null,
         "asof": null
       },
-      "created_at": "2026-09-16T15:15:43+00:00",
-      "updated_at": "2026-09-16T15:24:18+00:00",
-      "archive_reason": "price correction",
-      "archived_at": "2026-09-16"
+      "created_at": "2026-09-16T15:25:35+00:00",
+      "updated_at": "2026-09-16T15:25:35+00:00",
+      "readded_from_archive": "2026-09-16"
     },
     {
       "symbol": "HAPPYFORGE",
@@ -1047,19 +1048,23 @@
       },
       "ms_history": [],
       "human": {
-        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "thesis": "External momentum screen, 16 Sep close.",
         "conviction": null,
         "status": "Watching",
         "notes": [
           {
             "date": "2026-09-16",
             "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
           }
         ],
         "custom_levels": {},
         "tags": [],
         "date_added": "2026-09-16",
-        "price_at_add": 2169.0
+        "price_at_add": 2155.9
       },
       "technical": {
         "tag": null,
@@ -1071,10 +1076,9 @@
         "last": null,
         "asof": null
       },
-      "created_at": "2026-09-16T15:15:43+00:00",
-      "updated_at": "2026-09-16T15:24:18+00:00",
-      "archive_reason": "price correction",
-      "archived_at": "2026-09-16"
+      "created_at": "2026-09-16T15:25:35+00:00",
+      "updated_at": "2026-09-16T15:25:35+00:00",
+      "readded_from_archive": "2026-09-16"
     },
     {
       "symbol": "GLAND",
@@ -1104,19 +1108,23 @@
       },
       "ms_history": [],
       "human": {
-        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "thesis": "External momentum screen, 16 Sep close.",
         "conviction": null,
         "status": "Watching",
         "notes": [
           {
             "date": "2026-09-16",
             "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
           }
         ],
         "custom_levels": {},
         "tags": [],
         "date_added": "2026-09-16",
-        "price_at_add": 2922.3
+        "price_at_add": 2826.6
       },
       "technical": {
         "tag": null,
@@ -1128,10 +1136,9 @@
         "last": null,
         "asof": null
       },
-      "created_at": "2026-09-16T15:15:43+00:00",
-      "updated_at": "2026-09-16T15:24:18+00:00",
-      "archive_reason": "price correction",
-      "archived_at": "2026-09-16"
+      "created_at": "2026-09-16T15:25:35+00:00",
+      "updated_at": "2026-09-16T15:25:35+00:00",
+      "readded_from_archive": "2026-09-16"
     },
     {
       "symbol": "KRN",
@@ -1161,19 +1168,23 @@
       },
       "ms_history": [],
       "human": {
-        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "thesis": "External momentum screen, 16 Sep close.",
         "conviction": null,
         "status": "Watching",
         "notes": [
           {
             "date": "2026-09-16",
             "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
           }
         ],
         "custom_levels": {},
         "tags": [],
         "date_added": "2026-09-16",
-        "price_at_add": 1593.6
+        "price_at_add": 1438.3
       },
       "technical": {
         "tag": null,
@@ -1185,10 +1196,9 @@
         "last": null,
         "asof": null
       },
-      "created_at": "2026-09-16T15:15:43+00:00",
-      "updated_at": "2026-09-16T15:24:18+00:00",
-      "archive_reason": "price correction",
-      "archived_at": "2026-09-16"
+      "created_at": "2026-09-16T15:25:35+00:00",
+      "updated_at": "2026-09-16T15:25:35+00:00",
+      "readded_from_archive": "2026-09-16"
     },
     {
       "symbol": "ENTERO",
@@ -1218,19 +1228,23 @@
       },
       "ms_history": [],
       "human": {
-        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "thesis": "External momentum screen, 16 Sep close.",
         "conviction": null,
         "status": "Watching",
         "notes": [
           {
             "date": "2026-09-16",
             "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
           }
         ],
         "custom_levels": {},
         "tags": [],
         "date_added": "2026-09-16",
-        "price_at_add": 1815.4
+        "price_at_add": 1731.8
       },
       "technical": {
         "tag": null,
@@ -1242,10 +1256,9 @@
         "last": null,
         "asof": null
       },
-      "created_at": "2026-09-16T15:15:43+00:00",
-      "updated_at": "2026-09-16T15:24:18+00:00",
-      "archive_reason": "price correction",
-      "archived_at": "2026-09-16"
+      "created_at": "2026-09-16T15:25:36+00:00",
+      "updated_at": "2026-09-16T15:25:36+00:00",
+      "readded_from_archive": "2026-09-16"
     },
     {
       "symbol": "SAILIFE",
@@ -1275,19 +1288,23 @@
       },
       "ms_history": [],
       "human": {
-        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "thesis": "External momentum screen, 16 Sep close.",
         "conviction": null,
         "status": "Watching",
         "notes": [
           {
             "date": "2026-09-16",
             "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
           }
         ],
         "custom_levels": {},
         "tags": [],
         "date_added": "2026-09-16",
-        "price_at_add": 1585.0
+        "price_at_add": 1539.1
       },
       "technical": {
         "tag": null,
@@ -1299,10 +1316,9 @@
         "last": null,
         "asof": null
       },
-      "created_at": "2026-09-16T15:15:43+00:00",
-      "updated_at": "2026-09-16T15:24:18+00:00",
-      "archive_reason": "price correction",
-      "archived_at": "2026-09-16"
+      "created_at": "2026-09-16T15:25:36+00:00",
+      "updated_at": "2026-09-16T15:25:36+00:00",
+      "readded_from_archive": "2026-09-16"
     },
     {
       "symbol": "ALIVUS",
@@ -1332,19 +1348,23 @@
       },
       "ms_history": [],
       "human": {
-        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "thesis": "External momentum screen, 16 Sep close.",
         "conviction": null,
         "status": "Watching",
         "notes": [
           {
             "date": "2026-09-16",
             "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
           }
         ],
         "custom_levels": {},
         "tags": [],
         "date_added": "2026-09-16",
-        "price_at_add": 1386.8
+        "price_at_add": 1370.6
       },
       "technical": {
         "tag": null,
@@ -1356,10 +1376,9 @@
         "last": null,
         "asof": null
       },
-      "created_at": "2026-09-16T15:15:43+00:00",
-      "updated_at": "2026-09-16T15:24:18+00:00",
-      "archive_reason": "price correction",
-      "archived_at": "2026-09-16"
+      "created_at": "2026-09-16T15:25:36+00:00",
+      "updated_at": "2026-09-16T15:25:36+00:00",
+      "readded_from_archive": "2026-09-16"
     },
     {
       "symbol": "KENNAMET",
@@ -1389,19 +1408,23 @@
       },
       "ms_history": [],
       "human": {
-        "thesis": "From external momentum screen, 15 Sep. CDMO / aerospace-defence / capex themes.",
+        "thesis": "External momentum screen, 16 Sep close.",
         "conviction": null,
         "status": "Watching",
         "notes": [
           {
             "date": "2026-09-16",
             "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
           }
         ],
         "custom_levels": {},
         "tags": [],
         "date_added": "2026-09-16",
-        "price_at_add": 4682.4
+        "price_at_add": 4135.8
       },
       "technical": {
         "tag": null,
@@ -1413,10 +1436,10 @@
         "last": null,
         "asof": null
       },
-      "created_at": "2026-09-16T15:15:43+00:00",
-      "updated_at": "2026-09-16T15:24:18+00:00",
-      "archive_reason": "price correction",
-      "archived_at": "2026-09-16"
+      "created_at": "2026-09-16T15:25:36+00:00",
+      "updated_at": "2026-09-16T15:25:36+00:00",
+      "readded_from_archive": "2026-09-16"
     }
-  ]
+  ],
+  "archive": []
 }

@@ -1,15 +1,15 @@
 {
-  "built_at_utc": "2026-09-16T14:10:40.264402+00:00",
-  "bhavcopy_files": 1477,
-  "index_files": 1409,
-  "panel_sessions": 1477,
-  "panel_symbols": 3617,
-  "latest_session": "2026-09-16",
+  "built_at_utc": "2026-09-17T14:11:01.302471+00:00",
+  "bhavcopy_files": 1478,
+  "index_files": 1410,
+  "panel_sessions": 1478,
+  "panel_symbols": 3623,
+  "latest_session": "2026-09-17",
   "corporate_action_events": 361,
   "symbols_cap_classified": 500,
   "stale_symbols": 677,
   "warnings": [
     "unrecognised NSE series present and excluded: P1. Decide explicitly whether these belong in the panel.",
-    "677 symbol(s) stale (no data for >10 sessions); 37 went stale in the last 120 days. See artifacts/stale_symbols.csv. A stale symbol yields NaN ADV and is silently skipped by every liquidity gate."
+    "677 symbol(s) stale (no data for >10 sessions); 36 went stale in the last 120 days. See artifacts/stale_symbols.csv. A stale symbol yields NaN ADV and is silently skipped by every liquidity gate."
   ]
 }

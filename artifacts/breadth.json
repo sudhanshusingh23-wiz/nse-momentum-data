@@ -1,17 +1,17 @@
 {
-  "asof": "2026-09-17",
+  "asof": "2026-09-18",
   "universe": "NIFTY500",
-  "pct_above_200dma": 46.33,
-  "pct_above_50dma": 24.17,
-  "pct_above_50dma_10s_ago": 42.08,
-  "delta_10s_pp": -17.92,
-  "pct_within_10pct_of_52w_high": 23.9,
-  "denominator_200dma": 477,
-  "denominator_50dma": 480,
+  "pct_above_200dma": 50.63,
+  "pct_above_50dma": 34.1,
+  "pct_above_50dma_10s_ago": 41.16,
+  "delta_10s_pp": -7.07,
+  "pct_within_10pct_of_52w_high": 28.45,
+  "denominator_200dma": 478,
+  "denominator_50dma": 481,
   "constituents_in_list": 500,
   "not_found_in_panel": 0,
   "excluded_insufficient_history": 3,
-  "excluded_corporate_action_flag": 20,
+  "excluded_corporate_action_flag": 19,
   "ca_flagged_symbols": [
     "ADANIPOWER",
     "AIIL",
@@ -31,12 +31,11 @@
     "PIDILITIND",
     "TATAINVEST",
     "VEDL",
-    "ZFCVINDIA",
-    "ZYDUSWELL"
+    "ZFCVINDIA"
   ],
-  "sessions_in_panel": 1478,
+  "sessions_in_panel": 1479,
   "method": "computed_from_panel",
   "warnings": [
-    "20 symbols (4.0%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
+    "19 symbols (3.8%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
   ]
 }

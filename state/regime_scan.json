@@ -1,16 +1,16 @@
 {
-  "asof": "2026-09-11",
-  "composite_score": 43.21,
+  "asof": "2026-09-17",
+  "composite_score": 37.0,
   "state_raw": "RISK-OFF",
   "state_after_transition": "RISK-OFF",
   "partial": true,
   "degraded_benchmark": false,
   "benchmark_name": "NIFTY500",
   "cap_tier_divergence": {
-    "broad_pct_vs_200dma": -0.76,
-    "largecap_pct_vs_200dma": -4.69,
-    "gap_pp": 3.93,
-    "flag": "CAP-TIER DIVERGENCE +3.9 pp. Broad market and large caps are on materially different footings. Favourable for a small/mid book when positive, a warning when negative. This is why the Nifty 50 may never substitute for the Nifty 500 here."
+    "broad_pct_vs_200dma": -1.61,
+    "largecap_pct_vs_200dma": -5.05,
+    "gap_pp": 3.44,
+    "flag": "CAP-TIER DIVERGENCE +3.4 pp. Broad market and large caps are on materially different footings. Favourable for a small/mid book when positive, a warning when negative. This is why the Nifty 50 may never substitute for the Nifty 500 here."
   },
   "components_missing": [
     "smallcap_health",
@@ -19,56 +19,58 @@
   "weights_renormalized_total": 0.75,
   "components": {
     "index_trend": {
-      "score": 37.65,
+      "score": 34.21,
       "weight": 0.25,
       "detail": {
-        "pct_vs_200dma": -0.76,
-        "dma200_slope_20s_pct": -0.191,
-        "sub_position": 41.2,
-        "sub_slope": 32.4
+        "pct_vs_200dma": -1.61,
+        "dma200_slope_20s_pct": -0.247,
+        "sub_position": 37.0,
+        "sub_slope": 30.1
       }
     },
     "participation": {
-      "score": 53.95,
+      "score": 45.55,
       "weight": 0.25,
       "detail": {
-        "pct_above_200dma": 51.37
+        "pct_above_200dma": 46.33
       }
     },
     "thrust": {
-      "score": 16.67,
+      "score": 5.35,
       "weight": 0.15,
       "detail": {
-        "pct_above_50dma": 32.99,
-        "delta_10s_pp": -14.61,
-        "sub_level": 30.3,
+        "pct_above_50dma": 24.17,
+        "delta_10s_pp": -17.91,
+        "sub_level": 9.7,
         "sub_delta": 0.0
       }
     },
     "volatility": {
-      "score": 70.04,
+      "score": 70.06,
       "weight": 0.1,
       "detail": {
         "vix": 12.29,
-        "vix_chg_20s_pct": 8.66,
+        "vix_chg_20s_pct": 8.57,
         "sub_level": 83.6,
-        "sub_trend": 38.5
+        "sub_trend": 38.6
       }
     }
   },
   "breadth": {
-    "pct_above_200dma": 51.37,
-    "pct_above_50dma": 32.99,
-    "pct_above_50dma_10s_ago": 47.6,
-    "n_with_200dma": 475,
+    "pct_above_200dma": 46.33,
+    "pct_above_50dma": 24.17,
+    "pct_above_50dma_10s_ago": 42.08,
+    "n_with_200dma": 477,
     "n_symbols_total": 500,
-    "n_dropped_insufficient_history": 4,
+    "n_dropped_insufficient_history": 3,
     "source": "computed_from_panel",
     "breadth_warnings": [
-      "21 symbols (4.2%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
+      "20 symbols (4.0%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
     ]
   },
-  "overrides_fired": [],
+  "overrides_fired": [
+    "RISK-OFF floor: Nifty 500 below 200 DMA on 5 consecutive closes"
+  ],
   "transition": {
     "note": "no prior state supplied \u2014 unconfirmed classification",
     "sessions_in_state": 1,
@@ -81,5 +83,5 @@
     "new_entries": "none \u2014 manage existing only",
     "heat_cap_pct": 2.0
   },
-  "nifty500_5session_return_pct": -1.67
+  "nifty500_5session_return_pct": -1.32
 }

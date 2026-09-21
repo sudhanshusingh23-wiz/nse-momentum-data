@@ -1,11 +1,11 @@
 {
-  "asof": "2026-09-18",
+  "asof": "2026-09-21",
   "universe": "NIFTY500",
-  "pct_above_200dma": 50.63,
-  "pct_above_50dma": 34.1,
-  "pct_above_50dma_10s_ago": 41.16,
-  "delta_10s_pp": -7.07,
-  "pct_within_10pct_of_52w_high": 28.45,
+  "pct_above_200dma": 49.58,
+  "pct_above_50dma": 32.43,
+  "pct_above_50dma_10s_ago": 38.05,
+  "delta_10s_pp": -5.61,
+  "pct_within_10pct_of_52w_high": 27.62,
   "denominator_200dma": 478,
   "denominator_50dma": 481,
   "constituents_in_list": 500,
@@ -33,7 +33,7 @@
     "VEDL",
     "ZFCVINDIA"
   ],
-  "sessions_in_panel": 1479,
+  "sessions_in_panel": 1480,
   "method": "computed_from_panel",
   "warnings": [
     "19 symbols (3.8%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."

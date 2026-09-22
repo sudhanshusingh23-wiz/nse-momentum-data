@@ -1,19 +1,18 @@
 {
-  "asof": "2026-09-21",
+  "asof": "2026-09-22",
   "universe": "NIFTY500",
-  "pct_above_200dma": 49.58,
-  "pct_above_50dma": 32.43,
-  "pct_above_50dma_10s_ago": 38.05,
-  "delta_10s_pp": -5.61,
-  "pct_within_10pct_of_52w_high": 27.62,
-  "denominator_200dma": 478,
-  "denominator_50dma": 481,
+  "pct_above_200dma": 49.48,
+  "pct_above_50dma": 32.57,
+  "pct_above_50dma_10s_ago": 39.21,
+  "delta_10s_pp": -6.64,
+  "pct_within_10pct_of_52w_high": 27.35,
+  "denominator_200dma": 479,
+  "denominator_50dma": 482,
   "constituents_in_list": 500,
   "not_found_in_panel": 0,
   "excluded_insufficient_history": 3,
-  "excluded_corporate_action_flag": 19,
+  "excluded_corporate_action_flag": 18,
   "ca_flagged_symbols": [
-    "ADANIPOWER",
     "AIIL",
     "ANANDRATHI",
     "ANGELONE",
@@ -33,9 +32,9 @@
     "VEDL",
     "ZFCVINDIA"
   ],
-  "sessions_in_panel": 1480,
+  "sessions_in_panel": 1481,
   "method": "computed_from_panel",
   "warnings": [
-    "19 symbols (3.8%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
+    "18 symbols (3.6%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
   ]
 }

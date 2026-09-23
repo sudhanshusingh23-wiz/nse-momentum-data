@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created_at": "2026-09-14T00:00:00+00:00",
-  "updated_at": "2026-09-19T10:25:12+00:00",
+  "updated_at": "2026-09-23T04:50:46+00:00",
   "active": [
     {
       "symbol": "HFCL",
@@ -861,106 +861,6 @@
       "updated_at": "2026-09-14T10:16:49+00:00"
     },
     {
-      "symbol": "DIVGIITTS",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "Hand-added; auto components, torque transfer / drivetrain.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-14",
-        "price_at_add": 1188.3
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-14T10:18:28+00:00",
-      "updated_at": "2026-09-14T10:18:28+00:00"
-    },
-    {
-      "symbol": "IKIO",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "Hand-added; LED lighting / electronics manufacturing.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-14",
-        "price_at_add": 223.87
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-14T10:48:28+00:00",
-      "updated_at": "2026-09-14T10:48:28+00:00"
-    },
-    {
       "symbol": "SANSERA",
       "name": null,
       "book": "momentum",
@@ -1021,66 +921,6 @@
       "readded_from_archive": "2026-09-16"
     },
     {
-      "symbol": "HAPPYFORGE",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "External momentum screen, 16 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [
-          {
-            "date": "2026-09-16",
-            "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
-          },
-          {
-            "date": "2026-09-16",
-            "text": "Re-added. Previously archived: price correction"
-          }
-        ],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-16",
-        "price_at_add": 2155.9
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-16T15:25:35+00:00",
-      "updated_at": "2026-09-16T15:25:35+00:00",
-      "readded_from_archive": "2026-09-16"
-    },
-    {
       "symbol": "GLAND",
       "name": null,
       "book": "momentum",
@@ -1125,66 +965,6 @@
         "tags": [],
         "date_added": "2026-09-16",
         "price_at_add": 2826.6
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-16T15:25:35+00:00",
-      "updated_at": "2026-09-16T15:25:35+00:00",
-      "readded_from_archive": "2026-09-16"
-    },
-    {
-      "symbol": "KRN",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "External momentum screen, 16 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [
-          {
-            "date": "2026-09-16",
-            "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
-          },
-          {
-            "date": "2026-09-16",
-            "text": "Re-added. Previously archived: price correction"
-          }
-        ],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-16",
-        "price_at_add": 1438.3
       },
       "technical": {
         "tag": null,
@@ -1365,66 +1145,6 @@
         "tags": [],
         "date_added": "2026-09-16",
         "price_at_add": 1370.6
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-16T15:25:36+00:00",
-      "updated_at": "2026-09-16T15:25:36+00:00",
-      "readded_from_archive": "2026-09-16"
-    },
-    {
-      "symbol": "KENNAMET",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "External momentum screen, 16 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [
-          {
-            "date": "2026-09-16",
-            "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
-          },
-          {
-            "date": "2026-09-16",
-            "text": "Re-added. Previously archived: price correction"
-          }
-        ],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-16",
-        "price_at_add": 4135.8
       },
       "technical": {
         "tag": null,
@@ -1691,5 +1411,296 @@
       "updated_at": "2026-09-19T10:25:12+00:00"
     }
   ],
-  "archive": []
+  "archive": [
+    {
+      "symbol": "DIVGIITTS",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Hand-added; auto components, torque transfer / drivetrain.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": 1188.3
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T10:18:28+00:00",
+      "updated_at": "2026-09-14T10:18:28+00:00",
+      "archive_reason": "momentum_decay: negative or flat RS, >15% below trigger, stop >17%, thin ADV",
+      "archived_at": "2026-09-23"
+    },
+    {
+      "symbol": "KRN",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "External momentum screen, 16 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [
+          {
+            "date": "2026-09-16",
+            "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
+          }
+        ],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 1438.3
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:25:35+00:00",
+      "updated_at": "2026-09-16T15:25:35+00:00",
+      "readded_from_archive": "2026-09-16",
+      "archive_reason": "momentum_decay: negative or flat RS, >15% below trigger, stop >17%, thin ADV",
+      "archived_at": "2026-09-23"
+    },
+    {
+      "symbol": "HAPPYFORGE",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "External momentum screen, 16 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [
+          {
+            "date": "2026-09-16",
+            "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
+          }
+        ],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 2155.9
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:25:35+00:00",
+      "updated_at": "2026-09-16T15:25:35+00:00",
+      "readded_from_archive": "2026-09-16",
+      "archive_reason": "momentum_decay: negative or flat RS, >15% below trigger, stop >17%, thin ADV",
+      "archived_at": "2026-09-23"
+    },
+    {
+      "symbol": "IKIO",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Hand-added; LED lighting / electronics manufacturing.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": 223.87
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-14T10:48:28+00:00",
+      "updated_at": "2026-09-14T10:48:28+00:00",
+      "archive_reason": "momentum_decay: negative or flat RS, >15% below trigger, stop >17%, thin ADV",
+      "archived_at": "2026-09-23"
+    },
+    {
+      "symbol": "KENNAMET",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "External momentum screen, 16 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [
+          {
+            "date": "2026-09-16",
+            "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
+          }
+        ],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 4135.8
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:25:36+00:00",
+      "updated_at": "2026-09-16T15:25:36+00:00",
+      "readded_from_archive": "2026-09-16",
+      "archive_reason": "momentum_decay: negative or flat RS, >15% below trigger, stop >17%, thin ADV",
+      "archived_at": "2026-09-23"
+    }
+  ]
 }

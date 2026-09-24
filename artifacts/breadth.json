@@ -1,17 +1,17 @@
 {
-  "asof": "2026-09-23",
+  "asof": "2026-09-24",
   "universe": "NIFTY500",
-  "pct_above_200dma": 52.08,
-  "pct_above_50dma": 36.85,
-  "pct_above_50dma_10s_ago": 37.06,
-  "delta_10s_pp": -0.21,
-  "pct_within_10pct_of_52w_high": 29.17,
+  "pct_above_200dma": 46.67,
+  "pct_above_50dma": 29.05,
+  "pct_above_50dma_10s_ago": 37.14,
+  "delta_10s_pp": -8.09,
+  "pct_within_10pct_of_52w_high": 25.42,
   "denominator_200dma": 480,
-  "denominator_50dma": 483,
+  "denominator_50dma": 482,
   "constituents_in_list": 500,
   "not_found_in_panel": 0,
-  "excluded_insufficient_history": 3,
-  "excluded_corporate_action_flag": 17,
+  "excluded_insufficient_history": 2,
+  "excluded_corporate_action_flag": 18,
   "ca_flagged_symbols": [
     "AIIL",
     "ANANDRATHI",
@@ -27,13 +27,14 @@
     "LICI",
     "MCX",
     "NUVAMA",
+    "POLICYBZR",
     "TATAINVEST",
     "VEDL",
     "ZFCVINDIA"
   ],
-  "sessions_in_panel": 1482,
+  "sessions_in_panel": 1483,
   "method": "computed_from_panel",
   "warnings": [
-    "17 symbols (3.4%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
+    "18 symbols (3.6%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
   ]
 }

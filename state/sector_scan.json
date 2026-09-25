@@ -1,5 +1,5 @@
 {
-  "asof": "2026-09-17",
+  "asof": "2026-09-24",
   "regime": "RISK-OFF",
   "neutralized_components": [
     "particip"
@@ -13,14 +13,14 @@
       "reason": "regime RISK-OFF blocks entry"
     },
     {
-      "sector": "Media Entertainment & Publication",
+      "sector": "Capital Goods",
       "action": "BLOCKED",
-      "reason": "breadth 46.0 < 50; regime RISK-OFF blocks entry"
+      "reason": "breadth 41.3 < 50; regime RISK-OFF blocks entry"
     },
     {
-      "sector": "Oil Gas & Consumable Fuels",
+      "sector": "Textiles",
       "action": "BLOCKED",
-      "reason": "breadth 37.6 < 50; regime RISK-OFF blocks entry"
+      "reason": "regime RISK-OFF blocks entry"
     }
   ],
   "correlation_guard": [
@@ -30,136 +30,136 @@
   "ranking": [
     {
       "sector": "Healthcare",
-      "SMS": 96.2,
+      "SMS": 91.81,
       "rank": 1,
-      "breadth_raw": 58.5,
-      "abs_mom_raw": 14.04
-    },
-    {
-      "sector": "Media Entertainment & Publication",
-      "SMS": 78.65,
-      "rank": 2,
-      "breadth_raw": 46.0,
-      "abs_mom_raw": 18.62
-    },
-    {
-      "sector": "Oil Gas & Consumable Fuels",
-      "SMS": 77.49,
-      "rank": 3,
-      "breadth_raw": 37.6,
-      "abs_mom_raw": 8.2
+      "breadth_raw": 66.7,
+      "abs_mom_raw": 14.56
     },
     {
       "sector": "Capital Goods",
-      "SMS": 75.44,
-      "rank": 4,
-      "breadth_raw": 36.0,
-      "abs_mom_raw": 7.91
-    },
-    {
-      "sector": "Services",
-      "SMS": 67.25,
-      "rank": 5,
-      "breadth_raw": 35.7,
-      "abs_mom_raw": 3.45
+      "SMS": 88.3,
+      "rank": 2,
+      "breadth_raw": 41.3,
+      "abs_mom_raw": 11.99
     },
     {
       "sector": "Textiles",
-      "SMS": 59.5,
-      "rank": 6,
-      "breadth_raw": 32.0,
-      "abs_mom_raw": 3.33
-    },
-    {
-      "sector": "Chemicals",
-      "SMS": 57.31,
-      "rank": 7,
-      "breadth_raw": 27.7,
-      "abs_mom_raw": 2.68
-    },
-    {
-      "sector": "Telecommunication",
-      "SMS": 56.58,
-      "rank": 8,
-      "breadth_raw": 23.0,
-      "abs_mom_raw": 3.92
-    },
-    {
-      "sector": "Fast Moving Consumer Goods",
-      "SMS": 53.36,
-      "rank": 9,
-      "breadth_raw": 23.2,
-      "abs_mom_raw": 1.35
+      "SMS": 71.05,
+      "rank": 3,
+      "breadth_raw": 60.0,
+      "abs_mom_raw": 6.64
     },
     {
       "sector": "Realty",
-      "SMS": 53.07,
-      "rank": 10,
-      "breadth_raw": 17.3,
-      "abs_mom_raw": 5.1
+      "SMS": 70.47,
+      "rank": 4,
+      "breadth_raw": 33.6,
+      "abs_mom_raw": 10.72
     },
     {
-      "sector": "Consumer Services",
-      "SMS": 52.05,
-      "rank": 11,
-      "breadth_raw": 37.9,
-      "abs_mom_raw": -0.71
+      "sector": "Media Entertainment & Publication",
+      "SMS": 70.18,
+      "rank": 5,
+      "breadth_raw": 48.0,
+      "abs_mom_raw": 15.31
+    },
+    {
+      "sector": "Oil Gas & Consumable Fuels",
+      "SMS": 66.96,
+      "rank": 6,
+      "breadth_raw": 40.0,
+      "abs_mom_raw": 7.77
+    },
+    {
+      "sector": "Services",
+      "SMS": 66.08,
+      "rank": 7,
+      "breadth_raw": 30.7,
+      "abs_mom_raw": 5.31
+    },
+    {
+      "sector": "Chemicals",
+      "SMS": 62.87,
+      "rank": 8,
+      "breadth_raw": 25.0,
+      "abs_mom_raw": 5.61
     },
     {
       "sector": "Automobile and Auto Components",
-      "SMS": 50.29,
-      "rank": 12,
-      "breadth_raw": 32.4,
-      "abs_mom_raw": 2.1
+      "SMS": 56.14,
+      "rank": 9,
+      "breadth_raw": 34.7,
+      "abs_mom_raw": 4.69
+    },
+    {
+      "sector": "Consumer Services",
+      "SMS": 54.39,
+      "rank": 10,
+      "breadth_raw": 46.6,
+      "abs_mom_raw": 1.03
     },
     {
       "sector": "Consumer Durables",
-      "SMS": 47.66,
+      "SMS": 47.08,
+      "rank": 11,
+      "breadth_raw": 30.0,
+      "abs_mom_raw": 3.84
+    },
+    {
+      "sector": "Fast Moving Consumer Goods",
+      "SMS": 42.98,
+      "rank": 12,
+      "breadth_raw": 23.6,
+      "abs_mom_raw": 2.71
+    },
+    {
+      "sector": "Telecommunication",
+      "SMS": 42.4,
       "rank": 13,
-      "breadth_raw": 23.0,
-      "abs_mom_raw": 2.93
-    },
-    {
-      "sector": "Financial Services",
-      "SMS": 42.11,
-      "rank": 14,
-      "breadth_raw": 28.2,
-      "abs_mom_raw": -0.56
-    },
-    {
-      "sector": "Information Technology",
-      "SMS": 28.07,
-      "rank": 15,
-      "breadth_raw": 18.6,
-      "abs_mom_raw": -1.65
+      "breadth_raw": 16.0,
+      "abs_mom_raw": 3.34
     },
     {
       "sector": "Metals & Mining",
-      "SMS": 22.08,
-      "rank": 16,
-      "breadth_raw": 18.3,
-      "abs_mom_raw": -2.07
+      "SMS": 31.73,
+      "rank": 14,
+      "breadth_raw": 24.4,
+      "abs_mom_raw": -1.14
     },
     {
-      "sector": "Construction Materials",
-      "SMS": 13.3,
-      "rank": 17,
-      "breadth_raw": 5.5,
-      "abs_mom_raw": -5.21
+      "sector": "Financial Services",
+      "SMS": 25.88,
+      "rank": 15,
+      "breadth_raw": 23.7,
+      "abs_mom_raw": -0.77
+    },
+    {
+      "sector": "Information Technology",
+      "SMS": 22.81,
+      "rank": 16,
+      "breadth_raw": 15.9,
+      "abs_mom_raw": -3.11
     },
     {
       "sector": "Power",
-      "SMS": 11.7,
-      "rank": 18,
-      "breadth_raw": 11.2,
-      "abs_mom_raw": -5.65
+      "SMS": 13.45,
+      "rank": 17,
+      "breadth_raw": 15.3,
+      "abs_mom_raw": -4.94
     },
     {
       "sector": "Construction",
-      "SMS": 7.89,
-      "rank": 19,
+      "SMS": 12.87,
+      "rank": 18,
       "breadth_raw": 17.7,
-      "abs_mom_raw": -9.17
+      "abs_mom_raw": -6.23
+    },
+    {
+      "sector": "Construction Materials",
+      "SMS": 12.57,
+      "rank": 19,
+      "breadth_raw": 8.2,
+      "abs_mom_raw": -4.15
     }
   ],
   "notes": []

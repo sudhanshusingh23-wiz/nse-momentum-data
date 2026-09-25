@@ -1,102 +1,90 @@
 {
-  "asof": "2026-09-17",
+  "asof": "2026-09-24",
   "regime": "RISK-OFF",
   "shortlist": [
     {
       "symbol": "DIVISLAB",
       "sector": "Healthcare",
-      "MS": 92.7,
-      "SMS": 96.2,
-      "composite": 93.9,
+      "MS": 90.6,
+      "SMS": 91.8,
+      "composite": 91.0,
       "cap": "LARGE",
       "tier": "A",
       "unverified": 7,
       "entry": "ACTIONABLE",
-      "px": 9323.0
+      "px": 9602.0
     },
     {
       "symbol": "LAURUSLABS",
       "sector": "Healthcare",
-      "MS": 87.9,
-      "SMS": 96.2,
-      "composite": 90.8,
+      "MS": 83.4,
+      "SMS": 91.8,
+      "composite": 86.3,
       "cap": "MID",
       "tier": "A",
       "unverified": 7,
       "entry": "ACTIONABLE",
-      "px": 1948.1
+      "px": 2026.2
     },
     {
-      "symbol": "ANTHEM",
+      "symbol": "SAILIFE",
       "sector": "Healthcare",
-      "MS": 81.2,
-      "SMS": 96.2,
-      "composite": 86.4,
-      "cap": "MID",
-      "tier": "A",
-      "unverified": 7,
-      "entry": "ACTIONABLE",
-      "px": 927.4
-    },
-    {
-      "symbol": "PVRINOX",
-      "sector": "Media Entertainment & Publication",
-      "MS": 74.8,
-      "SMS": 78.7,
-      "composite": 76.1,
+      "MS": 81.5,
+      "SMS": 91.8,
+      "composite": 85.1,
       "cap": "SMALL",
       "tier": "A",
       "unverified": 7,
       "entry": "ACTIONABLE",
-      "px": 1272.7
+      "px": 1594.9
     },
     {
-      "symbol": "PFOCUS",
-      "sector": "Media Entertainment & Publication",
-      "MS": 65.4,
-      "SMS": 78.7,
-      "composite": 70.0,
+      "symbol": "WELCORP",
+      "sector": "Capital Goods",
+      "MS": 84.8,
+      "SMS": 88.3,
+      "composite": 86.0,
+      "cap": "SMALL",
+      "tier": "A",
+      "unverified": 7,
+      "entry": "ACTIONABLE",
+      "px": 2692.2
+    },
+    {
+      "symbol": "SHYAMMETL",
+      "sector": "Capital Goods",
+      "MS": 80.7,
+      "SMS": 88.3,
+      "composite": 83.4,
+      "cap": "SMALL",
+      "tier": "A",
+      "unverified": 7,
+      "entry": "ACTIONABLE",
+      "px": 1097.9
+    },
+    {
+      "symbol": "FINCABLES",
+      "sector": "Capital Goods",
+      "MS": 77.6,
+      "SMS": 88.3,
+      "composite": 81.3,
+      "cap": "SMALL",
+      "tier": "A",
+      "unverified": 7,
+      "entry": "ACTIONABLE",
+      "px": 1480.0
+    },
+    {
+      "symbol": "WELSPUNLIV",
+      "sector": "Textiles",
+      "MS": 76.2,
+      "SMS": 71.0,
+      "composite": 74.4,
       "cap": "SMALL",
       "tier": "B",
       "unverified": 7,
       "entry": "ACTIONABLE",
-      "px": 334.95
-    },
-    {
-      "symbol": "CASTROLIND",
-      "sector": "Oil Gas & Consumable Fuels",
-      "MS": 63.5,
-      "SMS": 77.5,
-      "composite": 68.4,
-      "cap": "SMALL",
-      "tier": "B",
-      "unverified": 7,
-      "entry": "ACTIONABLE",
-      "px": 191.72
-    },
-    {
-      "symbol": "AEGISVOPAK",
-      "sector": "Oil Gas & Consumable Fuels",
-      "MS": 63.4,
-      "SMS": 77.5,
-      "composite": 68.3,
-      "cap": "SMALL",
-      "tier": "B",
-      "unverified": 7,
-      "entry": "ACTIONABLE",
-      "px": 310.7
-    },
-    {
-      "symbol": "OIL",
-      "sector": "Oil Gas & Consumable Fuels",
-      "MS": 56.6,
-      "SMS": 77.5,
-      "composite": 63.9,
-      "cap": "MID",
-      "tier": "B",
-      "unverified": 7,
-      "entry": "ACTIONABLE",
-      "px": 477.4
+      "px": 222.32
     }
   ],
   "gates": {
@@ -128,7 +116,7 @@
       "G11_price": "PASS",
       "G12_delivery": "PASS"
     },
-    "ANTHEM": {
+    "SAILIFE": {
       "G1_liquidity": "PASS",
       "G2_pct_of_adv": "PASS",
       "G3_surveillance": "UNVERIFIED",
@@ -142,7 +130,7 @@
       "G11_price": "PASS",
       "G12_delivery": "PASS"
     },
-    "PVRINOX": {
+    "WELCORP": {
       "G1_liquidity": "PASS",
       "G2_pct_of_adv": "PASS",
       "G3_surveillance": "UNVERIFIED",
@@ -156,7 +144,7 @@
       "G11_price": "PASS",
       "G12_delivery": "PASS"
     },
-    "PFOCUS": {
+    "SHYAMMETL": {
       "G1_liquidity": "PASS",
       "G2_pct_of_adv": "PASS",
       "G3_surveillance": "UNVERIFIED",
@@ -170,7 +158,7 @@
       "G11_price": "PASS",
       "G12_delivery": "PASS"
     },
-    "CASTROLIND": {
+    "FINCABLES": {
       "G1_liquidity": "PASS",
       "G2_pct_of_adv": "PASS",
       "G3_surveillance": "UNVERIFIED",
@@ -184,21 +172,7 @@
       "G11_price": "PASS",
       "G12_delivery": "PASS"
     },
-    "AEGISVOPAK": {
-      "G1_liquidity": "PASS",
-      "G2_pct_of_adv": "PASS",
-      "G3_surveillance": "UNVERIFIED",
-      "G4_pledge": "UNVERIFIED",
-      "G5_promoter_trend": "UNVERIFIED",
-      "G6_revenue": "UNVERIFIED",
-      "G7_margin": "UNVERIFIED",
-      "G8_governance": "UNVERIFIED",
-      "G10_event": "UNVERIFIED",
-      "G9_circuit": "PASS",
-      "G11_price": "PASS",
-      "G12_delivery": "PASS"
-    },
-    "OIL": {
+    "WELSPUNLIV": {
       "G1_liquidity": "PASS",
       "G2_pct_of_adv": "PASS",
       "G3_surveillance": "UNVERIFIED",

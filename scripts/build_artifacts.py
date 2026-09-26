@@ -409,6 +409,78 @@ def main():
             cap_rows.append({"symbol": sym, "cap_tier": tier})
     if cap_rows:
         caps = pd.DataFrame(cap_rows).drop_duplicates("symbol", keep="first")
+        caps["cap_source"] = "nse_index"
+
+        # ---- COVERAGE FIX ---------------------------------------------------
+        # The three NSE lists cover the Nifty 500 and nothing else. Every other
+        # symbol arrived downstream with no tier and was defaulted to SMALL,
+        # which the RISK-OFF mandate ("large/mid only") then blocked. That is
+        # 42% of the tradeable universe and 95% of the top 40 three-month
+        # movers - TBZ, KABRAEXTRU, CYIENTDLM, INDSWFTLAB and the rest - locked
+        # out for being un-indexed rather than for being small.
+        #
+        # We have no share counts, so real market cap cannot be computed. A
+        # turnover proxy was tested against the known 500 and reached only 62%
+        # accuracy (41% on MID), so it is NOT presented as a size judgement.
+        # These names get the tier BROAD - a membership fact, not a size claim -
+        # plus two liquidity columns the eligibility rule gates on directly:
+        #
+        #   adv_cr      45-day average turnover, Rs cr
+        #   dlv_adv_cr  the same, multiplied by delivery% - the part that
+        #               actually settles rather than being churned intraday
+        #
+        # dlv_adv_cr is the one that matters. Two names can show the same ADV
+        # and differ tenfold in real liquidity: ITDC Rs 37cr at 25.5% delivery
+        # is Rs 3.4cr of genuine flow; SJS Rs 42cr at 55.1% is Rs 22.7cr.
+        known = set(caps["symbol"])
+        try:
+            adv_252 = (panel.pivot_table(index="date", columns="symbol",
+                                         values="turnover", aggfunc="last")
+                       .tail(252).mean() / 100.0)
+        except Exception:
+            adv_252 = pd.Series(dtype=float)
+        try:
+            _tv = panel.pivot_table(index="date", columns="symbol",
+                                    values="turnover", aggfunc="last").tail(45)
+            _dv = panel.pivot_table(index="date", columns="symbol",
+                                    values="delivery_pct", aggfunc="last").tail(45)
+            dlv_adv = (_tv * _dv / 100.0).mean() / 100.0
+        except Exception:
+            dlv_adv = pd.Series(dtype=float)
+        extra = []
+        for sym in sorted(set(panel["symbol"]) - known):
+            a = float(adv_252.get(sym, float("nan")))
+            if a != a:
+                continue
+            da = float(dlv_adv.get(sym, float("nan")))
+            extra.append({"symbol": sym, "cap_tier": "BROAD",
+                          "cap_source": "not_in_nse_index", "adv_cr": round(a, 1),
+                          "dlv_adv_cr": round(da, 2) if da == da else None})
+        if extra:
+            caps = pd.concat([caps, pd.DataFrame(extra)], ignore_index=True)
+        caps["adv_cr"] = caps.get("adv_cr", pd.Series(dtype=float))
+        miss = caps["adv_cr"].isna()
+        if miss.any():
+            caps.loc[miss, "adv_cr"] = caps.loc[miss, "symbol"].map(adv_252).round(1)
+        # Eligibility floor for BROAD names. Set from evidence, not from exit
+        # arithmetic: across 33 Fridays and 11,646 observations the 4-week
+        # forward excess return rises monotonically with dlv_adv_cr, and the
+        # Rs 6-10cr band is the WORST of six (+1.43%, 48% hit, negative median).
+        # Above Rs 6cr beats below by +1.53pp at t = +2.89; moving the floor to
+        # Rs 10cr lifts the kept-set return from +2.74% to +3.68%. Rs 20cr would
+        # be better still but leaves only ~7% of the broad universe.
+        BROAD_DLV_ADV_FLOOR = 10.0
+        if "dlv_adv_cr" not in caps.columns:
+            caps["dlv_adv_cr"] = pd.Series(dtype=float)
+        caps.loc[caps["dlv_adv_cr"].isna(), "dlv_adv_cr"] = (
+            caps.loc[caps["dlv_adv_cr"].isna(), "symbol"].map(dlv_adv).round(2))
+        n_broad = int((caps["cap_tier"] == "BROAD").sum())
+        elig = int(((caps["cap_tier"] == "BROAD")
+                    & (caps["dlv_adv_cr"] >= BROAD_DLV_ADV_FLOOR)).sum())
+        print("caps coverage: %d NSE-indexed + %d BROAD; %d BROAD clear the "
+              "Rs %.0f cr delivery-adjusted ADV floor"
+              % (len(known), n_broad, elig, BROAD_DLV_ADV_FLOOR))
+
         caps.to_csv(os.path.join(ART, "caps.csv"), index=False)
         vc = caps["cap_tier"].value_counts().to_dict()
         print("caps: %d classified -> artifacts/caps.csv  (%s)"

@@ -1,40 +1,21 @@
 {
   "asof": "2026-09-25",
   "universe": "NIFTY500",
-  "pct_above_200dma": 46.88,
-  "pct_above_50dma": 28.22,
-  "pct_above_50dma_10s_ago": 32.78,
-  "delta_10s_pp": -4.56,
-  "pct_within_10pct_of_52w_high": 25.62,
-  "denominator_200dma": 480,
-  "denominator_50dma": 482,
+  "pct_above_200dma": 46.76,
+  "pct_above_50dma": 28.92,
+  "pct_above_50dma_10s_ago": 37.68,
+  "delta_10s_pp": -8.76,
+  "pct_within_10pct_of_52w_high": 24.7,
+  "denominator_200dma": 494,
+  "denominator_50dma": 498,
   "constituents_in_list": 500,
   "not_found_in_panel": 0,
-  "excluded_insufficient_history": 2,
-  "excluded_corporate_action_flag": 18,
+  "excluded_insufficient_history": 5,
+  "excluded_corporate_action_flag": 1,
   "ca_flagged_symbols": [
-    "AIIL",
-    "ANANDRATHI",
-    "ANGELONE",
-    "BEML",
-    "CAMS",
-    "ECLERX",
-    "HDFCAMC",
-    "HEG",
-    "IRB",
-    "KOTAKBANK",
-    "LALPATHLAB",
-    "LICI",
-    "MCX",
-    "NUVAMA",
-    "POLICYBZR",
-    "TATAINVEST",
-    "VEDL",
-    "ZFCVINDIA"
+    "POLICYBZR"
   ],
-  "sessions_in_panel": 1484,
+  "sessions_in_panel": 1414,
   "method": "computed_from_panel",
-  "warnings": [
-    "18 symbols (3.6%) flagged as likely unadjusted corporate actions. Apply adjustments and re-run before trusting this figure."
-  ]
+  "warnings": []
 }

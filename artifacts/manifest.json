@@ -1,14 +1,15 @@
 {
-  "built_at_utc": "2026-09-25T14:10:38.243426+00:00",
+  "built_at_utc": "2026-09-26T08:26:32.111911+00:00",
   "bhavcopy_files": 1484,
   "index_files": 1416,
-  "panel_sessions": 1484,
+  "panel_sessions": 1414,
   "panel_symbols": 3634,
   "latest_session": "2026-09-25",
-  "corporate_action_events": 361,
+  "corporate_action_events": 548,
   "symbols_cap_classified": 500,
   "stale_symbols": 680,
   "warnings": [
+    "70 bhavcopy file(s) carried a different DATE1 to their filename and were rejected - almost always NSE serving the prior session for a market holiday. See artifacts/phantom_sessions.csv.",
     "unrecognised NSE series present and excluded: P1. Decide explicitly whether these belong in the panel.",
     "680 symbol(s) stale (no data for >10 sessions); 39 went stale in the last 120 days. See artifacts/stale_symbols.csv. A stale symbol yields NaN ADV and is silently skipped by every liquidity gate."
   ]

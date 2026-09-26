@@ -152,6 +152,7 @@ permanently.
 | 13 | Workflow: 7-day backfill + later cron + staleness warn | 10 min | **High — silent data loss** | — | **SHIPPED 15 Sep** |
 | 14 | **Fundamental verification ledger** | 1 hr | **High — stops re-research** | — | **OPEN** |
 | 15 | **Persist weekly grades + gate status** | 1 hr | **High — makes grade migration measurable** | — | **OPEN** |
+| 16 | **Downstream skills must handle `BROAD`** | 30 min | **High — blocks the new rule from acting** | — | **OPEN** |
 
 **Total: roughly 3.5 sessions of work across two weeks**, plus the backfill running in the
 background.
@@ -567,6 +568,58 @@ stop sweep.
 **They have NOT been re-run.** All three produced null results, and the contamination was ~4% of
 symbols plus 70 of 1,484 sessions, so the nulls are very unlikely to flip. Re-running is roughly a
 day of compute to confirm what is already concluded. **Deferred deliberately, not forgotten.**
+
+---
+
+## BROAD tier + delivery-adjusted liquidity floor · 26 September 2026 · **SHIPPED**
+
+**Full rationale, evidence tables and the rejected alternative are in
+`reference/CHANGE_NOTE_2026-09-26.md`. Summary only here.**
+
+**What changed.** `caps.csv` previously covered only the Nifty 500. Everything outside it reached
+the sizing layer with no tier, was silently defaulted to SMALL, and was then blocked by the RISK-OFF
+"large/mid only" mandate — **42% of the tradeable universe and 95% of the top 40 three-month
+movers.**
+
+`caps.csv` now carries every panel symbol with `cap_tier` (LARGE/MID/SMALL/**BROAD**), `cap_source`,
+`adv_cr` and **`dlv_adv_cr`** (turnover x delivery%). BROAD is a membership fact, not a size claim.
+
+**The rule: a BROAD name is eligible when `dlv_adv_cr >= 10`.** Constant lives in
+`build_artifacts.py` as `BROAD_DLV_ADV_FLOOR`.
+
+**Rejected: a turnover-based size proxy.** 62% accurate against the known 500, 41% on MID. Too weak
+to present as a size judgement.
+
+**Measured effect.** Two-week daily backtest, top-10 by 3M relative strength: OLD **-0.547%/day**,
+NEW **+0.821%/day**, better on 9 of 10 days. Eligible universe 240 -> 557.
+
+**Floor set from outcomes, not exit arithmetic.** The first proposal of Rs 6cr came from "can I exit
+a 15% position in two days" — the wrong question, since liquidity was never binding at this book
+size. Across 33 Fridays / 11,646 observations the Rs 6-10cr band is the WORST of six (+1.43% fwd,
+48% hit, negative median). Rs 10cr lifts the kept-set return from +2.74% to +3.68%.
+
+**Open risks on this change:**
+- **Task 16 blocks it from acting.** The position sizer and regime monitor still only understand
+  LARGE/MID/SMALL. Until patched, `caps.csv` carries the data but the mandate ignores it.
+- **The floor is tied to book size** (~Rs 50 lakh). Re-derive past roughly Rs 1 crore.
+- **33 Fridays is one episode.** Five of eight parameter changes on this project reversed when the
+  window widened. Re-test on the full 1,414-session panel at the next review.
+
+---
+
+## Task 16 — downstream skills must handle `BROAD` · **OPEN**
+
+`position-sizer` and `market-regime-monitor` branch on `cap_tier in (LARGE, MID, SMALL)`. A fourth
+value will either fall through to a default or raise.
+
+**Required:**
+1. Map `BROAD` to the **SMALL risk budget** (no change to risk per trade).
+2. Change the RISK-OFF cap-tilt gate from `cap_tier in (LARGE, MID)` to
+   `cap_tier in (LARGE, MID) or dlv_adv_cr >= 10`.
+3. Keep the 8%-of-ADV participation cap on **raw** `adv_cr`, not the delivery-adjusted figure —
+   they measure different things and must not be conflated.
+
+**Until this lands the new rule is inert.**
 
 ---
 

@@ -59,6 +59,7 @@ def load_bhavcopy():
     files = sorted(glob.glob(os.path.join(ROOT, "data", "sec_bhavdata_full_*.csv")))
     rows, skipped = [], 0
     series_seen = {}
+    date_mismatch = []
     for p in files:
         ds = datestr_from(p, "sec_bhavdata_full_")
         if not ds:
@@ -92,6 +93,8 @@ def load_bhavcopy():
             df["SERIES"] = ser[ser.isin(MAINBOARD_SERIES)]
             series_seen[ds] = ser.value_counts().to_dict()
         cols = ["SYMBOL", "CLOSE_PRICE", "PREV_CLOSE"]
+        if "DATE1" in df.columns:
+            pass  # read separately below; not carried into the panel
         if "SERIES" in df.columns:
             cols.append("SERIES")
         # HIGH/LOW are needed for a true ATR. Without them ATR degrades to mean
@@ -100,8 +103,37 @@ def load_bhavcopy():
         for opt in ("HIGH_PRICE", "LOW_PRICE", "TURNOVER_LACS", "DELIV_PER"):
             if opt in df.columns:
                 cols.append(opt)
+        # ---- PHANTOM-SESSION FIX --------------------------------------------
+        # The date must come from DATE1 INSIDE the file, never from the
+        # filename. NSE serves the PREVIOUS session's file when you request a
+        # market-holiday URL, so a filename-derived date stamps a real session
+        # with a date on which nothing traded. That injected ~60 flat sessions
+        # into 2021-24: Republic Day 2023, Holi 2023 and Independence Day 2024
+        # all carry full rows with 99.9% of closes identical to the prior day.
+        #
+        # It also caused a phantom corporate action: the 15-Jan-2026 holiday
+        # file repeated 14-Jan data, and the duplicate fired a 5.07x split
+        # factor on KOTAKBANK in the wrong direction.
+        #
+        # Flat sessions depress ATR and realised volatility, and shift every
+        # rolling window. Reject the mismatch rather than trying to repair it.
+        file_date = ds[4:] + ds[2:4] + ds[:2]       # DDMMYYYY -> YYYYMMDD
         sub = df[cols].copy()
-        sub["date"] = ds[4:] + ds[2:4] + ds[:2]     # DDMMYYYY -> YYYYMMDD
+        if "DATE1" in df.columns:
+            inner = pd.to_datetime(df["DATE1"].astype(str).str.strip(),
+                                   format="%d-%b-%Y", errors="coerce")
+            if inner.notna().any():
+                stamped = inner.dt.strftime("%Y%m%d")
+                keep = stamped == file_date
+                if not keep.all():
+                    got = sorted(stamped[~keep].dropna().unique())[:1]
+                    date_mismatch.append((os.path.basename(p), file_date,
+                                          got[0] if got else "?",
+                                          int((~keep).sum())))
+                sub = sub[keep.values].copy()
+                if sub.empty:
+                    continue
+        sub["date"] = file_date
         rows.append(sub)
     if not rows:
         sys.exit("ERROR: no parseable bhavcopy files in data/. Run fetch_nse.py first.")
@@ -116,7 +148,12 @@ def load_bhavcopy():
             d[c] = pd.to_numeric(d[c], errors="coerce")
     # BE/BZ rows carry no DELIV_PER (NSE prints "-"). Leave it NaN so gates read
     # UNVERIFIED rather than FAIL, and so delivery-weighted scoring neutralizes.
-    return d.dropna(subset=["close"]), len(files), skipped, series_seen
+    d = d.dropna(subset=["close"])
+    # One row per symbol per session. Belt and braces after the DATE1 check.
+    before = len(d)
+    d = d.drop_duplicates(subset=["date", "symbol"], keep="last")
+    n_dupes = before - len(d)
+    return d, len(files), skipped, series_seen, date_mismatch, n_dupes
 
 
 def adjust(d):
@@ -136,11 +173,46 @@ def adjust(d):
     # otherwise a data gap masquerades as a corporate action
     R = R.where(C.notna() & C.shift(1).notna() & P.notna())
     events = R.where((R < CA_LOW) | (R > CA_HIGH))
+
+    # ---- SECOND DETECTOR: the close series itself ---------------------------
+    # PREV_CLOSE is the primary signal, but NSE does not always publish an
+    # ADJUSTED prev close on the ex-date. On KOTAKBANK's 1:5 split (14 Jan 2026)
+    # it printed the raw 2132.60 beside a post-split close of 421.00, so
+    # R = 1.00 and nothing fired. Catch that case directly: a single-session
+    # move whose inverse ratio lands within 6% of a whole number >= 2 is a
+    # split or bonus, not a price move. No stock halves or thirds in one
+    # session and stays there.
+    step = C / C.shift(1)
+    step = step.where(C.notna() & C.shift(1).notna())
+    inv = 1.0 / step
+
+    # A split day carries the day's own price move as well as the ratio, so the
+    # observed number is never exactly the split ratio: KOTAKBANK's 1:5 printed
+    # 5.066, not 5.000. Snap to the nearest whole number and use THAT as the
+    # factor - the residual is a genuine price move and must survive adjustment.
+    # Tolerance is deliberately loose (15%) because the discriminator is not
+    # the tolerance, it is the size of the move: NSE price bands mean a real
+    # single-session fall past 35% is a corporate action, not a price.
+    ratio_dn = inv.round()
+    near_dn = (inv - ratio_dn).abs() / ratio_dn < 0.15
+    implied = (1.0 / ratio_dn).where(near_dn & (ratio_dn >= 2) & (step < 0.65))
+
+    # consolidation / reverse split: the ratio itself is a whole number
+    ratio_up = step.round()
+    near_up = (step - ratio_up).abs() / ratio_up < 0.15
+    implied_up = ratio_up.where(near_up & (ratio_up >= 2) & (step > 1.55))
+
+    from_close = implied.combine_first(implied_up)
+    # only where PREV_CLOSE did not already catch it
+    from_close = from_close.where(events.isna())
+    n_from_close = int(from_close.notna().sum().sum())
+    events = events.combine_first(from_close)
+
     n_events = int(events.notna().sum().sum())
     n_syms = int((events.notna().sum() > 0).sum())
     Rc = events.fillna(1.0)
     factor = Rc[::-1].cumprod()[::-1].shift(-1).fillna(1.0)   # product of SUBSEQUENT ratios
-    return C * factor, factor, n_events, n_syms
+    return C * factor, factor, n_events, n_syms, n_from_close
 
 
 def apply_factor(d, factor, col):
@@ -186,7 +258,26 @@ def main():
     print("BUILD ARTIFACTS")
     print("=" * 68)
 
-    raw, n_files, n_skipped, series_seen = load_bhavcopy()
+    raw, n_files, n_skipped, series_seen, date_mismatch, n_dupes = load_bhavcopy()
+    if date_mismatch:
+        print("phantom sessions rejected: %d file(s) whose DATE1 did not match "
+              "the filename date" % len(date_mismatch))
+        for fn, want, got, nrows in date_mismatch[:8]:
+            print("   %s: filename says %s, file contains %s (%d rows dropped)"
+                  % (fn, want, got, nrows))
+        if len(date_mismatch) > 8:
+            print("   ... %d more" % (len(date_mismatch) - 8))
+        pd.DataFrame(date_mismatch,
+                     columns=["file", "filename_date", "file_date", "rows_dropped"]
+                     ).to_csv(os.path.join(ART, "phantom_sessions.csv"), index=False)
+        warnings.append("%d bhavcopy file(s) carried a different DATE1 to their "
+                        "filename and were rejected - almost always NSE serving the "
+                        "prior session for a market holiday. See "
+                        "artifacts/phantom_sessions.csv." % len(date_mismatch))
+    else:
+        print("phantom sessions: none (every file's DATE1 matched its filename)")
+    if n_dupes:
+        print("duplicate (date, symbol) rows removed: %d" % n_dupes)
     print("bhavcopy: %d files, %d skipped, %d rows, %d symbols"
           % (n_files, n_skipped, len(raw), raw["symbol"].nunique()))
     if n_skipped:
@@ -228,8 +319,10 @@ def main():
                   "These are now retained; NSE prints no delivery for them, so "
                   "G12 will read UNVERIFIED rather than FAIL." % n_be)
 
-    Cadj, ca_factor, n_ev, n_sym = adjust(raw)
-    print("corporate actions: %d events across %d symbols, back-adjusted" % (n_ev, n_sym))
+    Cadj, ca_factor, n_ev, n_sym, n_close_detected = adjust(raw)
+    print("corporate actions: %d events across %d symbols, back-adjusted "
+          "(%d found via the close series where PREV_CLOSE was unadjusted)"
+          % (n_ev, n_sym, n_close_detected))
 
     panel = Cadj.stack().reset_index()
     panel.columns = ["date", "symbol", "close"]

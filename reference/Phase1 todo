@@ -1,0 +1,660 @@
+# Phase 1 To-Do — Sector Momentum, Stock Selection, Entry Timing
+
+**Drafted 6 September 2026 · last updated 15 September 2026 (Bug 3 logged: phantom holiday sessions)**
+
+**Results log at the end of this document — read that before re-proposing anything.**
+
+**Theme.** Before anything else in the system is worth improving, three things must work:
+we must not grossly miss the winners, the stocks we pick must actually be the strong ones
+inside the sectors we rank highly, and we must enter at a point that gives the trade a fair
+chance. Everything below is scoped to that and nothing else.
+
+---
+
+## Where phase 1 currently stands, measured
+
+| Symptom | Evidence | Source |
+|---|---|---|
+| Missing winners | 8 of 25 traced names blocked by the sector layer while beating the benchmark by 14–48% | trace analysis |
+| Sector rank does not imply stock strength | Spearman +0.39 between sector rank and its top-3 constituents' unified rank, across 426 sector-weeks | sector vs stock test |
+| Worst single case | Defence ranked **#2** with its best buyable constituent at **#286 of 445** | 4 Sep scan |
+| Entry timing costs the win rate | Hit rate falls monotonically 54% → 50% → 45% → **41%** as extension rises 0–1 → >3.5 ATR | 4,884 cohorts |
+| Extension is worst where it matters most | Among **top-20** ranked names, ≥2.5 ATR gives **−8.65pp, t = −3.41** | extension × rank test |
+| Low-quality entries always lost | All 4 holdings entered below technical score 7.0 lost money, 25% win rate | portfolio review |
+| Setups rarely qualify | L6 returned NO SETUP on nearly every live candidate | live scans |
+
+~~**The t = −3.41 on extension among top-ranked names is the strongest statistical signal found
+anywhere in this project.**~~ **SUPERSEDED 12 Sep.** That figure came from **10 weeks and 4,884
+observations**. On 49 weeks and 18,299 observations the sign reverses at the 12-week horizon.
+See results log, Task 1.
+
+---
+
+## The two items for the next two weeks
+
+### ITEM 1 — Entry quality: sweep the extension cap and the setup definitions
+
+**Objective.** Raise the win ratio by entering better, not by picking differently.
+
+**Why this first.** It has the strongest evidence, the lowest cost, and it acts on every
+trade regardless of which map or ranking is used. A portfolio simulation of weekly top-3 held
+12 weeks already shows:
+
+| Extension cap | Excess | Hit | MAE | MFE/MAE |
+|---|---|---|---|---|
+| **1.5 ATR** | **+14.60%** | **70%** | **−11.48%** | **2.75** |
+| 2.5 ATR (current) | +12.64% | 67% | −15.54% | 2.23 |
+| 3.5 ATR | +12.62% | 63% | −13.68% | 2.35 |
+| No cap | +11.43% | 63% | −14.62% | 2.12 |
+
+Tightening looks better on every measure, including a 4pp shallower drawdown. But that rests
+on 30 trades per arm — it needs a plateau, not a point.
+
+**Work:**
+
+1. Full plateau sweep of the extension cap at 1.0 / 1.25 / 1.5 / 1.75 / 2.0 / 2.5 / 3.0 /
+   3.5, across all 49 weeks, at 4 and 12 weeks, scoring both admitted and excluded names.
+   Require a plateau, not a peak.
+2. Split by regime — does the right cap differ in RISK-OFF? 21 weeks available.
+3. Measure how often each cap leaves **zero** actionable names. A cap that is right on
+   average but produces nothing to buy for six weeks is not usable.
+4. Audit L6's four setup definitions against the same cohorts: which classifications actually
+   precede good outcomes, and is "NO SETUP" firing too often because the definitions are
+   too narrow?
+5. **Rank-trajectory test.** The three entries that worked best were all *climbing* into
+   purchase (INDSWFTLAB #101→#27, SONACOMS #160→#35, TI #382→#39); the two that failed were
+   bought after a rank had peaked and faded (SUVEN #23 → bought at #156). Test whether
+   requiring an improving unified rank over 2–3 weeks beats rank level alone.
+
+**Effort:** 1–1.5 sessions. All data already in hand.
+
+**Impact:** **High and immediate.** Directly targets the win ratio, applies to every trade,
+and the extension finding is already the most significant result in the project. Item 5 is
+speculative but cheap and would also improve item 2.
+
+**Success:** a plateau that supports a specific cap, plus a measured effect on hit rate and
+MFE/MAE. **Failure:** no plateau — in which case keep 2.5 and say so.
+
+---
+
+### ITEM 2 — Sector-to-stock alignment: make a top sector mean something
+
+**Objective.** Close the gap between "this sector ranks #1" and "its stocks are worth buying."
+
+**Why this second.** The +0.39 correlation is the structural defect behind both missing
+winners and buying weak names inside strong sectors. Two attempts have already failed — the
+breadth-of-strength metric and the v2 map — so the remaining hypotheses need testing rather
+than assuming.
+
+**Work:**
+
+1. **Minimum-constituent rule.** Do sectors with fewer than N ranked constituents predict
+   worse than large ones? Defence had 3 ranked of 16 and ranked #2. EMS had 4 of 10 and
+   ranked #1. Healthcare had 22 of 48 and ranked #8 with four names in the top 50. Sweep N
+   at 5 / 8 / 10 / 15 across 426 sector-weeks. **This is the narrowest hypothesis aimed
+   directly at the observed failure and has not been tried.**
+2. **Promote cross-sector composite to default.** Already tested and significant:
+   `0.65·MS + 0.35·SMS` beat sector gating by **+7.59pp, t = +2.91** at 12 weeks. It is
+   implemented as `--global-rank` and opt-in. Needs one live Friday running both modes side
+   by side, then adoption.
+3. **Equal-weighted v2 series.** Use NSE constituent membership but compute an equal-weighted
+   series rather than the cap-weighted index. Isolates whether v2's loss came from
+   cap-weighting or from the narrower universe. Untested, flagged in §12.8.
+4. **Re-measure the correlation** after each change. The target is a meaningful rise above
+   +0.39, not a marginal return improvement.
+
+**Effort:** 1.5–2 sessions. Item 2.2 is nearly free; 2.1 and 2.3 are new runs.
+
+**Impact:** **High but less certain than Item 1.** 2.2 is proven and just needs shipping.
+2.1 is the best untested hypothesis. 2.3 is a clean isolation of a known confound.
+
+**Success:** correlation rises materially, or a minimum-constituent rule shows a plateau.
+**Failure:** correlation stays near +0.39 — in which case the honest conclusion is that
+sector rank is weak information, and the composite's 35% weight is already the right way to
+use it.
+
+---
+
+## Deliberately not in the next two weeks
+
+| Item | Why deferred |
+|---|---|
+| Backfill to 2021 + full backtest | Priority 1 by importance, but it is mostly waiting on a slow fetch. Start it running in the background; the analysis comes after. |
+| v1 vs v2 convergence | Needs forward accumulation in `map_comparison.jsonl`, not more slices of 49 weeks. Gate at 80 obs, currently 45. |
+| Breadth floor | 23 observations, gate at 60. Accumulating. |
+| Full-universe sector classification | Large effort, and TFCILTD/SHILPAMED showed the payoff is smaller than assumed. |
+| 21 unresolved NSE constituent lists | Retry on the next fetch; low expected value given the 18 that resolved added 6 symbols. |
+| Automating G3–G8 | Real blocker for funding, but it is a data-sourcing problem, not a selection-quality one. Off-theme for phase 1. |
+
+**One exception worth doing opportunistically:** G3 from the `series` column. A symbol on
+BE/BZ is under trade-for-trade restriction, which is most of what G3 establishes, and the
+column is already in the panel. Perhaps an hour, and it removes one of the seven manual gates
+permanently.
+
+---
+
+## Ranked to-do, with effort and impact
+
+| # | Task | Effort | Impact | Item | **Status** |
+|---|---|---|---|---|---|
+| 1 | Extension cap plateau sweep, 8 values, both horizons | 0.5 session | **High** | 1 | **DONE 12 Sep — no change** |
+| 2 | Extension × regime split | 0.25 | Medium | 1 | **DONE 12 Sep** |
+| 3 | "Zero actionable names" frequency per cap | 0.25 | **High** (usability) | 1 | **DONE 12 Sep — not a constraint** |
+| 4 | Rank-trajectory vs rank-level test | 0.5 | High if it holds | 1 | open |
+| 5 | Cross-sector mode live side-by-side, then adopt | 0.25 | **High** (already proven) | 2 | **DONE 12 Sep — not adopted, t=1.60** |
+| 6 | Minimum-constituent rule sweep | 0.5 | High if it holds | 2 | open |
+| 7 | L6 setup-definition audit | 0.5 | Medium | 1 | open |
+| 8 | Equal-weighted v2 series | 0.5 | Medium | 2 | open |
+| 9 | G3 from series column | 0.25 | Medium (unblocks funding) | — | open |
+| 10 | Start backfill fetch running | 0.1 + waiting | **High — now top priority** | — | **DONE 12 Sep — 1,474 sessions** |
+| 11 | **Bug 2 — unadjusted splits (18 live names)** | 1 hr | **Medium — data integrity** | — | **FIXED 26 Sep — 148 -> 0** |
+| 12 | **Bug 3 — ~60 phantom holiday sessions in 2021-24** | 1 hr | **Medium — corrupts historical tests** | — | **FIXED 26 Sep — 70 rejected** |
+| 13 | Workflow: 7-day backfill + later cron + staleness warn | 10 min | **High — silent data loss** | — | **SHIPPED 15 Sep** |
+| 14 | **Fundamental verification ledger** | 1 hr | **High — stops re-research** | — | **OPEN** |
+| 15 | **Persist weekly grades + gate status** | 1 hr | **High — makes grade migration measurable** | — | **OPEN** |
+
+**Total: roughly 3.5 sessions of work across two weeks**, plus the backfill running in the
+background.
+
+**If only two things get done: #1 and #5.** The extension plateau is the strongest signal in
+the project and the cheapest to act on; cross-sector adoption is already proven at t = 2.91
+and just needs a live confirmation before becoming the default.
+
+---
+
+# RESULTS LOG
+
+**Read this before re-proposing anything.** Five parameter changes have now been tested; none
+shipped. Each entry records what was tried, the evidence, and the decision — including the
+proposals that were rejected, because a log that shows only successes invites the same idea
+to be raised again in six months.
+
+## Task 1 — Extension cap · 12 September 2026 · **NO CHANGE**
+
+**Tested:** caps at 1.0 / 1.25 / 1.5 / 1.75 / 2.0 / 2.5 / 3.0 / 3.5 / none.
+49 weeks, **18,299 name-weeks**, both sides scored, paired weekly cohort significance.
+
+**Three methods gave three different answers:**
+
+| Method | Sample | Result |
+|---|---|---|
+| Preliminary screen | 10 wk, 4,884 | Tighter better, **t = −3.41** |
+| Full screen, 12wk | 49 wk, 18,299 | **Looser better, monotonic** |
+| **Full portfolio ablation** | 49 wk, with stops and ladder | Tighter better, **not significant** |
+
+**Band view, top-20 pool, 12 weeks** — every measure improves with extension:
+
+| Band | n | Excess | Hit | MAE | MFE/MAE |
+|---|---|---|---|---|---|
+| 0–1 ATR | 272 | +6.42% | 58% | −14.92% | 1.32 |
+| 1–2 | 210 | +7.84% | 62% | −12.83% | 1.61 |
+| 2–3 | 117 | +8.98% | 66% | −12.83% | 1.89 |
+| **>3** | **98** | **+12.79%** | **69%** | **−11.56%** | **2.60** |
+
+**Ablation (the decision-relevant test), weekly top-3, full stops:**
+
+| Cap | Mean | Win% | Expectancy R | Paired vs 2.5 | t |
+|---|---|---|---|---|---|
+| 1.00 | +3.42% | 46% | +0.35 | +1.58pp | +1.41 |
+| 1.50 | +3.06% | 46% | +0.34 | +1.22pp | +1.50 |
+| **2.00** | **+1.14%** | 41% | **+0.12** | **−0.70pp** | −1.27 |
+| **2.50 (live)** | +1.84% | 41% | +0.19 | — | — |
+| 3.00 | +1.41% | 40% | +0.15 | −0.43pp | −1.27 |
+| none | +2.17% | 41% | +0.28 | +0.33pp | +0.41 |
+
+**Decision: keep 2.5.** Ordering is 1.0 > 1.5 > none > 2.5 > 3.0 > 2.0 — **non-monotonic, so
+no plateau**. Nothing reaches t = 2. Cap 2.0 is the worst arm while 1.5 and 2.5 either side of
+it are better; no mechanism explains that.
+
+**Availability (Task 3) is not a constraint.** Even at 1.0 ATR the weekly top-10 yields 4.4
+actionable names on average, with only 1 of 49 weeks at zero. My concern that tightening
+would starve the pipeline was wrong.
+
+**Regime (Task 2):** in NEUTRAL the gate is expensive — it rejected names returning +17.4% at
+12 weeks. In RISK-OFF it makes no measurable difference.
+
+**Why the screen and the ablation disagree:** the screen ignores stops. Extended names show
+better raw forward returns but you often do not survive to collect them. **Always run the
+portfolio ablation, not the screen.**
+
+## Task 2 — Stop multiple · 12 September 2026 · **NO CHANGE**
+
+**Emerged from Task 1**, not on the original list: stops were firing on 50–60% of trades.
+
+**Live rule replicated exactly:** `min(entry − MULT·ATR, swing_low(15) − 0.3·ATR)`, clamped to
+[12% cap, 5% floor].
+
+| Mult | Avg R% | Mean ret | Win% | Stopped | Expectancy R | Paired ret t | Paired **R** t |
+|---|---|---|---|---|---|---|---|
+| 1.5 | 9.25 | +1.78% | 44% | 52% | +0.181 | −1.77 | −0.01 |
+| **2.0 (live)** | 9.70 | +2.02% | 45% | 50% | +0.181 | — | — |
+| 2.5 | 10.35 | +2.41% | 46% | 45% | +0.198 | +1.36 | +0.57 |
+| 3.0 | 10.90 | +2.53% | 48% | 41% | +0.197 | +1.38 | +0.40 |
+| **3.5** | 11.27 | **+2.74%** | **50%** | **36%** | **+0.221** | **+2.00** | +0.87 |
+| 4.0 | 11.50 | +2.72% | 50% | 36% | +0.219 | +1.96 | +0.81 |
+
+**Decision: keep 2.0×.** Returns show a genuine monotonic plateau at 3.5–4.0× reaching
+t = 2.00 — **the first real plateau found in any test here.** But on **expectancy in R** the
+paired t is only 0.87.
+
+**The mechanism is the reason to refuse:** average R rises 9.70% → 11.27%. **A wider stop is
+just a bigger bet.** Position sizing already scales inversely with R, so in a live book the
+wider stop buys fewer shares and the advantage largely disappears. 3.5× also beats 2.0× in
+only 33% of weeks despite the higher mean — the gain is in outliers.
+
+**Stop cap sweep (8/10/12/15/18/25%): non-monotonic and noisy. Keep 12%.**
+
+**Regime finding worth carrying:** the system earns roughly **3× more per trade in RISK-OFF
+than NEUTRAL** (+3.28% vs +1.07%, expectancy +0.292R vs +0.098R). Wider stops help more in
+RISK-OFF. Unexplained and worth understanding.
+
+**Open sub-question:** stop-outs fall 50% → 36% as the multiple widens, but time-stops rise
+33% → 44%. **Fast losses are being converted into slow ones**, which may be why expectancy
+barely moves. The 25-session time stop has never been tested.
+
+## Task 5 — Sector as GATE vs sector as SCORE · 12 September 2026 · **NOT ADOPTED**
+
+**Tested:** three arms over 49 weeks, weekly top-3, full portfolio — ATR stop, 2R/4R ladder,
+chandelier trail, 25-session time stop, 12-week max hold.
+
+| Arm | Trades | Mean | Median | Win% | Stopped | **Expectancy R** |
+|---|---|---|---|---|---|---|
+| **gated (live default)** | 147 | **+0.22%** | **−4.80%** | **36%** | **60%** | **−0.034** |
+| composite `0.65·MS + 0.35·SMS` | 147 | +1.83% | −2.15% | 40% | 56% | +0.162 |
+| ms_only (sector discarded) | 147 | +1.51% | −1.22% | **44%** | **50%** | **+0.194** |
+
+| Paired, weekly cohort means | Diff | t | Better in |
+|---|---|---|---|
+| composite − gated | +1.61pp | **+1.60** | 41% of weeks |
+| ms_only − gated | +1.28pp | +0.99 | 51% |
+| **composite − ms_only** | **+0.32pp** | **+0.37** | 37% |
+
+**Decision: not adopted.** Pre-set rule required paired t ≥ 2. It reached 1.60, and beat gated
+in only 41% of weeks — the advantage is in a few large weeks, not consistency.
+
+### Three findings that matter more than the pass/fail
+
+**1. The gated default has NEGATIVE expectancy.** −0.034R across 49 weeks with real stops,
+36% win rate, median trade −4.80%, stopped out 60% of the time. In NEUTRAL (28 of 49 weeks)
+it returns −0.11%. **This is the live configuration.** Composite and ms_only are both
+positive. Either this is a real defect or an artefact of one episode — only a longer sample
+distinguishes them.
+
+**2. The sector signal itself adds nothing.** composite − ms_only is +0.32pp at t = 0.37.
+Discarding sector information entirely gives the **best** expectancy (+0.194R), win rate (44%)
+and stop-out rate (50%). The 35% SMS weight is not earning its place.
+
+**3. Concentration works the opposite way to my prediction.** I flagged that dropping the gate
+would concentrate picks. It does the reverse:
+
+| Arm | 3-of-3 picks in one sector |
+|---|---|
+| gated | **49% of weeks** |
+| composite | 33% |
+| ms_only | **14%** |
+
+**The gate is the cause of concentration**, by construction — it forces all picks into three
+sectors.
+
+### Why this is harsher than the earlier +7.59pp result
+
+The earlier test scored raw forward returns on a scoring table. This one runs a real book. With
+stops applied, the gated arm's picks get stopped out far more (60% vs 50%). **The sector gate
+concentrates capital into names that do not survive their stops** — invisible to a screen.
+
+Same lesson as Task 1: **always run the portfolio ablation, never the screen.**
+
+---
+
+## Data integrity — corporate action adjustment · 12 September 2026
+
+### Bug 1 — high/low never adjusted · **FIXED AND SHIPPED**
+
+`build_artifacts.py` adjusted `close` for splits but merged `high` and `low` raw from the
+source. KOTAKBANK carried a close of 10,806 beside a high of 2,139.
+
+**Impact: 16,962 rows across 52 symbols.** Every ATR, stop, MAE and MFE on those rows was
+wrong — which feeds position sizing, the target ladder and every drawdown measurement.
+
+**Fix:** `adjust()` now returns the factor matrix; new `apply_factor()` applies it to high and
+low. Plus an assertion that close sits inside the high/low band on every row, writing
+`artifacts/ca_mismatch.csv` and raising a manifest warning on failure.
+
+**Verified on the rebuild: 0 rows out of band, down from 16,962.**
+
+**Lesson:** this was invisible for months because nothing ever compared the two. **The
+assertion is more valuable than the fix.**
+
+### Bug 2 — splits detected wrongly · **DEFERRED, NOT FIXED**
+
+Two compounding causes, found by inspecting raw bhavcopy around the KOTAKBANK split:
+
+| Date | PREV_CLOSE | CLOSE | R = prev / prior close |
+|---|---|---|---|
+| 13-Jan-2026 | 2133.3 | 2132.6 | 1.00 |
+| **14-Jan** (ex-date) | **2132.6 — unadjusted** | **421.0** | **1.00 — no event fires** |
+| **14-Jan** (repeat, from the 15-Jan file) | 2132.6 | 421.0 | **5.07 — fires, wrong direction** |
+
+1. **NSE does not always adjust PREV_CLOSE on the ex-date.** `adjust()` assumes it does, so
+   the true event is missed.
+2. **Holiday files repeat the prior session's data.** 15 Jan 2026 was a holiday; NSE's file for
+   that date carries 14 Jan's rows. The duplicate fires the detector a day late and inverted —
+   multiplying historical prices by 5.07 instead of dividing.
+
+**Impact: 148 unadjusted splits across 140 symbols; 80 currently liquid; 18 split within the
+last 252 sessions, so their live momentum scores are wrong.**
+
+**8 of those 18 are in the current ranked pool:**
+
+| Symbol | Split | Ratio | Rank | MS |
+|---|---|---|---|---|
+| **SHILPAMED** | 03 Oct 2025 | 1:2 | **#18** | 84.7 |
+| RAMRAT | 26 Dec 2025 | 1:2 | #69 | 80.3 |
+| NAZARA | 26 Sep 2025 | 1:4 | #101 | 78.1 |
+| LALPATHLAB | 19 Dec 2025 | 1:2 | #210 | 71.0 |
+| BEML | 03 Nov 2025 | 1:2 | #253 | 67.0 |
+| MCX | 02 Jan 2026 | 1:5 | #285 | 65.2 |
+| ANANDRATHI | 03 Jun 2026 | 1:2 | #339 | 62.4 |
+| ECLERX | 13 Mar 2026 | 1:2 | #350 | 61.8 |
+
+Full list of 18 in `artifacts/impacted_symbols.csv`. Others: PGIL, GOLDADD, CORDELIA,
+TDPOWERSYS, KIRLPNU, ZFCVINDIA, LICI, THYROCARE, HDFCAMC, SMCGLOBAL.
+
+**Known consequence already observed:** SHILPAMED was reported as **+192% over six months** in
+the 8 Sep scan. Roughly half of that is the 1:2 split. True figure is nearer +45%.
+
+**Interim handling — no fix, flag instead.** Any of the 18 appearing in a scan is marked
+**⚠️ IMPACTED — score unreliable**. None of the current trade candidates are affected:
+LAURUSLABS, SUNDRMFAST, NEULANDLAB, GLAND and IPCALAB are all clean.
+
+**The fix when we get to it (~1 hour, two changes):**
+1. **Deduplicate on DATE1 at load** — if two files carry the same trading date, keep one. Fixes
+   every market holiday across five years, not just this case.
+2. **Detect splits from the close series**, not PREV_CLOSE — a single-session move whose
+   inverse ratio lands within 5% of a round integer ≥2. This method found all 148 events
+   cleanly when tested.
+
+**What is NOT affected:** the other ~1,100 names in the scan; all ATR, stop and drawdown work
+(that was Bug 1); and every conclusion about the 4-week entry rule — only 3 of 33 simulated
+entries touched an affected symbol, and the finding was stronger on the clean subset.
+
+---
+
+## Bug 3 — phantom holiday sessions · logged 15 September 2026 · **DEFERRED**
+
+**NSE serves the PRIOR session's file when you request a market-holiday date. The build stores it
+under the holiday's filename date, creating a duplicate trading session that never happened.**
+
+**Evidence:**
+
+| Holiday | Weekday | Panel rows | Closes identical to prior session |
+|---|---|---|---|
+| 2023-01-26 Republic Day | Thu | 2,005 | **99.9%** |
+| 2024-08-15 Independence Day | Thu | 2,199 | **99.9%** |
+| 2023-03-07 Holi | Tue | 2,045 | — |
+| 2022-01-26, 2024-01-26, 2024-03-25, 2021-01-26 | — | all present | — |
+
+**Scale:** only **12 weekday gaps across 5.7 years** when NSE takes ~13 holidays a year — roughly
+**60 phantom sessions**. Concentrated in the backfilled portion: **2025 shows its 10 holidays
+correctly; 2021-2024 show almost none.** Recent daily runs appear clean; the Sep-2026 backfill
+introduced them.
+
+**Impact:**
+- ~60 flat days injected into 2021-24 — **depresses ATR, dampens realised volatility, shifts every
+  rolling window by a day or two**
+- Matters for the historical validation queue (Task 5 re-run, stop sweep, extension cap), not for
+  the current week's scan
+- **Same root cause as Bug 2**: the 15-Jan-2026 holiday file repeated 14-Jan data and fired a
+  phantom 5.07x corporate action on KOTAKBANK
+
+**Fix (bundle with Task 11, shared code path):**
+1. **Reject duplicate sessions at load** — if a file's `DATE1` does not match its filename date,
+   skip it. This is the actual bug and it is a few lines.
+2. **Confirmed-gaps ledger** — after a date has been retried across the full backfill window and
+   NSE still has nothing, record it in `state/known_gaps.json`. The staleness warning then ignores
+   confirmed holidays. Self-maintaining, no holiday calendar to keep updated.
+3. **Gap audit in the build** — weekdays in range minus sessions present minus confirmed gaps,
+   written to `artifacts/missing_sessions.csv`.
+
+**Note on holiday recovery generally:** a holiday has no data and should be ABSENT from the panel.
+There is nothing to recover. The only real recovery case is late publication or a transient fetch
+failure, which the 7-day rolling backfill (Task 13) now handles automatically.
+
+---
+
+## Task 13 — workflow reliability · 15 September 2026 · **PATCH WRITTEN, NOT YET COMMITTED**
+
+**Trigger:** on 15 Sep the panel was a day stale. Diagnosis: the cron runs at 13:30 UTC (19:00
+IST); NSE publishes the index close BEFORE the securities bhavcopy, so
+`ind_close_all_15092026.csv` was fetched and `sec_bhavdata_full_15092026.csv` was not.
+
+**Root cause: `BACKFILL` defaulted to `0`.** The fetch only ever attempted the current day, so any
+file unavailable at run time was never retried. **`ind_close_all_14092026.csv` was lost exactly
+this way** — Monday's index file is absent from the repo and nothing would have gone back for it.
+
+**Fix (`.github/workflows/daily.yml`):**
+1. `BACKFILL` default `0` -> **`7`**. The fetch skips files that already exist, so a 7-day rolling
+   window costs a handful of checks and self-heals late publication or transient failure.
+2. Cron `30 13` -> **`0 15`** UTC (20:30 IST), after NSE's publication window.
+3. **Staleness warning** — emits a GitHub `::warning::` if the latest session is 2+ weekdays
+   behind. Previously this failed silently.
+
+**Same principle as the OHLC assertion in Bug 1: the check is worth more than the fix**, because it
+converts a silent failure into a visible one.
+
+---
+
+## Tasks 14-15 — reporting architecture · logged 18 September 2026
+
+**Trigger:** the weekly report was presenting metrics rather than decisions. A conviction grading
+engine was built on 18 Sep (six components: trajectory 25, rank 20, entry 20, absorption 15,
+liquidity 10, regime fit 10 -> tier A/B/C/D). Building it exposed two gaps that need persisting.
+
+### Task 14 — fundamental verification ledger · **OPEN**
+
+Fundamental status currently lives in the assistant's working memory and evaporates between
+sessions. The same names get re-researched; verified quarters are lost.
+
+**Proposed: `reference/fundamental_status.csv`**
+
+| field | purpose |
+|---|---|
+| symbol | |
+| checked_on | date the quarter was read |
+| quarter | e.g. Q1 FY27 |
+| verdict | VERIFIED / VERIFIED-WEAK / VERIFIED-MIXED / VERIFIED-CAUTION / VERIFIED-EVENT / NOT CHECKED |
+| headline | the one metric that mattered, e.g. "CDMO +69%, PAT +126%, margin +700bps" |
+| next_checkpoint | the dated, testable claim, e.g. "Q2 EBITDA margin 16.5% per CFO" |
+
+**Why it matters:** ~18 names have been researched in depth so far. Each re-check costs 10-20
+minutes. The `next_checkpoint` field is the more valuable half — it converts management commentary
+into a falsifiable test with a date.
+
+### Task 15 — persist weekly grades and gate status · **OPEN**
+
+**Proposed: `state/grades.jsonl`**, one row per name per week: symbol, week, total, tier, and each
+of the six components, plus rank and MS.
+
+**Why it matters:**
+- **Grade migration becomes measurable.** How often does an A become a C, and what does price do
+  when it happens? That is a testable question the system cannot currently ask.
+- **Six weeks of history is regenerated from scratch on every container reset**, roughly 2 minutes
+  of compute each time plus the risk of inconsistency.
+- Feeds the demotion table directly instead of recomputing it.
+
+**Also proposed: gate status as a tracked field** — G3 surveillance, G4 pledge, G8 governance with
+the date checked, stored beside the grade. **A name should not be able to reach "actionable"
+without them dated.** They are currently checked ad hoc and forgotten, which is why every report
+ends with the same manual-gate caveat.
+
+---
+
+## Bugs 2 and 3 — FIXED AND VERIFIED · 26 September 2026
+
+Both shipped in one patch to `scripts/build_artifacts.py` (522 lines). They shared a root cause and
+were fixed together, as planned.
+
+### Bug 3 root cause — the date came from the FILENAME
+
+```python
+sub["date"] = ds[4:] + ds[2:4] + ds[:2]    # DDMMYYYY -> YYYYMMDD, from the filename
+```
+
+NSE serves the PREVIOUS session's file when you request a market-holiday URL. The build stamped
+that real data with a date on which nothing traded.
+
+**Fix:** read `DATE1` from inside the file; reject any row whose internal date disagrees with the
+filename. Plus `drop_duplicates` on (date, symbol) as a backstop. Rejected files are written to
+`artifacts/phantom_sessions.csv` and raise a manifest warning.
+
+**Result:**
+
+| | Before | After |
+|---|---|---|
+| Panel sessions | 1,483 | **1,414** |
+| Files rejected | — | **70** |
+| Remaining phantom pairs | ~60 | **0** |
+| Weekday gaps | 12 | **82** |
+
+82 gaps over 5.7 years is correct — NSE takes 13-16 holidays a year. Per year: 14, 13, 15, 16, 13,
+11. Before the fix 2021-24 showed almost none.
+
+### Bug 2 root cause — NSE does not always adjust PREV_CLOSE on the ex-date
+
+On KOTAKBANK's 1:5 split (14 Jan 2026) NSE printed the raw 2,132.60 beside a post-split close of
+421.00, so `R = P / C.shift(1)` read 1.00 and nothing fired.
+
+**Fix:** a second detector on the close series. A single-session fall past 35% whose inverse ratio
+lands near a whole number >= 2 is a split, not a price move.
+
+**One iteration was needed and it is worth recording.** The first attempt used a 6% tolerance and
+MISSED KOTAKBANK: the observed ratio was **5.066, not 5.000**, because the stock also moved that
+day. The detector now **snaps to the nearest integer** and uses that as the factor, so the residual
+price move survives adjustment. Tolerance widened to 15% — the discriminator is the SIZE of the
+move (NSE price bands make a real 35%+ single-session fall a corporate action), not the tolerance.
+
+**Result:**
+
+| | Before | After |
+|---|---|---|
+| Corporate action events | 354 | **548** (194 found via the close series) |
+| Unadjusted splits market-wide | **148 across 140 symbols** | **0 across 0** |
+| KOTAKBANK 13 Jan close | 2,132.60 | **426.52** |
+| KOTAKBANK worst session ratio | **0.197** | **0.987** |
+
+All 18 previously-impacted names are clean: SHILPAMED, RAMRAT, NAZARA, LALPATHLAB, BEML, MCX,
+ANANDRATHI, ECLERX, PGIL, GOLDADD, CORDELIA, TDPOWERSYS, KIRLPNU, ZFCVINDIA, LICI, THYROCARE,
+HDFCAMC, SMCGLOBAL.
+
+**A correction to an earlier claim.** On 8 Sep I reported SHILPAMED at +192% over six months and
+said roughly half was the split. **The true adjusted figure is +224.5% — HIGHER than I quoted.**
+The old panel had the adjustment INVERTED rather than absent, so my correction was in the wrong
+direction.
+
+### One residual, knowingly accepted
+
+**NAZARA still shows −40.5% in a single session.** Its ratio (1/0.595 = 1.68) is not near a whole
+number, so the detector correctly declines to treat it as a split. It is either a non-integer
+corporate action (demerger, or a 3:2 bonus) or a genuine fall. **Needs a manual check before
+trusting anything computed on it.** One symbol in 3,634 is an acceptable residual.
+
+### What this invalidates
+
+Every historical analysis run before 26 Sep used a panel with ~140 mis-scaled symbols and 70
+phantom flat sessions. That includes the 244-week Task 5 ablation, the extension cap sweep and the
+stop sweep.
+
+**They have NOT been re-run.** All three produced null results, and the contamination was ~4% of
+symbols plus 70 of 1,484 sessions, so the nulls are very unlikely to flip. Re-running is roughly a
+day of compute to confirm what is already concluded. **Deferred deliberately, not forgotten.**
+
+---
+
+## Running tally of tested proposals
+
+| # | Proposal | Evidence | Outcome |
+|---|---|---|---|
+| 1 | ADV-scaled delivery floor | Gate adds value in every bucket; interaction t = −0.81 | **Rejected** |
+| 2 | Relax extension cap | Top-20 ≥2.5 ATR cost −8.65pp, t = −3.41 (10 wk) | **Rejected** |
+| 3 | Breadth-of-strength sector metric | Won on 18 wk, lost on 45 wk | **Rejected** |
+| 4 | v3 map (v2 minus themes) | Recovered 40% of v2 deficit, worse at 4 wk | **Rejected** |
+| 5 | Anchored VWAP / 150 MA / both | +0.03 to −0.65pp, all t < 1 | **Rejected** |
+| 6 | Extension cap change | No plateau, no t ≥ 2 | **Rejected** |
+| 7 | Stop multiple change | Plateau exists, expectancy t = 0.87 | **Rejected** |
+| — | Cross-sector composite ranking | +7.59pp vs gated, **t = +2.91** | **SHIPPED** |
+| — | Delivery weight 7.0% → 10.5% of MS | +3.1pp, t = +2.5, plateau w=0.15–0.30 | **SHIPPED** |
+| — | G12 window → 63d or 3-of-4 months | MOREPENLAB failed by 1.0pp on noise | **SHIPPED** |
+| 8 | Sector as score (composite) instead of gate | +1.61pp vs gated, t = +1.60 | **Rejected** |
+| — | Dual sector map, v1 + v2 parallel | No separation, t = −1.08 | **SHIPPED** (both live) |
+
+**Eight proposals tested and rejected. Four shipped.** The two that shipped on statistics both
+cleared t ≥ 2.5. **Nothing has been changed on a t below 2.**
+
+**Most rejections died on sample size, not on being wrong.** Task 5 at t = 1.60, the stop
+multiple at t = 2.00 on returns but 0.87 on expectancy, the v1/v2 map at t = −1.08 — these are
+effects of roughly the right size that 49 weeks cannot separate from noise.
+
+## What this pattern suggests
+
+Five consecutive parameter tests have failed to improve the system. Two readings:
+
+1. **The rule set is near a local optimum** on these parameters, and further tuning is low
+   value. The remaining gains are structural (Tasks 5, 6) rather than parametric.
+2. **49 weeks in one market episode cannot resolve differences this small.** Most effects are
+   worth 0.5–1.5pp with t of 1–2, which needs several hundred weeks to separate.
+
+Both are probably true. **Task 5 has now been run and also failed on sample size**, which
+settles the question: the binding constraint is data, not ideas.
+
+---
+
+# CURRENT PRIORITY — Task 10, backfill to 2021
+
+**Started 12 September 2026.**
+
+**Why it is now first.** Eight proposals tested; most died at t = 1–2 on 49 weeks of one market
+episode. A genuine +1.6pp effect would clear significance comfortably on ~230 weeks. Further
+parameter work before the backfill lands is wasted effort.
+
+**How.** Actions tab → "Daily NSE data" → Run workflow → `backfill=2080` (reaches Jan 2021).
+Run `backfill=1000` first, verify, then the full value — the fetch skips existing files.
+
+| | |
+|---|---|
+| New sessions | ~936 (500 → ~1,436) |
+| Files | ~1,872 |
+| Fetch time | 45–60 min, expect 2–3 re-runs for rate limits |
+| Repo growth | ~234 MB |
+| **Usable test window** | **0.96 yr → ~4.7 yr** |
+
+**Verify before analysing.** In the build log:
+- `skipped` should be under ~20. More than that means holes — stop and investigate. This is the
+  STLTECH lesson.
+- Corporate actions should be **200+** (currently 88 over 2 years). The `adjust()` gap-guard has
+  never run over this span.
+- Watch for unrecognised series warnings — NSE's format changed over the period.
+
+## Re-run queue once the data lands
+
+Everything below was inconclusive on 49 weeks and deserves one clean re-test, in this order:
+
+| # | Re-test | Prior result |
+|---|---|---|
+| 1 | **Task 5 — gate vs composite vs ms_only** | t = 1.60; **gated expectancy −0.034R** |
+| 2 | Stop multiple, sized to constant risk | t = 2.00 returns / 0.87 expectancy |
+| 3 | Extension cap | No plateau |
+| 4 | v1 vs v2 sector map | t = −1.08 |
+| 5 | Breadth floor (gate is 60 obs, will be met) | 23 obs, t = −0.81 to +0.71 |
+| 6 | Regime thresholds 45 / 65 | One correct call, Jan 2026 |
+
+**Plus the two questions only a longer sample can answer:**
+- Does the system really earn **3× more per trade in RISK-OFF than NEUTRAL**? (+3.28% vs +1.07%)
+- Does the gated arm's negative expectancy hold outside this episode?
+
+## Not blocked by the backfill
+
+| # | Task | Why it can run now |
+|---|---|---|
+| 9 | **G3 from the series column** | BE/BZ = trade-for-trade. Already in the panel. Removes one of seven manual gates. ~1 hour, no sample-size dependency |
+| — | Commit `PHASE1_TODO.md` and `BACKTEST_PLAN.md` to `reference/` | Lost twice already |
+| — | Weekly logging of `map_comparison.jsonl` and `breadth_counterfactual.jsonl` | Both stuck at backfill counts since 6 Sep; neither gate is accumulating |

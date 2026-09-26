@@ -455,23 +455,31 @@ def main():
             # name whose delivery-bearing days were its busiest came out with
             # dlv_adv_cr ABOVE adv_cr. DIACABS had delivery on 7 of 45 days and
             # printed 124.78 against an ADV of 78.5.
-            _mask_ok = _tv.notna() & _dv.notna()
+            # BE and BZ are the trade-for-trade segment: intraday netting is
+            # not allowed, so every trade settles by delivery. NSE therefore
+            # prints no DELIV_PER for them - it is 100% by definition, not
+            # missing. Confirmed in the panel: EQ carries delivery on 100.0% of
+            # 2.70m rows, BE and BZ on exactly 0 of 335,339.
+            #
+            # Treating those blanks as "no delivery" inverts the truth and
+            # excludes the most-delivered names in the market. STLTECH has
+            # traded BE since 14 May on Rs 135 cr a day - all of it delivered -
+            # and an earlier version of this code scored it 0.00 and blocked it.
+            #
+            # Note what this does NOT do: BE/BZ usually signals surveillance,
+            # and that is a separate question from liquidity. It is reported,
+            # not gated on.
+            _ser = (panel.pivot_table(index="date", columns="symbol",
+                                      values="series", aggfunc="last")
+                    .tail(LIQ_WINDOW).reindex(columns=_tv.columns))
+            _dv_eff = _dv.where(~_ser.isin(["BE", "BZ"]), 100.0)
             _n = float(max(len(_tv.index), 1))
             adv_45 = _tv.sum() / _n / 100.0
-            # Delivered turnover summed over the window and divided by the FULL
-            # session count, not by the days that happened to report delivery.
-            # NSE prints no DELIV_PER for BE/BZ days, and averaging over only
-            # the reporting days gave a figure that could exceed ADV outright:
-            # DIACABS reported delivery on 7 of 45 sessions - its busiest - and
-            # printed 124.78 against an ADV of 78.5.
-            #
-            # Treating a non-reporting day as zero delivered is also the right
-            # economics: on a trade-for-trade day there is no delivery to count.
-            # A name that spends half the window on BE therefore scores half the
-            # delivered liquidity, which is exactly the penalty intended.
-            # By construction dlv_adv_cr <= adv_cr for every row.
-            dlv_adv = (_tv.where(_mask_ok) * _dv / 100.0).sum() / _n / 100.0
-            _cover = _mask_ok.sum() / _n
+            # Delivered turnover over the window / full session count. A day
+            # with genuinely unknown delivery contributes nothing; a T2T day
+            # contributes in full. dlv_adv_cr <= adv_cr holds by construction.
+            dlv_adv = (_tv.where(_dv_eff.notna()) * _dv_eff / 100.0).sum() / _n / 100.0
+            _cover = (_tv.notna() & _dv_eff.notna()).sum() / _n
         except Exception:
             adv_45 = pd.Series(dtype=float)
             dlv_adv = pd.Series(dtype=float)

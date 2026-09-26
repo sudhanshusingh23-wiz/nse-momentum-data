@@ -447,9 +447,31 @@ def main():
                    .tail(LIQ_WINDOW))
             _dv = (panel.pivot_table(index="date", columns="symbol",
                                      values="delivery_pct", aggfunc="last")
-                   .tail(LIQ_WINDOW))
-            adv_45 = _tv.mean() / 100.0
-            dlv_adv = (_tv * _dv / 100.0).mean() / 100.0
+                   .tail(LIQ_WINDOW).reindex(columns=_tv.columns))
+            # Both averages must run over the SAME rows. NSE prints no
+            # DELIV_PER for BE/BZ sessions, so delivery is NaN on some days.
+            # Averaging turnover over 45 rows and delivered turnover over
+            # whichever rows had delivery gives different denominators, and any
+            # name whose delivery-bearing days were its busiest came out with
+            # dlv_adv_cr ABOVE adv_cr. DIACABS had delivery on 7 of 45 days and
+            # printed 124.78 against an ADV of 78.5.
+            _mask_ok = _tv.notna() & _dv.notna()
+            _n = float(max(len(_tv.index), 1))
+            adv_45 = _tv.sum() / _n / 100.0
+            # Delivered turnover summed over the window and divided by the FULL
+            # session count, not by the days that happened to report delivery.
+            # NSE prints no DELIV_PER for BE/BZ days, and averaging over only
+            # the reporting days gave a figure that could exceed ADV outright:
+            # DIACABS reported delivery on 7 of 45 sessions - its busiest - and
+            # printed 124.78 against an ADV of 78.5.
+            #
+            # Treating a non-reporting day as zero delivered is also the right
+            # economics: on a trade-for-trade day there is no delivery to count.
+            # A name that spends half the window on BE therefore scores half the
+            # delivered liquidity, which is exactly the penalty intended.
+            # By construction dlv_adv_cr <= adv_cr for every row.
+            dlv_adv = (_tv.where(_mask_ok) * _dv / 100.0).sum() / _n / 100.0
+            _cover = _mask_ok.sum() / _n
         except Exception:
             adv_45 = pd.Series(dtype=float)
             dlv_adv = pd.Series(dtype=float)
@@ -459,9 +481,11 @@ def main():
             if a != a:
                 continue
             da = float(dlv_adv.get(sym, float("nan")))
+            cv = float(_cover.get(sym, float("nan")))
             extra.append({"symbol": sym, "cap_tier": "BROAD",
                           "cap_source": "not_in_nse_index", "adv_cr": round(a, 1),
-                          "dlv_adv_cr": round(da, 2) if da == da else None})
+                          "dlv_adv_cr": round(da, 2) if da == da else None,
+                          "dlv_cover": round(cv, 2) if cv == cv else None})
         if extra:
             caps = pd.concat([caps, pd.DataFrame(extra)], ignore_index=True)
         caps["adv_cr"] = caps.get("adv_cr", pd.Series(dtype=float))

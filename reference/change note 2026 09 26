@@ -1,0 +1,170 @@
+# Change Note — 26 September 2026
+
+Three changes shipped today. Two were bug fixes to the data layer; one changes what the
+strategy is allowed to buy. All three were tested before shipping.
+
+---
+
+## 1. Bug 3 — phantom trading sessions · FIXED
+
+**Symptom.** The panel contained roughly 60 sessions on which nothing actually traded. Republic Day
+2023, Holi 2023 and Independence Day 2024 all carried full rows, with 99.9% of closes identical to
+the prior day.
+
+**Root cause.** `build_artifacts.py` took the session date from the FILENAME:
+
+```python
+sub["date"] = ds[4:] + ds[2:4] + ds[:2]     # DDMMYYYY -> YYYYMMDD
+```
+
+NSE serves the PREVIOUS session's file when you request a market-holiday URL, so real data was
+stamped with a date on which the market was shut.
+
+**Fix.** Read `DATE1` from inside the file and reject any row whose internal date disagrees with the
+filename. Plus `drop_duplicates` on (date, symbol) as a backstop. Rejected files are written to
+`artifacts/phantom_sessions.csv` and raise a manifest warning.
+
+**Result.**
+
+| | Before | After |
+|---|---|---|
+| Panel sessions | 1,483 | **1,414** |
+| Files rejected | — | **70** |
+| Remaining duplicate-session pairs | ~60 | **0** |
+| Weekday gaps across 5.7 years | 12 | **82** |
+
+82 gaps is correct — NSE takes 13-16 holidays a year. Per year: 14, 13, 15, 16, 13, 11.
+
+**Why it mattered.** Flat sessions depress ATR and realised volatility and shift every rolling
+window, so stops and position sizes were computed on softened inputs.
+
+---
+
+## 2. Bug 2 — unadjusted stock splits · FIXED
+
+**Symptom.** 148 splits across 140 symbols were unadjusted. KOTAKBANK showed a pre-split close of
+Rs 10,806 beside a post-split Rs 421.
+
+**Root cause.** The adjustment relied on NSE publishing an ADJUSTED `PREV_CLOSE` on the ex-date.
+It does not always do so. On KOTAKBANK's 1:5 split (14 Jan 2026) NSE printed the raw Rs 2,132.60,
+so the detection ratio read 1.00 and nothing fired.
+
+**Fix.** A second detector on the close series: a single-session fall past 35% whose inverse ratio
+lands near a whole number >= 2 is a split, not a price move.
+
+**One iteration was needed and is worth recording.** The first attempt used a 6% tolerance and MISSED
+KOTAKBANK, because the observed ratio was **5.066, not 5.000** — the stock also moved that day. The
+detector now **snaps to the nearest integer** and uses that as the factor, so the residual price move
+survives adjustment. Tolerance widened to 15%; the discriminator is the SIZE of the move, not the
+tolerance, because NSE price bands make a real 35%+ single-session fall a corporate action.
+
+**Result.**
+
+| | Before | After |
+|---|---|---|
+| Corporate action events | 354 | **548** (194 via the close series) |
+| Unadjusted splits market-wide | **148 / 140 symbols** | **0 / 0** |
+| KOTAKBANK worst session ratio | **0.197** | **0.987** |
+
+**A correction to an earlier claim.** On 8 Sep SHILPAMED was reported at +192% over six months, with
+"roughly half" attributed to the split. The true adjusted figure is **+224.5%** — the old panel had
+the adjustment INVERTED rather than absent, so the correction was in the wrong direction.
+
+**One residual, knowingly accepted.** NAZARA still shows -40.5% in a single session at a ratio of
+1.68, which is not near a whole number. Either a non-integer corporate action (demerger, 3:2 bonus)
+or a genuine fall. Needs a manual check before anything is computed on it.
+
+---
+
+## 3. BROAD tier and the delivery-adjusted liquidity floor · NEW RULE
+
+### The problem
+
+`caps.csv` was built only from the Nifty 100 / Midcap 150 / Smallcap 250 lists. Every symbol outside
+the Nifty 500 arrived downstream with no tier and was silently defaulted to SMALL, which the RISK-OFF
+mandate ("large/mid only") then blocked.
+
+**That is 42% of the tradeable universe and 95% of the top 40 three-month movers** — TBZ,
+KABRAEXTRU, CYIENTDLM, INDSWFTLAB, BODALCHEM, RAYMOND and the rest — excluded for being un-indexed
+rather than for being small.
+
+### What was rejected
+
+**A turnover-based size proxy.** Tested against the known Nifty 500 tiers it reached only **62%
+accuracy overall and 41% on MID**. Too weak to present as a size judgement, so it was not used.
+
+### What was adopted
+
+`caps.csv` now carries every panel symbol, with:
+
+| column | meaning |
+|---|---|
+| `cap_tier` | LARGE / MID / SMALL / **BROAD** |
+| `cap_source` | `nse_index` or `not_in_nse_index` |
+| `adv_cr` | 45-day average turnover, Rs cr |
+| `dlv_adv_cr` | **the same multiplied by delivery%** — the part that actually settles |
+
+**BROAD is a membership fact, not a size claim.** Eligibility is then decided on liquidity, which is
+measurable, rather than on an invented size label.
+
+**Rule: a BROAD name is eligible when `dlv_adv_cr >= 10`.**
+
+### Why delivery-adjusted rather than raw ADV
+
+Two names can show the same ADV and differ tenfold in real liquidity:
+
+| | ADV | Delivery | Real liquidity |
+|---|---|---|---|
+| ITDC | Rs 37cr | 25.5% | **Rs 3.4cr** |
+| SJS | Rs 42cr | 55.1% | **Rs 22.7cr** |
+
+### Why Rs 10cr and not Rs 6cr
+
+The first proposal was Rs 6cr, derived from exit arithmetic — "can a full 15% position be sold over
+two days". **That was the wrong question.** At this book size liquidity was never binding: even
+Rs 5cr ADV clears a full position inside a day.
+
+The threshold was then set from outcomes instead. Across **33 Fridays and 11,646 observations** of
+BROAD names above a rising 50 DMA, 4-week forward excess return by band:
+
+| dlv_adv_cr | n | 4wk fwd | median | hit |
+|---|---|---|---|---|
+| 1-3 | 4,185 | +2.05% | +0.14% | 51% |
+| 3-6 | 3,156 | +1.78% | -0.04% | 50% |
+| **6-10** | 1,811 | **+1.43%** | **-0.34%** | **48%** |
+| 10-20 | 1,629 | +3.04% | +0.88% | 53% |
+| 20-40 | 645 | +3.57% | +1.83% | 56% |
+| 40+ | 220 | **+8.77%** | +3.41% | **61%** |
+
+**Above Rs 6cr beats below by +1.53pp at t = +2.89.** But the Rs 6-10 band is the worst of the six,
+so a Rs 6cr floor lands in the weakest bucket. Moving to Rs 10cr lifts the kept-set forward return
+from **+2.74% to +3.68%**. Rs 20cr scores better still but retains only ~7% of the broad universe,
+which is too narrow to trade.
+
+**Interpretation.** Real liquidity is behaving as a QUALITY signal, not an exit constraint. Names
+with genuinely settled volume are names institutions are accumulating.
+
+### Measured effect
+
+Two-week daily backtest, top-10 picks per day ranked by 3-month relative strength:
+
+| | mean 1-day forward |
+|---|---|
+| OLD rule (large/mid only) | **-0.547%** |
+| NEW rule | **+0.821%** |
+| difference | **+1.369pp/day**, better on **9 of 10 days** |
+
+Eligible universe: **240 -> 557**. On last week's scan, **all 40 of the new top 40 and 97 of the top
+100 are BROAD names.** Twelve sit at a clean entry: MOREPENLAB, CYIENTDLM, SHILPAMED, BIRLACABLE,
+DIACABS, YASHO, SBCL, CUPID, IOLCP, RPEL, MARINE, AVALON. At the Rs 10cr floor, RPEL (7.8) and YASHO
+(9.5) drop out.
+
+### To review
+
+- **The floor is tied to book size.** At Rs 50 lakh, Rs 10cr is right. Past roughly Rs 1 crore of
+  book it should be re-derived.
+- **33 Fridays is one market episode.** Five of eight parameter changes tested on this project have
+  reversed when the window widened. Re-test on the full 1,414-session panel at the next review.
+- **Downstream skills still expect LARGE/MID/SMALL.** The position sizer and regime monitor need to
+  handle a fourth value: map BROAD to the SMALL risk budget, and gate regime eligibility on
+  `dlv_adv_cr >= 10` rather than on cap tier.

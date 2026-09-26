@@ -1,5 +1,5 @@
 {
-  "built_at_utc": "2026-09-26T14:59:28.852736+00:00",
+  "built_at_utc": "2026-09-26T15:09:44.200517+00:00",
   "bhavcopy_files": 1484,
   "index_files": 1416,
   "panel_sessions": 1414,
@@ -11,7 +11,7 @@
   "warnings": [
     "70 bhavcopy file(s) carried a different DATE1 to their filename and were rejected - almost always NSE serving the prior session for a market holiday. See artifacts/phantom_sessions.csv.",
     "unrecognised NSE series present and excluded: P1. Decide explicitly whether these belong in the panel.",
-    "245 row(s) in caps.csv have dlv_adv_cr > adv_cr, which is impossible - the two columns are on different windows.",
+    "358 row(s) in caps.csv have dlv_adv_cr > adv_cr, which is impossible - the two columns are on different windows.",
     "680 symbol(s) stale (no data for >10 sessions); 39 went stale in the last 120 days. See artifacts/stale_symbols.csv. A stale symbol yields NaN ADV and is silently skipped by every liquidity gate."
   ]
 }

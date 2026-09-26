@@ -244,10 +244,31 @@ def apply_state(score, bm, vix, breadth, partial):
 
 
 MANDATE = {
-    "RISK-ON":  {"max_deployment_pct": 85, "positions": "6-9", "cap_tilt": "small/mid favoured; smallcap up to 60% of pool", "new_entries": "full tranche ladder", "heat_cap_pct": 6.0},
-    "NEUTRAL":  {"max_deployment_pct": 60, "positions": "5-7", "cap_tilt": "mid favoured; max 2 smallcap positions", "new_entries": "tranches 1 and 2 only", "heat_cap_pct": 3.5},
-    "RISK-OFF": {"max_deployment_pct": 30, "positions": "<=4", "cap_tilt": "large/mid only; no new smallcap", "new_entries": "none — manage existing only", "heat_cap_pct": 2.0},
-    "SHOCK":    {"max_deployment_pct": 20, "positions": "<=2 (CORE only)", "cap_tilt": "any", "new_entries": "none — exit non-core within 3 sessions", "heat_cap_pct": 1.0},
+    # cap_tilt gates on LIQUIDITY, not on index membership.
+    #
+    # It used to read "large/mid only; no new smallcap". Every symbol outside
+    # the Nifty 500 reached the sizing layer with no cap tier, defaulted to
+    # SMALL, and was excluded - 42% of the tradeable universe and 95% of the
+    # top 40 three-month movers, shut out for being un-indexed rather than for
+    # being small or illiquid.
+    #
+    # caps.csv now tags those names BROAD and carries dlv_adv_cr: 45-session
+    # average turnover multiplied by delivery%, i.e. the part that actually
+    # settles rather than being churned intraday. Two names can show the same
+    # turnover and differ tenfold in real liquidity.
+    #
+    # The Rs 10 cr floor is set from outcomes, not from exit arithmetic. Across
+    # 33 Fridays and 11,646 observations the 4-week forward excess return rises
+    # monotonically with dlv_adv_cr, and the Rs 6-10 cr band is the worst of six
+    # (+1.43%, 48% hit, negative median). Above Rs 6 cr beats below by +1.53pp
+    # at t = +2.89; moving the floor to Rs 10 cr lifts the kept-set return from
+    # +2.74% to +3.68%.
+    #
+    # The floor is calibrated to a ~Rs 50 lakh book. Re-derive past ~Rs 1 crore.
+    "RISK-ON":  {"max_deployment_pct": 85, "positions": "6-9", "cap_tilt": "any tier; thin names (dlv_adv_cr < 10) up to 60% of pool", "new_entries": "full tranche ladder", "heat_cap_pct": 6.0, "min_dlv_adv_cr": 3.0},
+    "NEUTRAL":  {"max_deployment_pct": 60, "positions": "5-7", "cap_tilt": "any tier with dlv_adv_cr >= 6; max 2 thin positions", "new_entries": "tranches 1 and 2 only", "heat_cap_pct": 3.5, "min_dlv_adv_cr": 6.0},
+    "RISK-OFF": {"max_deployment_pct": 30, "positions": "<=4", "cap_tilt": "LARGE/MID, or BROAD/SMALL with dlv_adv_cr >= 10", "new_entries": "none — manage existing only", "heat_cap_pct": 2.0, "min_dlv_adv_cr": 10.0},
+    "SHOCK":    {"max_deployment_pct": 20, "positions": "<=2 (CORE only)", "cap_tilt": "any", "new_entries": "none — exit non-core within 3 sessions", "heat_cap_pct": 1.0, "min_dlv_adv_cr": 20.0},
 }
 
 ORDER = ["RISK-OFF", "NEUTRAL", "RISK-ON"]
@@ -492,6 +513,8 @@ def main():
           ("  (Rs %s)" % format(m["max_deployment_rupees"], ",")) if a.pool else ""))
     print("  Positions      : %s" % m["positions"])
     print("  Cap tilt       : %s" % m["cap_tilt"])
+    print("  Liquidity floor: dlv_adv_cr >= Rs %.0f cr  (turnover x delivery%%, 45 sessions)"
+          % m["min_dlv_adv_cr"])
     print("  New entries    : %s" % m["new_entries"])
     print("  Heat cap       : %.1f%%" % m["heat_cap_pct"])
     if partial:

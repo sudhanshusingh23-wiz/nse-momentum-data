@@ -1,0 +1,193 @@
+# Backtest Plan — Priority 1
+
+**Drafted 6 September 2026 · for execution week of 8 September**
+
+---
+
+## 1. Why this is priority one
+
+Every result produced so far rests on **49 weekly rebalances in a single market episode**.
+That episode turned out to be more useful than assumed — it contains a −14.8% drawdown and
+21 RISK-OFF weeks — but it is still one episode. Nothing has been validated across a second
+independent period.
+
+Specifically unvalidated:
+
+| Item | Current evidence | Needed |
+|---|---|---|
+| Expectancy in R | never measured | walk-forward, out-of-sample |
+| Drawdown distribution | one observed path | Monte Carlo, 10,000 reshuffles |
+| Parameter settings | single-point tests on 49 weeks | plateau at ±30% |
+| 2:1 reward:risk floor | untested | plateau |
+| 12% stop cap | untested | plateau |
+| 2-week hysteresis | untested | plateau |
+| Regime thresholds (45 / 65) | one correction, worked well | second episode |
+| SMS weights 30/20/20/15/10/5 | never varied | plateau |
+
+The regime layer is the one component with genuine evidence behind it: it cut deployment
+60% → 30% on 16 Jan 2026 at a −3.2% drawdown, ahead of a further 10.5% decline, and stayed
+defensive until 19 June. That behaviour needs confirming on a second drawdown, not
+discovering for the first time.
+
+---
+
+## 2. Data to fetch
+
+**Target: January 2021.** Gives 4.7 tradeable years after the 252-session warm-up, and
+includes the 2022 rotation-driven bear market — the specific condition this system has
+never faced.
+
+| Option | New sessions | Size | Tradeable years | Includes |
+|---|---|---|---|---|
+| **Jan 2021 (recommended)** | ~936 | ~234 MB | **4.7** | 2022 bear, Oct 2024 correction |
+| Jan 2020 | ~1,189 | ~297 MB | 5.7 | + COVID crash |
+| Jan 2019 | ~1,441 | ~360 MB | 6.7 | + 2019 NBFC stress |
+
+Jan 2020 is tempting for the COVID crash, but March 2020 was a liquidity event rather than a
+rotation, and it would dominate any drawdown statistic. **Start with Jan 2021; extend later
+if the walk-forward wants more in-sample years.**
+
+### Command
+
+```
+python scripts/fetch_nse.py --backfill 2100
+```
+
+or Actions tab → Run workflow → backfill = `2100`.
+
+Fetches both `data/sec_bhavdata_full_*.csv` and `indices/ind_close_all_*.csv`. Skips
+existing files, so it is safe to re-run.
+
+### Expectations
+
+- **Slow.** The fetch is rate-limited and polite. Expect a long run and possible timeouts.
+- **Gaps are normal.** Re-run the same command; it only fetches what is missing.
+- **Verify before building.** Session count should land near 1,431. A shortfall of more than
+  ~20 means gaps worth investigating rather than ignoring.
+
+---
+
+## 3. Repository changes required
+
+| # | Change | File | Why |
+|---|---|---|---|
+| 1 | None to the fetch | `scripts/fetch_nse.py` | `--backfill` already supported and tested |
+| 2 | None to the build | `scripts/build_artifacts.py` | Series fix, staleness and snapshots already in |
+| 3 | **Verify CA adjustment over the longer history** | `build_artifacts.py` | 88 events over 2 years; expect ~200+ over 5. The `adjust()` gap-guard has never run on this span |
+| 4 | **Add `--start` to the backtest harness** if absent | `momentum-backtest-harness` | Walk-forward needs explicit window control |
+| 5 | Nothing else | — | The map, caps rule and state files are unchanged |
+
+**No new infrastructure.** The plumbing built over the last two days — series retention,
+staleness detection, constituent snapshots — was the prerequisite, and it is done.
+
+### One check worth running before the full build
+
+Rebuild on 2021 data alone and confirm the reconciliation line reports sensible series
+counts. NSE's series conventions have changed over time, and an unrecognised code in 2021
+should surface as a warning, not a silent drop.
+
+---
+
+## 4. Test objectives
+
+Four runs, in this order. Each answers a question that cannot currently be answered.
+
+### 4.1 Walk-forward — is there an edge at all?
+
+3 years in-sample, 1 year out-of-sample, rolling annually. **Report only out-of-sample.**
+From Jan 2021 that yields roughly two out-of-sample years.
+
+**Success:** positive out-of-sample expectancy after costs and 20% STCG.
+**Failure:** in-sample positive, out-of-sample flat or negative → the rules are fitted.
+
+### 4.2 Regime-conditional — does the gate generalise?
+
+Split every metric by RISK-ON / NEUTRAL / RISK-OFF / SHOCK.
+
+**Specific question:** does L1 de-risk ahead of the 2022 decline the way it did in Jan 2026?
+That was a single correct call. Two makes it a pattern.
+
+**Also measure:** what the 60/30 deployment mandate costs in returns and saves in drawdown.
+On the current window it roughly halved both.
+
+### 4.3 Parameter plateaus — which settings are real?
+
+Vary each ±30% and plot. **Choose the middle of a plateau, never a peak.**
+
+Priority order, by how much rests on them and how little they have been tested:
+
+1. Extension cap (currently 2.5 ATR — 1.5 tested better on 30 trades, needs a plateau)
+2. Reward:risk floor (2.0)
+3. Stop cap (12%)
+4. Hysteresis (2 weeks — the 3-week variant reversed the v1/v2 ranking, which is a warning)
+5. Delivery floor (30% / 25%)
+6. Breadth floor (50 — 23 observations to date, decision gate is 60)
+7. SMS component weights
+
+**A parameter that works at one value and fails at ±30% is noise.**
+
+### 4.4 Monte Carlo — what drawdown to plan for?
+
+10,000 trade-sequence reshuffles. The **95th-percentile drawdown** is the sizing input,
+typically 1.5–2× the observed. Directly relevant: the book currently runs 7.35% heat
+against a 3.5% cap.
+
+### 4.5 Ablations
+
+- `--no-regime` — quantify what L1 contributes
+- `--no-sector` — the L2 question again, this time with a real drawdown in the sample
+- `--no-costs` — see the cost drag, typically the difference between positive and negative
+
+---
+
+## 5. What this will and will not settle
+
+### Will settle
+
+- Whether the rule set has out-of-sample expectancy
+- Realistic drawdown distribution for position sizing
+- Which parameters sit on plateaus and which are fitted
+- Whether the regime gate generalises beyond one correct call
+- The value of the regime and sector layers, measured rather than argued
+
+### Will not settle
+
+**v1 vs v2.** Both maps are current snapshots. Running either against 2022 gives the map
+four years of hindsight about index membership. Constituent snapshots only began accumulating
+on 4 Sep 2026.
+
+That question stays with `state/map_comparison.jsonl` accumulating forward, where there is no
+look-ahead. Decision gate remains 80 matured 4-week observations; currently 45.
+
+**Gate-related selection.** G3–G8 are not modelled, so the backtest omits trades those gates
+would have blocked. Per the protocol, live should beat backtest on gate-related names — if it
+does not, something else is wrong.
+
+---
+
+## 6. Sequence and effort
+
+| Step | Effort | Blocking |
+|---|---|---|
+| 1. Backfill fetch to Jan 2021 | mostly waiting, may need re-runs | yes |
+| 2. Verify session count and gaps | 10 min | yes |
+| 3. Full rebuild, check CA count and series reconciliation | 20 min | yes |
+| 4. Walk-forward + regime-conditional | 1 session | — |
+| 5. Parameter plateaus | 1 session, compute-heavy | — |
+| 6. Monte Carlo + ablations | 1 session | — |
+
+**Start the fetch first** — it is the long pole and everything else waits on it.
+
+---
+
+## 7. Standing rules for this exercise
+
+Carried forward from the methodology adopted after four proposals reversed on wider samples:
+
+1. No parameter change on anecdotes — sweep the full universe
+2. Score both sides — what a rule admits *and* what it excludes
+3. Significance on weekly cohort means, not raw n
+4. Require a plateau — a change that works at one exact value is fitted
+5. Test at the holding horizon — two findings reversed sign between 4 and 12 weeks
+6. Report out-of-sample only
+7. Record rejected proposals with the evidence that killed them

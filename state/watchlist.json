@@ -1,58 +1,8 @@
 {
   "schema_version": 1,
   "created_at": "2026-09-14T00:00:00+00:00",
-  "updated_at": "2026-09-28T04:40:33+00:00",
+  "updated_at": "2026-09-28T04:47:14+00:00",
   "active": [
-    {
-      "symbol": "HFCL",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": null,
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-14",
-        "price_at_add": 235.0
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": 233.69,
-        "asof": "2026-09-11",
-        "bench_last": 22866.5,
-        "bench_asof": "2026-09-11",
-        "bench_at_add": 22866.5
-      },
-      "created_at": "2026-09-14T05:55:22+00:00",
-      "updated_at": "2026-09-14T07:03:56+00:00"
-    },
     {
       "symbol": "DIVISLAB",
       "name": null,
@@ -191,152 +141,6 @@
       "fundamental_findings": [],
       "price": {
         "last": 1969.0,
-        "asof": "2026-09-11",
-        "bench_last": 22866.5,
-        "bench_asof": "2026-09-11",
-        "bench_at_add": 22866.5
-      },
-      "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T07:03:56+00:00"
-    },
-    {
-      "symbol": "ANTHEM",
-      "name": null,
-      "book": "momentum",
-      "origin": "scan",
-      "scan_confirmed": true,
-      "machine": {
-        "ms": 83.0,
-        "sms": 96.5,
-        "composite": 87.7,
-        "sector": "Healthcare",
-        "cap_tier": "MID",
-        "tier": "A",
-        "gates": {
-          "G1_liquidity": "PASS",
-          "G2_pct_of_adv": "PASS",
-          "G3_surveillance": "UNVERIFIED",
-          "G4_pledge": "UNVERIFIED",
-          "G5_promoter_trend": "UNVERIFIED",
-          "G6_revenue": "UNVERIFIED",
-          "G7_margin": "UNVERIFIED",
-          "G8_governance": "UNVERIFIED",
-          "G10_event": "UNVERIFIED",
-          "G9_circuit": "PASS",
-          "G11_price": "PASS",
-          "G12_delivery": "PASS"
-        },
-        "unverified": 7,
-        "entry_signal": "ACTIONABLE",
-        "px": 940.9,
-        "regime_at_ingest": "RISK-OFF",
-        "data_tier": 1,
-        "ms_asof": "2026-09-11",
-        "neutralized": [
-          "earnings"
-        ],
-        "dropped_from_scan": null,
-        "scan_appearances": 1,
-        "first_seen_asof": "2026-09-11",
-        "last_seen_asof": "2026-09-11"
-      },
-      "ms_history": [
-        {
-          "asof": "2026-09-11",
-          "ms": 83.0
-        }
-      ],
-      "human": {
-        "thesis": null,
-        "conviction": null,
-        "status": "Surfaced",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-14",
-        "price_at_add": null
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": 940.9,
-        "asof": "2026-09-11",
-        "bench_last": 22866.5,
-        "bench_asof": "2026-09-11",
-        "bench_at_add": 22866.5
-      },
-      "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T07:03:56+00:00"
-    },
-    {
-      "symbol": "OIL",
-      "name": null,
-      "book": "momentum",
-      "origin": "scan",
-      "scan_confirmed": true,
-      "machine": {
-        "ms": 66.4,
-        "sms": 81.6,
-        "composite": 71.7,
-        "sector": "Oil Gas & Consumable Fuels",
-        "cap_tier": "MID",
-        "tier": "B",
-        "gates": {
-          "G1_liquidity": "PASS",
-          "G2_pct_of_adv": "PASS",
-          "G3_surveillance": "UNVERIFIED",
-          "G4_pledge": "UNVERIFIED",
-          "G5_promoter_trend": "UNVERIFIED",
-          "G6_revenue": "UNVERIFIED",
-          "G7_margin": "UNVERIFIED",
-          "G8_governance": "UNVERIFIED",
-          "G10_event": "UNVERIFIED",
-          "G9_circuit": "PASS",
-          "G11_price": "PASS",
-          "G12_delivery": "PASS"
-        },
-        "unverified": 7,
-        "entry_signal": "ACTIONABLE",
-        "px": 489.8,
-        "regime_at_ingest": "RISK-OFF",
-        "data_tier": 1,
-        "ms_asof": "2026-09-11",
-        "neutralized": [
-          "earnings"
-        ],
-        "dropped_from_scan": null,
-        "scan_appearances": 1,
-        "first_seen_asof": "2026-09-11",
-        "last_seen_asof": "2026-09-11"
-      },
-      "ms_history": [
-        {
-          "asof": "2026-09-11",
-          "ms": 66.4
-        }
-      ],
-      "human": {
-        "thesis": null,
-        "conviction": null,
-        "status": "Surfaced",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-14",
-        "price_at_add": null
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": 489.8,
         "asof": "2026-09-11",
         "bench_last": 22866.5,
         "bench_asof": "2026-09-11",
@@ -556,152 +360,6 @@
       "fundamental_findings": [],
       "price": {
         "last": 2676.6,
-        "asof": "2026-09-11",
-        "bench_last": 22866.5,
-        "bench_asof": "2026-09-11",
-        "bench_at_add": 22866.5
-      },
-      "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T07:03:56+00:00"
-    },
-    {
-      "symbol": "JINDALSAW",
-      "name": null,
-      "book": "momentum",
-      "origin": "scan",
-      "scan_confirmed": true,
-      "machine": {
-        "ms": 79.0,
-        "sms": 78.1,
-        "composite": 78.6,
-        "sector": "Capital Goods",
-        "cap_tier": "SMALL",
-        "tier": "A",
-        "gates": {
-          "G1_liquidity": "PASS",
-          "G2_pct_of_adv": "PASS",
-          "G3_surveillance": "UNVERIFIED",
-          "G4_pledge": "UNVERIFIED",
-          "G5_promoter_trend": "UNVERIFIED",
-          "G6_revenue": "UNVERIFIED",
-          "G7_margin": "UNVERIFIED",
-          "G8_governance": "UNVERIFIED",
-          "G10_event": "UNVERIFIED",
-          "G9_circuit": "PASS",
-          "G11_price": "PASS",
-          "G12_delivery": "PASS"
-        },
-        "unverified": 7,
-        "entry_signal": "ACTIONABLE",
-        "px": 311.95,
-        "regime_at_ingest": "RISK-OFF",
-        "data_tier": 1,
-        "ms_asof": "2026-09-11",
-        "neutralized": [
-          "earnings"
-        ],
-        "dropped_from_scan": null,
-        "scan_appearances": 1,
-        "first_seen_asof": "2026-09-11",
-        "last_seen_asof": "2026-09-11"
-      },
-      "ms_history": [
-        {
-          "asof": "2026-09-11",
-          "ms": 79.0
-        }
-      ],
-      "human": {
-        "thesis": null,
-        "conviction": null,
-        "status": "Surfaced",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-14",
-        "price_at_add": null
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": 311.95,
-        "asof": "2026-09-11",
-        "bench_last": 22866.5,
-        "bench_asof": "2026-09-11",
-        "bench_at_add": 22866.5
-      },
-      "created_at": "2026-09-14T06:23:12+00:00",
-      "updated_at": "2026-09-14T07:03:56+00:00"
-    },
-    {
-      "symbol": "SHYAMMETL",
-      "name": null,
-      "book": "momentum",
-      "origin": "scan",
-      "scan_confirmed": true,
-      "machine": {
-        "ms": 76.1,
-        "sms": 78.1,
-        "composite": 76.8,
-        "sector": "Capital Goods",
-        "cap_tier": "SMALL",
-        "tier": "A",
-        "gates": {
-          "G1_liquidity": "PASS",
-          "G2_pct_of_adv": "PASS",
-          "G3_surveillance": "UNVERIFIED",
-          "G4_pledge": "UNVERIFIED",
-          "G5_promoter_trend": "UNVERIFIED",
-          "G6_revenue": "UNVERIFIED",
-          "G7_margin": "UNVERIFIED",
-          "G8_governance": "UNVERIFIED",
-          "G10_event": "UNVERIFIED",
-          "G9_circuit": "PASS",
-          "G11_price": "PASS",
-          "G12_delivery": "PASS"
-        },
-        "unverified": 7,
-        "entry_signal": "ACTIONABLE",
-        "px": 1074.8,
-        "regime_at_ingest": "RISK-OFF",
-        "data_tier": 1,
-        "ms_asof": "2026-09-11",
-        "neutralized": [
-          "earnings"
-        ],
-        "dropped_from_scan": null,
-        "scan_appearances": 1,
-        "first_seen_asof": "2026-09-11",
-        "last_seen_asof": "2026-09-11"
-      },
-      "ms_history": [
-        {
-          "asof": "2026-09-11",
-          "ms": 76.1
-        }
-      ],
-      "human": {
-        "thesis": null,
-        "conviction": null,
-        "status": "Surfaced",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-14",
-        "price_at_add": null
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": 1074.8,
         "asof": "2026-09-11",
         "bench_last": 22866.5,
         "bench_asof": "2026-09-11",
@@ -1101,166 +759,6 @@
       "readded_from_archive": "2026-09-16"
     },
     {
-      "symbol": "ALIVUS",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "External momentum screen, 16 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [
-          {
-            "date": "2026-09-16",
-            "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
-          },
-          {
-            "date": "2026-09-16",
-            "text": "Re-added. Previously archived: price correction"
-          }
-        ],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-16",
-        "price_at_add": 1370.6
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-16T15:25:36+00:00",
-      "updated_at": "2026-09-16T15:25:36+00:00",
-      "readded_from_archive": "2026-09-16"
-    },
-    {
-      "symbol": "VOLTAMP",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "Hand-added; power transformers, capex/grid theme.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-19",
-        "price_at_add": 10735.0
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-19T09:28:31+00:00",
-      "updated_at": "2026-09-19T09:28:31+00:00"
-    },
-    {
-      "symbol": "NEULANDLAB",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "CDMO / peptide basket, 17 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-19",
-        "price_at_add": 22665.0
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-19T10:25:12+00:00",
-      "updated_at": "2026-09-19T10:25:12+00:00"
-    },
-    {
       "symbol": "GRANULES",
       "name": null,
       "book": "momentum",
@@ -1346,56 +844,6 @@
         "tags": [],
         "date_added": "2026-09-19",
         "price_at_add": 958.35
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-19T10:25:12+00:00",
-      "updated_at": "2026-09-19T10:25:12+00:00"
-    },
-    {
-      "symbol": "ACUTAAS",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "CDMO / peptide basket, 17 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-19",
-        "price_at_add": 3315.1
       },
       "technical": {
         "tag": null,
@@ -1561,106 +1009,6 @@
       "updated_at": "2026-09-28T04:40:33+00:00"
     },
     {
-      "symbol": "EMCURE",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "Momentum tool top-10, 25 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-28",
-        "price_at_add": 1950.6
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-28T04:40:33+00:00",
-      "updated_at": "2026-09-28T04:40:33+00:00"
-    },
-    {
-      "symbol": "NAVINFLUOR",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "Momentum tool top-10, 25 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-28",
-        "price_at_add": 8584.5
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-28T04:40:33+00:00",
-      "updated_at": "2026-09-28T04:40:33+00:00"
-    },
-    {
       "symbol": "RBLBANK",
       "name": null,
       "book": "momentum",
@@ -1696,56 +1044,6 @@
         "tags": [],
         "date_added": "2026-09-28",
         "price_at_add": 415.05
-      },
-      "technical": {
-        "tag": null,
-        "note": null,
-        "asof": null
-      },
-      "fundamental_findings": [],
-      "price": {
-        "last": null,
-        "asof": null
-      },
-      "created_at": "2026-09-28T04:40:33+00:00",
-      "updated_at": "2026-09-28T04:40:33+00:00"
-    },
-    {
-      "symbol": "TORNTPHARM",
-      "name": null,
-      "book": "momentum",
-      "origin": "user",
-      "scan_confirmed": false,
-      "machine": {
-        "ms": null,
-        "sms": null,
-        "composite": null,
-        "sector": null,
-        "cap_tier": null,
-        "tier": null,
-        "gates": {},
-        "unverified": null,
-        "entry_signal": null,
-        "px": null,
-        "regime_at_ingest": null,
-        "data_tier": null,
-        "ms_asof": null,
-        "neutralized": null,
-        "dropped_from_scan": null,
-        "scan_appearances": null,
-        "first_seen_asof": null,
-        "last_seen_asof": null
-      },
-      "ms_history": [],
-      "human": {
-        "thesis": "Momentum tool top-10, 25 Sep close.",
-        "conviction": null,
-        "status": "Watching",
-        "notes": [],
-        "custom_levels": {},
-        "tags": [],
-        "date_added": "2026-09-28",
-        "price_at_add": 4988.5
       },
       "technical": {
         "tag": null,
@@ -2151,6 +1449,732 @@
       "readded_from_archive": "2026-09-16",
       "archive_reason": "momentum_decay: negative or flat RS, >15% below trigger, stop >17%, thin ADV",
       "archived_at": "2026-09-23"
+    },
+    {
+      "symbol": "ANTHEM",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 83.0,
+        "sms": 96.5,
+        "composite": 87.7,
+        "sector": "Healthcare",
+        "cap_tier": "MID",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 940.9,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 83.0
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": 940.9,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T07:03:56+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "JINDALSAW",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 79.0,
+        "sms": 78.1,
+        "composite": 78.6,
+        "sector": "Capital Goods",
+        "cap_tier": "SMALL",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 311.95,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 79.0
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": 311.95,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T07:03:56+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "OIL",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 66.4,
+        "sms": 81.6,
+        "composite": 71.7,
+        "sector": "Oil Gas & Consumable Fuels",
+        "cap_tier": "MID",
+        "tier": "B",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 489.8,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 66.4
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": 489.8,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T07:03:56+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "ACUTAAS",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "CDMO / peptide basket, 17 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-19",
+        "price_at_add": 3315.1
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-19T10:25:12+00:00",
+      "updated_at": "2026-09-19T10:25:12+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "NEULANDLAB",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "CDMO / peptide basket, 17 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-19",
+        "price_at_add": 22665.0
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-19T10:25:12+00:00",
+      "updated_at": "2026-09-19T10:25:12+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "ALIVUS",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "External momentum screen, 16 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [
+          {
+            "date": "2026-09-16",
+            "text": "price_at_add corrected to 16 Sep close (was 11 Sep). Source: external momentum screen."
+          },
+          {
+            "date": "2026-09-16",
+            "text": "Re-added. Previously archived: price correction"
+          }
+        ],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-16",
+        "price_at_add": 1370.6
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-16T15:25:36+00:00",
+      "updated_at": "2026-09-16T15:25:36+00:00",
+      "readded_from_archive": "2026-09-16",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "VOLTAMP",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Hand-added; power transformers, capex/grid theme.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-19",
+        "price_at_add": 10735.0
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-19T09:28:31+00:00",
+      "updated_at": "2026-09-19T09:28:31+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "NAVINFLUOR",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 8584.5
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "TORNTPHARM",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 4988.5
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "SHYAMMETL",
+      "name": null,
+      "book": "momentum",
+      "origin": "scan",
+      "scan_confirmed": true,
+      "machine": {
+        "ms": 76.1,
+        "sms": 78.1,
+        "composite": 76.8,
+        "sector": "Capital Goods",
+        "cap_tier": "SMALL",
+        "tier": "A",
+        "gates": {
+          "G1_liquidity": "PASS",
+          "G2_pct_of_adv": "PASS",
+          "G3_surveillance": "UNVERIFIED",
+          "G4_pledge": "UNVERIFIED",
+          "G5_promoter_trend": "UNVERIFIED",
+          "G6_revenue": "UNVERIFIED",
+          "G7_margin": "UNVERIFIED",
+          "G8_governance": "UNVERIFIED",
+          "G10_event": "UNVERIFIED",
+          "G9_circuit": "PASS",
+          "G11_price": "PASS",
+          "G12_delivery": "PASS"
+        },
+        "unverified": 7,
+        "entry_signal": "ACTIONABLE",
+        "px": 1074.8,
+        "regime_at_ingest": "RISK-OFF",
+        "data_tier": 1,
+        "ms_asof": "2026-09-11",
+        "neutralized": [
+          "earnings"
+        ],
+        "dropped_from_scan": null,
+        "scan_appearances": 1,
+        "first_seen_asof": "2026-09-11",
+        "last_seen_asof": "2026-09-11"
+      },
+      "ms_history": [
+        {
+          "asof": "2026-09-11",
+          "ms": 76.1
+        }
+      ],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Surfaced",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": null
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": 1074.8,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
+      },
+      "created_at": "2026-09-14T06:23:12+00:00",
+      "updated_at": "2026-09-14T07:03:56+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "EMCURE",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 1950.6
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
+    },
+    {
+      "symbol": "HFCL",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": null,
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-14",
+        "price_at_add": 235.0
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": 233.69,
+        "asof": "2026-09-11",
+        "bench_last": 22866.5,
+        "bench_asof": "2026-09-11",
+        "bench_at_add": 22866.5
+      },
+      "created_at": "2026-09-14T05:55:22+00:00",
+      "updated_at": "2026-09-14T07:03:56+00:00",
+      "archive_reason": "prune to 20: falling or decaying momentum on universe-ranked MS (25 Sep)",
+      "archived_at": "2026-09-28"
     }
   ]
 }

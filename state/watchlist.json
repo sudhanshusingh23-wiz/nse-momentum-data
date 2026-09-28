@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created_at": "2026-09-14T00:00:00+00:00",
-  "updated_at": "2026-09-23T04:54:56+00:00",
+  "updated_at": "2026-09-28T04:40:33+00:00",
   "active": [
     {
       "symbol": "HFCL",
@@ -1509,6 +1509,356 @@
       },
       "created_at": "2026-09-23T04:54:56+00:00",
       "updated_at": "2026-09-23T04:54:56+00:00"
+    },
+    {
+      "symbol": "APLAPOLLO",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 2214.7
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00"
+    },
+    {
+      "symbol": "EMCURE",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 1950.6
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00"
+    },
+    {
+      "symbol": "NAVINFLUOR",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 8584.5
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00"
+    },
+    {
+      "symbol": "RBLBANK",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 415.05
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00"
+    },
+    {
+      "symbol": "TORNTPHARM",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 4988.5
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00"
+    },
+    {
+      "symbol": "LENSKART",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 680.25
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00"
+    },
+    {
+      "symbol": "LALPATHLAB",
+      "name": null,
+      "book": "momentum",
+      "origin": "user",
+      "scan_confirmed": false,
+      "machine": {
+        "ms": null,
+        "sms": null,
+        "composite": null,
+        "sector": null,
+        "cap_tier": null,
+        "tier": null,
+        "gates": {},
+        "unverified": null,
+        "entry_signal": null,
+        "px": null,
+        "regime_at_ingest": null,
+        "data_tier": null,
+        "ms_asof": null,
+        "neutralized": null,
+        "dropped_from_scan": null,
+        "scan_appearances": null,
+        "first_seen_asof": null,
+        "last_seen_asof": null
+      },
+      "ms_history": [],
+      "human": {
+        "thesis": "Momentum tool top-10, 25 Sep close.",
+        "conviction": null,
+        "status": "Watching",
+        "notes": [],
+        "custom_levels": {},
+        "tags": [],
+        "date_added": "2026-09-28",
+        "price_at_add": 1952.3
+      },
+      "technical": {
+        "tag": null,
+        "note": null,
+        "asof": null
+      },
+      "fundamental_findings": [],
+      "price": {
+        "last": null,
+        "asof": null
+      },
+      "created_at": "2026-09-28T04:40:33+00:00",
+      "updated_at": "2026-09-28T04:40:33+00:00"
     }
   ],
   "archive": [

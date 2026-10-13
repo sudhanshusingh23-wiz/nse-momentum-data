@@ -1,21 +1,21 @@
 {
-  "asof": "2026-10-12",
+  "asof": "2026-10-13",
   "universe": "NIFTY500",
-  "pct_above_200dma": 36.97,
-  "pct_above_50dma": 19.28,
-  "pct_above_50dma_10s_ago": 28.92,
-  "delta_10s_pp": -9.64,
-  "pct_within_10pct_of_52w_high": 17.37,
-  "denominator_200dma": 495,
+  "pct_above_200dma": 37.9,
+  "pct_above_50dma": 20.68,
+  "pct_above_50dma_10s_ago": 20.68,
+  "delta_10s_pp": 0.0,
+  "pct_within_10pct_of_52w_high": 17.54,
+  "denominator_200dma": 496,
   "denominator_50dma": 498,
   "constituents_in_list": 500,
   "not_found_in_panel": 0,
-  "excluded_insufficient_history": 4,
+  "excluded_insufficient_history": 3,
   "excluded_corporate_action_flag": 1,
   "ca_flagged_symbols": [
     "POLICYBZR"
   ],
-  "sessions_in_panel": 1424,
+  "sessions_in_panel": 1425,
   "method": "computed_from_panel",
   "warnings": []
 }

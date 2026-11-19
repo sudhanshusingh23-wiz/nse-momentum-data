@@ -1,11 +1,11 @@
 {
-  "asof": "2026-11-18",
+  "asof": "2026-11-19",
   "universe": "NIFTY500",
-  "pct_above_200dma": 45.45,
-  "pct_above_50dma": 50.5,
-  "pct_above_50dma_10s_ago": 28.37,
-  "delta_10s_pp": 22.13,
-  "pct_within_10pct_of_52w_high": 24.65,
+  "pct_above_200dma": 48.28,
+  "pct_above_50dma": 56.54,
+  "pct_above_50dma_10s_ago": 36.62,
+  "delta_10s_pp": 19.92,
+  "pct_within_10pct_of_52w_high": 26.87,
   "denominator_200dma": 495,
   "denominator_50dma": 497,
   "constituents_in_list": 500,
@@ -15,7 +15,7 @@
   "ca_flagged_symbols": [
     "POLICYBZR"
   ],
-  "sessions_in_panel": 1449,
+  "sessions_in_panel": 1450,
   "method": "computed_from_panel",
   "warnings": []
 }
